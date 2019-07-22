@@ -10,7 +10,8 @@
   "scripts": {
     "start": "NODE_ENV=production node app.js",
     "test": "NODE_ENV=test jest --watchAll --env node --runInBand",
-    "watch": "NODE_ENV=development nodemon app.js"
+    "watch": "NODE_ENV=development nodemon app.js",
+    "heroku-postbuild": "cd frontend && npm install && npm build && cp -r build ../backend"
   },
   "repository": {
     "type": "git",
