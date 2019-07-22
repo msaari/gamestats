@@ -2,8 +2,12 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { Nav, Navbar, NavItem } from "react-bootstrap"
 import { LinkContainer } from "react-router-bootstrap"
+import { useAuth0 } from "../react-auth0-wrapper"
 
 const Header = () => {
+	const { isAuthenticated, loginWithRedirect, logout } = useAuth0()
+
+	console.log(loginWithRedirect, useAuth0)
 	return (
 		<Navbar bg="light" expand="lg">
 			<Navbar.Brand>
@@ -20,6 +24,13 @@ const Header = () => {
 					<NavItem>Games</NavItem>
 				</LinkContainer>
 			</Nav>
+			<div>
+				{!isAuthenticated && (
+					<button onClick={() => loginWithRedirect({})}>Log in</button>
+				)}
+
+				{isAuthenticated && <button onClick={() => logout()}>Log out</button>}
+			</div>
 		</Navbar>
 	)
 }

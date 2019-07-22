@@ -1,6 +1,8 @@
 import React from "react"
 import { BrowserRouter as Router, Route } from "react-router-dom"
 
+import "./index.css"
+
 import Header from "./components/Header"
 import SessionList from "./components/SessionList"
 import NewSessionForm from "./components/NewSessionForm"
@@ -8,7 +10,7 @@ import GameList from "./components/GameList"
 
 import Container from "react-bootstrap/Container"
 
-import "./index.css"
+import { useAuth0 } from "./react-auth0-wrapper"
 
 const Sessions = () => {
 	return (
@@ -29,18 +31,31 @@ const Games = () => {
 }
 
 const Home = () => {
+	const { isAuthenticated } = useAuth0()
+
 	return (
 		<Container>
-			<NewSessionForm />
+			{isAuthenticated && <NewSessionForm />}
+			{!isAuthenticated && (
+				<div>
+					<p>Please log in!</p>
+				</div>
+			)}
 		</Container>
 	)
 }
 
 const NewSession = () => {
+	const { isAuthenticated } = useAuth0()
 	return (
 		<Container>
 			<h2>Add a session</h2>
-			<NewSessionForm />
+			{isAuthenticated && <NewSessionForm />}
+			{!isAuthenticated && (
+				<div>
+					<p>Please log in!</p>
+				</div>
+			)}
 		</Container>
 	)
 }
