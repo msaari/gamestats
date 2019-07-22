@@ -11,7 +11,7 @@ mongoose.set("useFindAndModify", false)
 mongoose.connect(mongoUrl, { useNewUrlParser: true })
 
 const app = new Koa()
-app.use(serve(__dirname + "frontend/build"))
+app.use(serve(__dirname + "/frontend/build"))
 app.use(bodyParser())
 app.use(logger())
 

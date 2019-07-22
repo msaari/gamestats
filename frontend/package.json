@@ -1,5 +1,5 @@
 {
-  "name": "gamestats-app",
+  "name": "gamestats-frontend",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
