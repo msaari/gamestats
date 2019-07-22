@@ -26,7 +26,7 @@ const SessionForm = props => {
 			</Form.Row>
 			<Form.Row>
 				<Form.Group as={Col} controlId="sessionGames">
-					<Form.Label>Games played</Form.Label>
+					<Form.Label>Plays</Form.Label>
 					<Form.Control type="number" name="plays" defaultValue={props.plays} />
 				</Form.Group>
 				<Form.Group as={Col} controlId="sessionWins">

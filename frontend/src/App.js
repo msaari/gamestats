@@ -6,14 +6,16 @@ import SessionList from "./components/SessionList"
 import NewSessionForm from "./components/NewSessionForm"
 import GameList from "./components/GameList"
 
+import Container from "react-bootstrap/Container"
+
 import "./index.css"
 
 const Sessions = () => {
 	return (
-		<div>
+		<Container>
 			<h2>List of sessions</h2>
 			<SessionList />
-		</div>
+		</Container>
 	)
 }
 
@@ -28,19 +30,18 @@ const Games = () => {
 
 const Home = () => {
 	return (
-		<>
-			<h1>Gamestats</h1>
+		<Container>
 			<NewSessionForm />
-		</>
+		</Container>
 	)
 }
 
 const NewSession = () => {
 	return (
-		<>
+		<Container>
 			<h2>Add a session</h2>
 			<NewSessionForm />
-		</>
+		</Container>
 	)
 }
 
