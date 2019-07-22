@@ -1,0 +1,10 @@
+POST http://localhost:3001/sessions
+Content-Type: application/json
+
+{
+	"game": "EuroRails",
+	"players": 2,
+	"plays": 1,
+	"wins": 1,
+	"date": "2019-05-15T00:00:00.000+00:00"
+}
