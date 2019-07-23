@@ -1,5 +1,6 @@
 const Session = require("../models/Session")
 const Game = require("../models/Game")
+const jwt = require("../middlewares/jwt")
 
 module.exports = ({ sessionsRouter }) => {
 	sessionsRouter.get("/", async (ctx, next) => {
@@ -62,7 +63,7 @@ module.exports = ({ sessionsRouter }) => {
 		}
 	})
 
-	sessionsRouter.post("/", async (ctx, next) => {
+	sessionsRouter.post("/", jwt, async (ctx, next) => {
 		const body = ctx.request.body
 
 		if (!body.game) ctx.throw(400, "Game not specified.")
@@ -96,7 +97,7 @@ module.exports = ({ sessionsRouter }) => {
 		ctx.body = savedSession
 	})
 
-	sessionsRouter.put("/:id", async (ctx, next) => {
+	sessionsRouter.put("/:id", jwt, async (ctx, next) => {
 		const body = ctx.request.body
 
 		const session = {
@@ -115,7 +116,7 @@ module.exports = ({ sessionsRouter }) => {
 		ctx.body = updatedSession.toJSON()
 	})
 
-	sessionsRouter.delete("/:id", async (ctx, next) => {
+	sessionsRouter.delete("/:id", jwt, async (ctx, next) => {
 		await Session.findOneAndDelete({ _id: ctx.params.id })
 		ctx.status = 204
 	})

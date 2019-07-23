@@ -3,6 +3,7 @@ const bodyParser = require("koa-bodyparser")
 const Router = require("koa-router")
 const logger = require("koa-logger")
 const serve = require("koa-static")
+const jwt = require("koa-jwt")
 const mongoose = require("mongoose")
 const config = require("./utils/config")
 
@@ -36,15 +37,23 @@ app.on("error", (err, ctx) => {
 const router = new Router({
 	prefix: "/api"
 })
+
 const gamesRouter = new Router({
 	prefix: "/api/games"
 })
+
 const sessionsRouter = new Router({
 	prefix: "/api/sessions"
 })
+
+const loginRouter = new Router({
+	prefix: "/api/login"
+})
+
 require("./routes/basic")({ router })
 require("./routes/games")({ gamesRouter })
 require("./routes/sessions")({ sessionsRouter })
+require("./routes/login")({ loginRouter })
 
 app.use(router.routes())
 app.use(router.allowedMethods())
@@ -54,6 +63,9 @@ app.use(gamesRouter.allowedMethods())
 
 app.use(sessionsRouter.routes())
 app.use(sessionsRouter.allowedMethods())
+
+app.use(loginRouter.routes())
+app.use(loginRouter.allowedMethods())
 
 if (!module.parent) app.listen(config.port)
 

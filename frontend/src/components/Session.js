@@ -3,11 +3,7 @@ import AWN from "awesome-notifications"
 import sessionService from "../services/sessions"
 import SessionEditForm from "./SessionEditForm"
 
-import { useAuth0 } from "../react-auth0-wrapper"
-
-const Session = ({ session }) => {
-	const { isAuthenticated } = useAuth0()
-
+const Session = ({ session, isAuth }) => {
 	const [editForm, setEditForm] = useState(false)
 
 	const deleteSession = async () => {
@@ -30,10 +26,8 @@ const Session = ({ session }) => {
 	return (
 		<li>
 			{date}: {session.game} ({session.wins}/{session.plays}, {session.players}){" "}
-			{isAuthenticated && (
-				<button onClick={() => setEditForm(true)}>Edit</button>
-			)}
-			{isAuthenticated && <button onClick={deleteSession}>Delete</button>}
+			{isAuth && <button onClick={() => setEditForm(true)}>Edit</button>}
+			{isAuth && <button onClick={deleteSession}>Delete</button>}
 			{editForm && <SessionEditForm session={session} />}
 		</li>
 	)

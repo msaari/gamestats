@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { BrowserRouter as Router, Route } from "react-router-dom"
 
 import "./index.css"
@@ -10,13 +10,11 @@ import GameList from "./components/GameList"
 
 import Container from "react-bootstrap/Container"
 
-import { useAuth0 } from "./react-auth0-wrapper"
-
-const Sessions = () => {
+const Sessions = ({ user }) => {
 	return (
 		<Container>
 			<h2>List of sessions</h2>
-			<SessionList />
+			<SessionList user={user} />
 		</Container>
 	)
 }
@@ -30,44 +28,41 @@ const Games = () => {
 	)
 }
 
-const Home = () => {
-	const { isAuthenticated } = useAuth0()
-
+const Home = ({ user }) => {
 	return (
 		<Container>
-			{isAuthenticated && <NewSessionForm />}
-			{!isAuthenticated && (
-				<div>
-					<p>Please log in!</p>
-				</div>
-			)}
+			{user !== null ? <NewSessionForm /> : <p>Please log in!</p>}
 		</Container>
 	)
 }
 
-const NewSession = () => {
-	const { isAuthenticated } = useAuth0()
+const NewSession = ({ user }) => {
 	return (
 		<Container>
 			<h2>Add a session</h2>
-			{isAuthenticated && <NewSessionForm />}
-			{!isAuthenticated && (
-				<div>
-					<p>Please log in!</p>
-				</div>
-			)}
+			{user !== null ? <NewSessionForm /> : <p>Please log in!</p>}
 		</Container>
 	)
 }
 
 const App = props => {
+	const [user, setUser] = useState(null)
+
+	useEffect(() => {
+		const loggedUserJSON = window.localStorage.getItem("gamestatsLoggedUser")
+		if (loggedUserJSON) {
+			const user = JSON.parse(loggedUserJSON)
+			setUser(user)
+		}
+	}, [])
+
 	return (
 		<Router>
-			<Header />
+			<Header user={user} setUser={setUser} />
 
-			<Route path="/" exact component={Home} />
-			<Route path="/add_session" component={NewSession} />
-			<Route path="/sessions" component={Sessions} />
+			<Route path="/" exact render={() => <Home user={user} />} />
+			<Route path="/add_session" render={() => <NewSession user={user} />} />
+			<Route path="/sessions" render={() => <Sessions user={user} />} />
 			<Route path="/games" component={Games} />
 		</Router>
 	)

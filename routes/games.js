@@ -1,6 +1,7 @@
 const GameObject = require("../classes/Game")
 const Game = require("../models/Game")
 const Session = require("../models/Session")
+const jwt = require("../middlewares/jwt")
 
 function calculateYears(moment) {
 	var ageDifMs = Date.now() - moment.getTime()
@@ -113,7 +114,7 @@ module.exports = ({ gamesRouter }) => {
 		ctx.body = filteredGames
 	})
 
-	gamesRouter.post("/", async (ctx, next) => {
+	gamesRouter.post("/", jwt, async (ctx, next) => {
 		const body = ctx.request.body
 
 		if (!body.name) ctx.throw(400, "Name not specified.")
@@ -144,7 +145,7 @@ module.exports = ({ gamesRouter }) => {
 		ctx.body = savedGame
 	})
 
-	gamesRouter.put("/:id", async (ctx, next) => {
+	gamesRouter.put("/:id", jwt, async (ctx, next) => {
 		const body = ctx.request.body
 
 		const game = {
@@ -164,7 +165,7 @@ module.exports = ({ gamesRouter }) => {
 		ctx.body = updatedGame.toJSON()
 	})
 
-	gamesRouter.delete("/:id", async (ctx, next) => {
+	gamesRouter.delete("/:id", jwt, async (ctx, next) => {
 		await Game.findOneAndDelete({ _id: ctx.params.id })
 		ctx.status = 204
 	})

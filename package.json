@@ -23,10 +23,12 @@
   "author": "Mikko Saari",
   "license": "MIT",
   "dependencies": {
-    "@auth0/auth0-spa-js": "^1.1.0",
+    "bcrypt": "^3.0.6",
     "dotenv": "^8.0.0",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
+    "koa-jwt": "^3.6.0",
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",

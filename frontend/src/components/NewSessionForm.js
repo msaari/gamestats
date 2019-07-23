@@ -5,9 +5,10 @@ import SessionForm from "./SessionForm"
 import sessionService from "../services/sessions"
 import gameService from "../services/games"
 
-const NewSessionForm = props => {
+const NewSessionForm = ({ userprofile }) => {
 	const [gameNames, setGameNames] = useState([])
 
+	console.log(userprofile)
 	useEffect(() => {
 		let isSubscribed = true
 		gameService.getAll().then(games => {
