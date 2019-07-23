@@ -2,7 +2,6 @@ import React, { useState } from "react"
 import loginService from "../services/login"
 import AWN from "awesome-notifications"
 import Form from "react-bootstrap/Form"
-import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 
 const LoginForm = ({ setUser }) => {
