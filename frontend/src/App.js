@@ -8,6 +8,9 @@ import SessionList from "./components/SessionList"
 import NewSessionForm from "./components/NewSessionForm"
 import GameList from "./components/GameList"
 
+import gameService from "./services/games"
+import sessionService from "./services/sessions"
+
 import Container from "react-bootstrap/Container"
 
 const Sessions = ({ user }) => {
@@ -19,11 +22,12 @@ const Sessions = ({ user }) => {
 	)
 }
 
-const Games = () => {
+const Games = ({ match, user }) => {
+	const path = match.path.replace(/\/games\/?/, "")
 	return (
 		<div>
 			<h2>List of games</h2>
-			<GameList />
+			<GameList path={path} user={user} />
 		</div>
 	)
 }
@@ -53,6 +57,8 @@ const App = props => {
 		if (loggedUserJSON) {
 			const user = JSON.parse(loggedUserJSON)
 			setUser(user)
+			gameService.setToken(user.token)
+			sessionService.setToken(user.token)
 		}
 	}, [])
 
@@ -63,7 +69,16 @@ const App = props => {
 			<Route path="/" exact render={() => <Home user={user} />} />
 			<Route path="/add_session" render={() => <NewSession user={user} />} />
 			<Route path="/sessions" render={() => <Sessions user={user} />} />
-			<Route path="/games" component={Games} />
+			<Route
+				path="/games"
+				exact
+				render={routeProps => <Games user={user} {...routeProps} />}
+			/>
+			<Route
+				path="/games/top100"
+				exact
+				render={routeProps => <Games user={user} {...routeProps} />}
+			/>
 		</Router>
 	)
 }
