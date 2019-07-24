@@ -12,6 +12,11 @@ const getAll = async () => {
 	return response.data
 }
 
+const getPath = async path => {
+	const response = await axios.get(baseUrl + "/" + path)
+	return response.data
+}
+
 const create = async newObject => {
 	const config = {
 		headers: { Authorization: token }
@@ -40,6 +45,7 @@ const deleteGame = async id => {
 }
 export default {
 	getAll,
+	getPath,
 	create,
 	update,
 	deleteGame,
