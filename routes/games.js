@@ -33,14 +33,6 @@ module.exports = ({ gamesRouter }) => {
 				if (parentObject) {
 					parentObject.addSession(sessions[i].plays, sessions[i].wins)
 				}
-				if (parentObject.parent) {
-					const grandParentObject = gameObjects.find(
-						game => game.name === parentObject.parent
-					)
-					if (grandParentObject) {
-						grandParentObject.addSession(sessions[i].plays, sessions[i].wins)
-					}
-				}
 			}
 		}
 		switch (order) {
@@ -96,7 +88,7 @@ module.exports = ({ gamesRouter }) => {
 		})
 
 		const filteredGames = gameObjects.filter(
-			game => game.plays > 0 && game.rating >= 8 && game.parent === undefined
+			game => game.plays > 0 && game.rating >= 7 && !game.parent
 		)
 
 		switch (order) {
@@ -129,7 +121,8 @@ module.exports = ({ gamesRouter }) => {
 		game.owned = body.owned ? true : false
 		if (body.bgg) game.bgg = parseInt(body.bgg)
 		if (body.rating) game.rating = parseInt(body.rating)
-		if (body.length) game.length = parseInt(body.length)
+		if (body.gameLength) game.length = parseInt(body.gameLength)
+		if (body.parent) game.parent = body.parent
 
 		const savedGame = await game.save()
 
@@ -156,7 +149,8 @@ module.exports = ({ gamesRouter }) => {
 			owned: body.owned,
 			bgg: body.bgg,
 			rating: body.rating,
-			length: body.length
+			length: body.gameLength,
+			parent: body.parent
 		}
 
 		const updatedGame = await Game.findByIdAndUpdate(ctx.params.id, game, {
