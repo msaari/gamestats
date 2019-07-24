@@ -8,7 +8,6 @@ import gameService from "../services/games"
 const NewSessionForm = ({ userprofile }) => {
 	const [gameNames, setGameNames] = useState([])
 
-	console.log(userprofile)
 	useEffect(() => {
 		let isSubscribed = true
 		gameService.getAll().then(games => {
