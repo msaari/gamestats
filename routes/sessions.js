@@ -66,6 +66,8 @@ module.exports = ({ sessionsRouter }) => {
 	sessionsRouter.post("/", jwt, async (ctx, next) => {
 		const body = ctx.request.body
 
+		console.log(body)
+
 		if (!body.game) ctx.throw(400, "Game not specified.")
 		if (!body.players) ctx.throw(400, "Players not specified.")
 		if (!body.wins) ctx.throw(400, "Wins not specified.")
