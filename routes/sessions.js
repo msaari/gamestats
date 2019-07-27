@@ -82,7 +82,7 @@ module.exports = ({ sessionsRouter }) => {
 			plays: body.plays,
 			wins: body.wins,
 			date: date,
-			geek: false
+			ungeeked: true
 		})
 
 		const savedSession = await session.save()
@@ -107,7 +107,8 @@ module.exports = ({ sessionsRouter }) => {
 			plays: body.plays,
 			wins: body.wins,
 			players: body.players,
-			date: body.date
+			date: body.date,
+			ungeeked: body.ungeeked
 		}
 
 		const updatedSession = await Session.findByIdAndUpdate(

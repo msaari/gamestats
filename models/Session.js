@@ -6,7 +6,7 @@ const sessionSchema = mongoose.Schema({
 	plays: Number,
 	wins: Number,
 	players: Number,
-	geek: Boolean
+	ungeeked: Boolean
 })
 
 sessionSchema.set("toJSON", {

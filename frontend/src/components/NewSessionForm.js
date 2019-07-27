@@ -25,23 +25,28 @@ const NewSessionForm = ({ userprofile }) => {
 		return () => (isSubscribed = false)
 	}, [])
 
+	const zeroPad = (input, length) => {
+		return (Array(length + 1).join("0") + input).slice(-length)
+	}
+
 	const formHandler = async event => {
 		event.persist()
 		event.preventDefault()
 		try {
-			const date = new Date(
-				`${event.target["dateYY"].value}-${event.target["dateMM"].value}-${
-					event.target["dateDD"].value
-				} 15:00`
-			)
+			const dateYY = event.target["dateYY"].value
+			const dateMM = zeroPad(event.target["dateMM"].value, 2)
+			const dateDD = zeroPad(event.target["dateDD"].value, 2)
+
+			const dateString = `${dateYY}-${dateMM}-${dateDD}T15:00:00`
+			const date = new Date(dateString)
 			const newSession = {
 				date: date.getTime(),
 				game: event.target.game.value,
 				plays: event.target.plays.value,
 				wins: event.target.wins.value,
-				players: event.target.players.value
+				players: event.target.players.value,
+				ungeeked: true
 			}
-			console.log(newSession)
 			await sessionService.create(newSession)
 			const notifier = new AWN()
 			notifier.success("Session saved!")
@@ -51,6 +56,7 @@ const NewSessionForm = ({ userprofile }) => {
 			event.target.players.value = "2"
 		} catch (exception) {
 			const notifier = new AWN()
+			console.log(exception)
 			notifier.alert(`There was a problem saving the session: ${exception}`)
 		}
 	}
