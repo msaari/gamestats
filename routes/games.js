@@ -76,17 +76,6 @@ module.exports = ({ gamesRouter }) => {
 				}
 			}
 		}
-
-		gamesRouter.get("/:id", async (ctx, next) => {
-			const game = await Game.findOne({ _id: ctx.params.id })
-			if (game !== null) {
-				ctx.body = game
-			} else {
-				ctx.status = 404
-				ctx.body = "Nothing found"
-			}
-		})
-
 		const filteredGames = gameObjects.filter(
 			game => game.plays > 0 && game.rating >= 7 && !game.parent
 		)
@@ -104,6 +93,28 @@ module.exports = ({ gamesRouter }) => {
 		}
 
 		ctx.body = filteredGames
+	})
+
+	gamesRouter.get("/name/:name", async (ctx, next) => {
+		const game = await Game.findOne({
+			name: new RegExp(`^${ctx.params.name}$`, "i")
+		})
+		if (game !== null) {
+			ctx.body = game
+		} else {
+			ctx.status = 404
+			ctx.body = "Nothing found"
+		}
+	})
+
+	gamesRouter.get("/:id", async (ctx, next) => {
+		const game = await Game.findOne({ _id: ctx.params.id })
+		if (game !== null) {
+			ctx.body = game
+		} else {
+			ctx.status = 404
+			ctx.body = "Nothing found"
+		}
 	})
 
 	gamesRouter.post("/", jwt, async (ctx, next) => {

@@ -7,6 +7,11 @@ const setToken = newToken => {
 	token = `Bearer ${newToken}`
 }
 
+const getByName = async name => {
+	const response = await axios.get(baseUrl + "/name/" + name)
+	return response.data
+}
+
 const getAll = async () => {
 	const response = await axios.get(baseUrl)
 	return response.data
@@ -44,6 +49,7 @@ const deleteGame = async id => {
 	return response.data
 }
 export default {
+	getByName,
 	getAll,
 	getPath,
 	create,
