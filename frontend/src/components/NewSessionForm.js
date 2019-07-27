@@ -30,9 +30,9 @@ const NewSessionForm = ({ userprofile }) => {
 		event.preventDefault()
 		try {
 			const date = new Date(
-				`${event.target["year-input"].value}-${
-					event.target["month-input"].value
-				}-${event.target["day-input"].value} 15:00`
+				`${event.target["dateYY"].value}-${event.target["dateMM"].value}-${
+					event.target["dateDD"].value
+				} 15:00`
 			)
 			const newSession = {
 				date: date.getTime(),

@@ -1,21 +1,20 @@
 import React from "react"
-import TextDatePicker from "react-text-datepicker"
 import CreatableSelect from "react-select/lib/Creatable"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
+import SessionDate from "./SessionDate"
 
 const SessionForm = props => {
 	return (
 		<form onSubmit={props.formHandler}>
 			<Form.Row>
-				<Form.Group as={Col} sm={2} controlId="sessionDate">
-					<Form.Label>Date</Form.Label>
+				<Form.Group as={Col} sm={3} controlId="sessionDate">
 					<Form.Row>
-						<TextDatePicker name="date" value={props.date} />
+						<SessionDate date={props.date} />
 					</Form.Row>
 				</Form.Group>
-				<Form.Group as={Col} sm={10} controlId="sessionGame">
+				<Form.Group as={Col} sm={9} controlId="sessionGame">
 					<Form.Label>Game</Form.Label>
 					<CreatableSelect
 						name="game"
