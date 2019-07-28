@@ -3,7 +3,6 @@ const bodyParser = require("koa-bodyparser")
 const Router = require("koa-router")
 const logger = require("koa-logger")
 const serve = require("koa-static")
-const jwt = require("koa-jwt")
 const mongoose = require("mongoose")
 const config = require("./utils/config")
 
