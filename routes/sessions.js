@@ -130,7 +130,6 @@ module.exports = ({ sessionsRouter }) => {
 
 		const output = filteredGames.reduce((result, game) => {
 			let text = ""
-			console.log(game)
 			switch (game.rating) {
 				case 10:
 					text =
@@ -190,8 +189,6 @@ module.exports = ({ sessionsRouter }) => {
 
 	sessionsRouter.post("/", jwt, async (ctx, next) => {
 		const body = ctx.request.body
-
-		console.log(body)
 
 		if (!body.game) ctx.throw(400, "Game not specified.")
 		if (!body.players) ctx.throw(400, "Players not specified.")
