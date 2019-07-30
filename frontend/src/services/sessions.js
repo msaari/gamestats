@@ -19,6 +19,12 @@ const getSome = async limit => {
 	return response.data
 }
 
+const getPath = async (path, params = null) => {
+	params = params ? "?" + params : ""
+	const response = await axios.get(baseUrl + "/" + path + params)
+	return response.data
+}
+
 const create = async newObject => {
 	const config = {
 		headers: { Authorization: token }
@@ -50,6 +56,7 @@ const deleteSession = async id => {
 export default {
 	getAll,
 	getSome,
+	getPath,
 	create,
 	update,
 	deleteSession,
