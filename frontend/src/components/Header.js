@@ -26,6 +26,9 @@ const Header = ({ user, setUser }) => {
 						<LinkContainer to="/games/top100">
 							<NavDropdown.Item>Top 100 candidates</NavDropdown.Item>
 						</LinkContainer>
+						<LinkContainer to="/sessions/bbcode">
+							<NavDropdown.Item>BBCode sessions</NavDropdown.Item>
+						</LinkContainer>
 					</NavDropdown>
 				</Nav>
 				{!user && <LoginForm setUser={setUser} />}

@@ -7,6 +7,7 @@ import Header from "./components/Header"
 import SessionList from "./components/SessionList"
 import NewSessionForm from "./components/NewSessionForm"
 import GameList from "./components/GameList"
+import BBCode from "./components/BBCode"
 
 import gameService from "./services/games"
 import sessionService from "./services/sessions"
@@ -68,7 +69,11 @@ const App = props => {
 
 			<Route path="/" exact render={() => <Home user={user} />} />
 			<Route path="/add_session" render={() => <NewSession user={user} />} />
-			<Route path="/sessions" render={() => <Sessions user={user} />} />
+			<Route path="/sessions" exact render={() => <Sessions user={user} />} />
+			<Route
+				path="/sessions/bbcode"
+				render={routeProps => <BBCode {...routeProps} />}
+			/>
 			<Route
 				path="/games"
 				exact
