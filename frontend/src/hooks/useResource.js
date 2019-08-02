@@ -7,15 +7,38 @@ export const useResource = baseUrl => {
 
 	useEffect(() => {
 		async function getResources() {
-			const response = await axios.get(baseUrl)
+			let params = {}
+			if (baseUrl === "/api/sessions") {
+				params = {
+					limit: 20,
+					order: "desc"
+				}
+			}
+			const response = await axios.get(baseUrl, { params })
 			setResources(response.data)
 		}
 		getResources()
 	}, [baseUrl])
 
+	useEffect(() => {
+		const loggedUserJSON = window.localStorage.getItem("gamestatsLoggedUser")
+		if (loggedUserJSON) {
+			const user = JSON.parse(loggedUserJSON)
+			setToken(user.token)
+		}
+	}, [])
+
+	const getPath = async (path, params = null) => {
+		params = params ? "?" + params : ""
+		const response = await axios.get(baseUrl + "/" + path + params)
+		const newResources = response.data
+		setResources(newResources)
+		return response.data
+	}
+
 	const create = async resource => {
 		const config = {
-			headers: { Authorization: `bearer ${token}` }
+			headers: { Authorization: `Bearer ${token}` }
 		}
 
 		const response = await axios.post(baseUrl, resource, config)
@@ -26,7 +49,7 @@ export const useResource = baseUrl => {
 
 	const update = async (id, resource) => {
 		const config = {
-			headers: { Authorization: `bearer ${token}` }
+			headers: { Authorization: `Bearer ${token}` }
 		}
 		const response = await axios.put(`${baseUrl}/${id}`, resource, config)
 		const newResources = resources
@@ -38,7 +61,7 @@ export const useResource = baseUrl => {
 
 	const deleteResource = async id => {
 		const config = {
-			headers: { Authorization: `bearer ${token}` }
+			headers: { Authorization: `Bearer ${token}` }
 		}
 
 		await axios.delete(`${baseUrl}/${id}`, config)
@@ -48,6 +71,7 @@ export const useResource = baseUrl => {
 
 	const service = {
 		create,
+		getPath,
 		setToken,
 		update,
 		deleteResource
