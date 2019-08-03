@@ -5,7 +5,7 @@ import SessionForm from "./SessionForm"
 import sessionService from "../services/sessions"
 import gameService from "../services/games"
 
-const NewSessionForm = ({ userprofile }) => {
+const NewSessionForm = () => {
 	const [gameNames, setGameNames] = useState([])
 
 	useEffect(() => {
@@ -36,24 +36,30 @@ const NewSessionForm = ({ userprofile }) => {
 			const dateYY = event.target["dateYY"].value
 			const dateMM = zeroPad(event.target["dateMM"].value, 2)
 			const dateDD = zeroPad(event.target["dateDD"].value, 2)
-
 			const dateString = `${dateYY}-${dateMM}-${dateDD}T15:00:00`
 			const date = new Date(dateString)
+
+			const plays = event.target.plays.value
+				? event.target.plays.value
+				: event.target.plays.placeholder
+			const wins = event.target.wins.value
+				? event.target.wins.value
+				: event.target.wins.placeholder
+			const players = event.target.players.value
+				? event.target.players.value
+				: event.target.players.placeholder
+
 			const newSession = {
 				date: date.getTime(),
 				game: event.target.game.value,
-				plays: event.target.plays.value,
-				wins: event.target.wins.value,
-				players: event.target.players.value,
+				plays,
+				wins,
+				players,
 				ungeeked: true
 			}
 			await sessionService.create(newSession)
 			const notifier = new AWN()
 			notifier.success("Session saved!")
-			event.target.game.value = ""
-			event.target.plays.value = "1"
-			event.target.wins.value = "0"
-			event.target.players.value = "2"
 		} catch (exception) {
 			const notifier = new AWN()
 			console.log(exception)
@@ -64,14 +70,7 @@ const NewSessionForm = ({ userprofile }) => {
 	const today = new Date()
 
 	return (
-		<SessionForm
-			formHandler={formHandler}
-			date={today}
-			gameNames={gameNames}
-			plays="1"
-			wins="0"
-			players="2"
-		/>
+		<SessionForm formHandler={formHandler} date={today} gameNames={gameNames} />
 	)
 }
 

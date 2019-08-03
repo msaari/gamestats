@@ -26,11 +26,21 @@ const SessionForm = props => {
 			<Form.Row>
 				<Form.Group as={Col} controlId="sessionGames">
 					<Form.Label>Plays</Form.Label>
-					<Form.Control type="number" name="plays" defaultValue={props.plays} />
+					<Form.Control
+						type="number"
+						name="plays"
+						defaultValue={props.plays}
+						placeholder="1"
+					/>
 				</Form.Group>
 				<Form.Group as={Col} controlId="sessionWins">
 					<Form.Label>Wins</Form.Label>{" "}
-					<Form.Control type="number" name="wins" defaultValue={props.wins} />
+					<Form.Control
+						type="number"
+						name="wins"
+						defaultValue={props.wins}
+						placeholder="0"
+					/>
 				</Form.Group>
 				<Form.Group as={Col} controlId="sessionPlayers">
 					<Form.Label>Players</Form.Label>{" "}
@@ -38,6 +48,7 @@ const SessionForm = props => {
 						type="number"
 						name="players"
 						defaultValue={props.players}
+						placeholder="2"
 					/>
 				</Form.Group>
 			</Form.Row>
