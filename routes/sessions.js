@@ -4,7 +4,7 @@ const GameObject = require("../classes/Game")
 const jwt = require("../middlewares/jwt")
 const moment = require("moment")
 
-const generateDateParam = (week, month, year) => {
+const generateWeekDateParam = (week, month, year) => {
 	year = Number.isInteger(parseInt(year)) ? parseInt(year) : null
 	month = Number.isInteger(parseInt(month)) ? parseInt(month) : null
 	week = Number.isInteger(parseInt(week)) ? parseInt(week) : null
@@ -43,6 +43,22 @@ const generateDateParam = (week, month, year) => {
 	return dateParam
 }
 
+const generateRangeDateParam = (from, to) => {
+	const now = moment()
+	if (!to) {
+		to = now.format("YYYY-MM-DD")
+	}
+
+	let dateParam = {
+		date: {
+			$gte: `${from}`,
+			$lte: `${to}`
+		}
+	}
+
+	return dateParam
+}
+
 module.exports = ({ sessionsRouter }) => {
 	sessionsRouter.get("/", async (ctx, next) => {
 		let order = "asc"
@@ -50,12 +66,22 @@ module.exports = ({ sessionsRouter }) => {
 
 		let params = {}
 
-		const dateParam = generateDateParam(
-			ctx.request.query.week,
-			ctx.request.query.month,
-			ctx.request.query.year
-		)
+		let dateParam = null
 
+		if (ctx.request.query.week) {
+			dateParam = generateWeekDateParam(
+				ctx.request.query.week,
+				ctx.request.query.month,
+				ctx.request.query.year
+			)
+		}
+
+		if (ctx.request.query.from) {
+			dateParam = generateRangeDateParam(
+				ctx.request.query.from,
+				ctx.request.query.to
+			)
+		}
 		if (dateParam) params = dateParam
 
 		if (ctx.request.query.game) {
@@ -82,7 +108,7 @@ module.exports = ({ sessionsRouter }) => {
 
 		let params = {}
 
-		const dateParam = generateDateParam(
+		const dateParam = generateWeekDateParam(
 			ctx.request.query.week,
 			ctx.request.query.month,
 			ctx.request.query.year
