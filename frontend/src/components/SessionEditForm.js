@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react"
 import AWN from "awesome-notifications"
 import SessionForm from "./SessionForm"
+
+import sessionService from "../services/sessions"
 import gameService from "../services/games"
 
 const SessionEditForm = props => {
@@ -48,7 +50,7 @@ const SessionEditForm = props => {
 				wins: event.target.wins.value,
 				players: event.target.players.value
 			}
-			await props.service.update(session.id, newSession)
+			await sessionService.update(session.id, newSession)
 			const notifier = new AWN()
 			notifier.success("Session updated!")
 			setSubmitted(true)

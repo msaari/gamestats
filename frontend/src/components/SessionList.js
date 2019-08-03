@@ -1,22 +1,20 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import Session from "./Session"
-import { useResource } from "../hooks/useResource"
+import sessionService from "../services/sessions"
 
 const SessionList = props => {
-	const [sessions, sessionService] = useResource("/api/sessions")
+	const [sessionList, setSessionList] = useState([])
 
 	const isAuth = props.user ? true : false
 
-	const sessionsToShow = sessions.map(entry => {
-		return (
-			<Session
-				key={entry.id}
-				session={entry}
-				isAuth={isAuth}
-				sessions={sessions}
-				service={sessionService}
-			/>
-		)
+	useEffect(() => {
+		sessionService.getSome(20).then(sessions => {
+			setSessionList(sessions)
+		})
+	}, [])
+
+	const sessionsToShow = sessionList.map(entry => {
+		return <Session key={entry.id} session={entry} isAuth={isAuth} />
 	})
 
 	return <div>{sessionsToShow}</div>

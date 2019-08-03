@@ -1,16 +1,16 @@
 import React, { useState } from "react"
 import AWN from "awesome-notifications"
+import sessionService from "../services/sessions"
 import SessionEditForm from "./SessionEditForm"
 import SessionGeekLink from "./SessionGeekLink"
 
-const Session = ({ session, isAuth, sessions, service }) => {
+const Session = ({ session, isAuth }) => {
 	const [editForm, setEditForm] = useState(false)
 
 	const deleteSession = async () => {
 		const notifier = new AWN()
 		const onOk = () => {
-			service.deleteResource(session.id)
-			notifier.success("Session deleted!")
+			sessionService.deleteSession(session.id)
 		}
 		const onCancel = () => {
 			notifier.info("User says no.")
@@ -31,13 +31,7 @@ const Session = ({ session, isAuth, sessions, service }) => {
 			{session.wins}/{session.plays}, {session.players}){" "}
 			{isAuth && <button onClick={() => setEditForm(true)}>Edit</button>}
 			{isAuth && <button onClick={deleteSession}>Delete</button>}
-			{editForm && (
-				<SessionEditForm
-					session={session}
-					sessions={sessions}
-					service={service}
-				/>
-			)}
+			{editForm && <SessionEditForm session={session} />}
 		</li>
 	)
 }
