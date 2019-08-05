@@ -49,10 +49,15 @@ const loginRouter = new Router({
 	prefix: "/api/login"
 })
 
+const syncRouter = new Router({
+	prefix: "/api/sync"
+})
+
 require("./routes/basic")({ router })
 require("./routes/games")({ gamesRouter })
 require("./routes/sessions")({ sessionsRouter })
 require("./routes/login")({ loginRouter })
+require("./routes/sync")({ syncRouter })
 
 app.use(router.routes())
 app.use(router.allowedMethods())
@@ -65,6 +70,9 @@ app.use(sessionsRouter.allowedMethods())
 
 app.use(loginRouter.routes())
 app.use(loginRouter.allowedMethods())
+
+app.use(syncRouter.routes())
+app.use(syncRouter.allowedMethods())
 
 if (!module.parent) app.listen(config.port)
 
