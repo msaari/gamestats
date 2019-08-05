@@ -9,6 +9,10 @@ function calculateYears(moment) {
 	return Math.abs(ageDate.getUTCFullYear() - 1970)
 }
 
+function escapeRegExp(text) {
+	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
+}
+
 module.exports = ({ gamesRouter }) => {
 	gamesRouter.get("/", async (ctx, next) => {
 		let order = "name"
@@ -97,7 +101,7 @@ module.exports = ({ gamesRouter }) => {
 
 	gamesRouter.get("/name/:name", async (ctx, next) => {
 		const game = await Game.findOne({
-			name: new RegExp(`^${ctx.params.name}$`, "i")
+			name: new RegExp(`^${escapeRegExp(ctx.params.name)}$`, "i")
 		})
 		if (game !== null) {
 			ctx.body = game
