@@ -39,6 +39,7 @@ const parseJSON = async xmlData => {
 	})
 
 	await Promise.all(promises)
+	if (changes.length === 0) changes.push("No changes!")
 	return changes
 }
 
@@ -85,7 +86,10 @@ module.exports = ({ syncRouter }) => {
 		}
 
 		try {
-			ctx.body = await parseJSON(await getXMLData())
+			const changes = await parseJSON(await getXMLData())
+			const result = JSON.stringify(changes.join("\n"))
+			console.log(result)
+			ctx.body = result
 		} catch (err) {
 			ctx.throw(400, err)
 		}

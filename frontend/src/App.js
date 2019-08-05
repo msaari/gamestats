@@ -8,6 +8,7 @@ import SessionList from "./components/SessionList"
 import NewSessionForm from "./components/NewSessionForm"
 import GameList from "./components/GameList"
 import BBCode from "./components/BBCode"
+import SyncResults from "./components/SyncResults"
 
 import gameService from "./services/games"
 import sessionService from "./services/sessions"
@@ -50,6 +51,14 @@ const NewSession = ({ user }) => {
 	)
 }
 
+const Sync = ({ user }) => {
+	return (
+		<Container>
+			{user !== null ? <SyncResults user={user} /> : <p>Please log in!</p>}
+		</Container>
+	)
+}
+
 const App = props => {
 	const [user, setUser] = useState(null)
 
@@ -66,7 +75,6 @@ const App = props => {
 	return (
 		<Router>
 			<Header user={user} setUser={setUser} />
-
 			<Route path="/" exact render={() => <Home user={user} />} />
 			<Route path="/add_session" render={() => <NewSession user={user} />} />
 			<Route path="/sessions" exact render={() => <Sessions user={user} />} />
@@ -83,6 +91,11 @@ const App = props => {
 				path="/games/top100"
 				exact
 				render={routeProps => <Games user={user} {...routeProps} />}
+			/>
+			<Route
+				path="/sync"
+				exact
+				render={routeProps => <Sync user={user} {...routeProps} />}
 			/>
 		</Router>
 	)

@@ -29,6 +29,9 @@ const Header = ({ user, setUser }) => {
 						<LinkContainer to="/sessions/bbcode">
 							<NavDropdown.Item>BBCode sessions</NavDropdown.Item>
 						</LinkContainer>
+						<LinkContainer to="/sync">
+							<NavDropdown.Item>Sync BGG ratings</NavDropdown.Item>
+						</LinkContainer>
 					</NavDropdown>
 				</Nav>
 				{!user && <LoginForm setUser={setUser} />}
