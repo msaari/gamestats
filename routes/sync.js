@@ -6,39 +6,39 @@ const Game = require("../models/Game")
 const jwt = require("../middlewares/jwt")
 
 const parseJSON = async xmlData => {
-	const changes = []
-
 	const games = await Game.find({})
 	const gameObjects = games.map(game => {
 		return new GameObject(game.name, game.id, game)
 	})
 
 	const jsonObj = parser.parse(xmlData, { ignoreAttributes: false })
-	const promises = Object.keys(jsonObj.items.item).map(async item => {
+	const changePromises = Object.keys(jsonObj.items.item).map(async item => {
 		const game = jsonObj.items.item[item]
 		const gameID = game["@_objectid"]
 		const rating = game.stats.rating["@_value"]
-		if (rating === "N/A") return
+		if (rating === "N/A") {
+			return null
+		}
 		const gameObject = await gameObjects.find(
 			game => game.bgg === parseInt(gameID)
 		)
-		if (gameObject && gameObject.rating !== parseInt(rating)) {
-			try {
-				const updated = await Game.findOneAndUpdate(
-					{ _id: gameObject.id },
-					{ rating: rating },
-					{ new: true }
-				).exec()
-				changes.push(
-					`${updated.name}: ${gameObject.rating} -> ${updated.rating}`
-				)
-			} catch (error) {
-				console.log(error)
-			}
+		if (!(gameObject && gameObject.rating !== parseInt(rating))) {
+			// Game not found or its rating is already correct; no change.
+			return null
+		}
+		try {
+			const updated = await Game.findOneAndUpdate(
+				{ _id: gameObject.id },
+				{ rating: rating },
+				{ new: true }
+			).exec()
+			return `${updated.name}: ${gameObject.rating} -> ${updated.rating}`
+		} catch (error) {
+			console.log(error)
 		}
 	})
 
-	await Promise.all(promises)
+	const changes = (await Promise.all(changePromises)).filter(c => c)
 	if (changes.length === 0) changes.push("No changes!")
 	return changes
 }
