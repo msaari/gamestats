@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react"
-import Session from "./Session/Session"
-import sessionService from "../../services/sessions"
-import DateRange from "../DateRange"
 import moment from "moment"
+import Session from "./Session/Session"
+import DateRange from "../DateRange"
+import GameSelector from "./GameSelector/GameSelector"
+import sessionService from "../../services/sessions"
+import Container from "react-bootstrap/Container"
 
 const dateParamString = dateParams => {
 	let paramArray = []
@@ -27,15 +29,17 @@ const SessionList = props => {
 		toMonth: now.month() + 1,
 		toYear: now.year()
 	})
+	const [gameParam, setGameParam] = useState("")
 	const isAuth = props.user ? true : false
 
 	useEffect(() => {
-		sessionService
-			.getPath("", dateParamString(dateParams) + "&order=desc")
-			.then(sessions => {
-				setSessionList(sessions)
-			})
-	}, [dateParams])
+		let paramString = dateParamString(dateParams) + "&order=desc"
+		if (gameParam)
+			paramString = `game=${encodeURIComponent(gameParam)}&order=desc`
+		sessionService.getPath("", paramString).then(sessions => {
+			setSessionList(sessions)
+		})
+	}, [dateParams, gameParam])
 
 	const handleDateChange = event => {
 		event.preventDefault()
@@ -60,6 +64,10 @@ const SessionList = props => {
 		setDateParams({ fromDay, fromMonth, fromYear, toDay, toMonth, toYear })
 	}
 
+	const handleGameChange = event => {
+		setGameParam(event.value)
+	}
+
 	const sessionsToShow = sessionList.map(entry => {
 		return <Session key={entry.id} session={entry} isAuth={isAuth} />
 	})
@@ -67,7 +75,8 @@ const SessionList = props => {
 	return (
 		<>
 			<DateRange formHandler={handleDateChange} />
-			<div>{sessionsToShow}</div>
+			<GameSelector changeHandler={handleGameChange} />
+			<Container className="mt-4">{sessionsToShow}</Container>
 		</>
 	)
 }
