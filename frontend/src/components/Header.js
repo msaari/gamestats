@@ -6,7 +6,7 @@ import LoginForm from "./LoginForm"
 
 const Header = ({ user, setUser }) => {
 	return (
-		<Navbar bg="light" expand="lg">
+		<Navbar bg="light" expand="lg" className="mb-3">
 			<Navbar.Brand>
 				<Link to="/">Gamestats</Link>
 			</Navbar.Brand>
