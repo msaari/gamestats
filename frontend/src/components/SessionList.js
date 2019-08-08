@@ -30,9 +30,11 @@ const SessionList = props => {
 	const isAuth = props.user ? true : false
 
 	useEffect(() => {
-		sessionService.getPath("", dateParamString(dateParams)).then(sessions => {
-			setSessionList(sessions)
-		})
+		sessionService
+			.getPath("", dateParamString(dateParams) + "&order=desc")
+			.then(sessions => {
+				setSessionList(sessions)
+			})
 	}, [dateParams])
 
 	const handleDateChange = event => {
