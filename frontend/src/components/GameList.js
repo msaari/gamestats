@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react"
-import Game from "./Game.js"
-import GameFilter from "./GameFilter.js"
+import Game from "./Game"
+import GameFilter from "./GameFilter"
 import gameService from "../services/games"
+import ExportList from "./ExportList"
 
 const GameList = ({ path, user }) => {
 	const [gameList, setGameList] = useState([])
@@ -50,6 +51,8 @@ const GameList = ({ path, user }) => {
 		return <Game counter={counter} key={game.id} game={game} isAuth={isAuth} />
 	})
 
+	const plainText = filteredGameList.map(game => game.name)
+
 	const handleFilterChange = event => {
 		setGameFilter(event.target.value)
 	}
@@ -88,6 +91,7 @@ const GameList = ({ path, user }) => {
 				</thead>
 				<tbody>{gamesToShow}</tbody>
 			</table>
+			{path === "top100" ? <ExportList text={plainText} /> : null}
 		</>
 	)
 }
