@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 
-import Rating from "./Rating"
-import GameEditForm from "./GameEditForm"
-import GameDetails from "./GameDetails"
+import Rating from "./Rating/Rating"
+import GameEditForm from "./GameEditForm/GameEditForm"
+import GameDetails from "./GameDetails/GameDetails"
 
 const Game = ({ game, counter, isAuth }) => {
 	const [moreVisible, setMoreVisible] = useState(null)

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
-import Session from "./Session"
-import sessionService from "../services/sessions"
-import DateRange from "./DateRange"
+import Session from "./Session/Session"
+import sessionService from "../../services/sessions"
+import DateRange from "../DateRange"
 import moment from "moment"
 
 const dateParamString = dateParams => {

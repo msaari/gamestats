@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import Container from "react-bootstrap/Container"
 import DisplayText from "./DisplayText"
 import sessionService from "../services/sessions"
 import moment from "moment"
@@ -63,8 +62,7 @@ const BBCode = () => {
 	}
 
 	return (
-		<Container>
-			<h2>BBCode</h2>
+		<>
 			<Form onSubmit={formHandler}>
 				<Form.Row>
 					<Form.Group as={Col} md="3" controlId="week">
@@ -93,7 +91,7 @@ const BBCode = () => {
 				params={dateParamString(dateParams)}
 				heading={dateParamHeading(dateParams)}
 			/>
-		</Container>
+		</>
 	)
 }
 

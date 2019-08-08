@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react"
 import AWN from "awesome-notifications"
-import SessionForm from "./SessionForm"
+import SessionForm from "../SessionForm/SessionForm"
 
-import sessionService from "../services/sessions"
-import gameService from "../services/games"
+import sessionService from "../../../../services/sessions"
+import gameService from "../../../../services/games"
 
 const NewSessionForm = () => {
 	const [gameNames, setGameNames] = useState([])

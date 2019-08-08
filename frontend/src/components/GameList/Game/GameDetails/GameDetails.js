@@ -1,6 +1,6 @@
 import React from "react"
 import Table from "react-bootstrap/Table"
-import Rating from "./Rating"
+import Rating from "../Rating/Rating"
 
 const GameDetails = ({ game }) => {
 	return (

@@ -1,8 +1,8 @@
 import React, { useState } from "react"
 import AWN from "awesome-notifications"
-import sessionService from "../services/sessions"
-import SessionEditForm from "./SessionEditForm"
-import SessionGeekLink from "./SessionGeekLink"
+import sessionService from "../../../services/sessions"
+import SessionEditForm from "./SessionEditForm/SessionEditForm"
+import SessionGeekLink from "./SessionGeekLink/SessionGeekLink"
 
 const Session = ({ session, isAuth }) => {
 	const [editForm, setEditForm] = useState(false)

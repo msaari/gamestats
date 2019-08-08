@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react"
-import Game from "./Game"
-import GameFilter from "./GameFilter"
-import gameService from "../services/games"
-import ExportList from "./ExportList"
+import Game from "./Game/Game"
+import GameFilter from "./GameFilter/GameFilter"
+import gameService from "../../services/games"
+import ExportList from "../ExportList"
 
 const GameList = ({ path, user }) => {
 	const [gameList, setGameList] = useState([])

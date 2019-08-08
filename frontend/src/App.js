@@ -3,61 +3,17 @@ import { BrowserRouter as Router, Route } from "react-router-dom"
 
 import "./index.css"
 
+import Home from "./views/Home"
+import Games from "./views/Games"
+import NewSession from "./views/NewSession"
+import Sessions from "./views/Sessions"
+import Sync from "./views/Sync"
+import BBCodes from "./views/BBCodes"
+
 import Header from "./components/Header"
-import SessionList from "./components/SessionList"
-import NewSessionForm from "./components/NewSessionForm"
-import GameList from "./components/GameList"
-import BBCode from "./components/BBCode"
-import SyncResults from "./components/SyncResults"
 
 import gameService from "./services/games"
 import sessionService from "./services/sessions"
-
-import Container from "react-bootstrap/Container"
-
-const Sessions = ({ user }) => {
-	return (
-		<Container>
-			<h2>List of sessions</h2>
-			<SessionList user={user} />
-		</Container>
-	)
-}
-
-const Games = ({ match, user }) => {
-	const path = match.path.replace(/\/games\/?/, "")
-	return (
-		<div>
-			<h2>List of games</h2>
-			<GameList path={path} user={user} />
-		</div>
-	)
-}
-
-const Home = ({ user }) => {
-	return (
-		<Container>
-			{user !== null ? <NewSessionForm /> : <p>Please log in!</p>}
-		</Container>
-	)
-}
-
-const NewSession = ({ user }) => {
-	return (
-		<Container>
-			<h2>Add a session</h2>
-			{user !== null ? <NewSessionForm /> : <p>Please log in!</p>}
-		</Container>
-	)
-}
-
-const Sync = ({ user }) => {
-	return (
-		<Container>
-			{user !== null ? <SyncResults user={user} /> : <p>Please log in!</p>}
-		</Container>
-	)
-}
 
 const App = props => {
 	const [user, setUser] = useState(null)
@@ -80,7 +36,7 @@ const App = props => {
 			<Route path="/sessions" exact render={() => <Sessions user={user} />} />
 			<Route
 				path="/sessions/bbcode"
-				render={routeProps => <BBCode {...routeProps} />}
+				render={routeProps => <BBCodes {...routeProps} />}
 			/>
 			<Route
 				path="/games"

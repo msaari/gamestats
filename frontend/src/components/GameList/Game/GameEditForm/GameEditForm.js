@@ -1,5 +1,5 @@
 import React from "react"
-import gameService from "../services/games"
+import gameService from "../../../../services/games"
 import AWN from "awesome-notifications"
 
 import Form from "react-bootstrap/Form"

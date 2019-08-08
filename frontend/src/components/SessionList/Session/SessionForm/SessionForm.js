@@ -3,7 +3,7 @@ import CreatableSelect from "react-select/lib/Creatable"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
-import SessionDate from "./SessionDate"
+import SessionDate from "./SessionDate/SessionDate"
 
 const SessionForm = props => {
 	return (

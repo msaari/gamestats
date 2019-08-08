@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
-import gameService from "../services/games"
-import sessionService from "../services/sessions"
+import gameService from "../../../../services/games"
+import sessionService from "../../../../services/sessions"
 import AWN from "awesome-notifications"
 
 const markSessionGeeked = async session => {
