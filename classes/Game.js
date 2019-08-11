@@ -12,6 +12,7 @@ class Game {
 		this.gameLength = data["length"]
 		this.parent = data.parent
 		this.owned = data.owned
+		this.happiness = 0
 	}
 
 	addSession(plays, wins) {
@@ -21,10 +22,17 @@ class Game {
 
 	addPlays(plays) {
 		this.plays += parseInt(plays)
+		this.updateHappiness()
 	}
 
 	addWins(wins) {
 		this.wins += parseInt(wins)
+	}
+
+	updateHappiness() {
+		this.happiness = Math.round(
+			(this.rating - 4.5) * (this.gameLength * this.plays)
+		)
 	}
 }
 
