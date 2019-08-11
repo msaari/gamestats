@@ -13,6 +13,8 @@ class Game {
 		this.parent = data.parent
 		this.owned = data.owned
 		this.happiness = 0
+		this.hotness = 0
+		this.totalPlays = data.totalPlays
 	}
 
 	addSession(plays, wins) {
@@ -30,9 +32,20 @@ class Game {
 	}
 
 	updateHappiness() {
+		const ratio =
+			this.plays && this.totalPlays ? 1 + this.plays / this.totalPlays : 0
 		this.happiness = Math.round(
 			(this.rating - 4.5) * (this.gameLength * this.plays)
 		)
+		this.hotness = Math.round(
+			ratio * ratio * Math.sqrt(this.plays) * this.happiness
+		)
+		this.happiness = Number.parseFloat(Math.log10(this.happiness)).toPrecision(
+			3
+		)
+		this.hotness = Number.parseFloat(Math.log10(this.hotness)).toPrecision(3)
+		if (isNaN(this.happiness)) this.happiness = 0
+		if (isNaN(this.hotness)) this.hotness = 0
 	}
 }
 
