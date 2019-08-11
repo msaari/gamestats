@@ -41,29 +41,6 @@ const SessionList = props => {
 		})
 	}, [dateParams, gameParam])
 
-	const handleDateChange = event => {
-		event.preventDefault()
-		const fromYear = event.target.fromYear.value
-			? parseInt(event.target.fromYear.value)
-			: now.year()
-		const fromMonth = event.target.fromMonth.value
-			? parseInt(event.target.fromMonth.value)
-			: null
-		const fromDay = event.target.fromDay.value
-			? parseInt(event.target.fromDay.value)
-			: null
-		const toYear = event.target.toYear.value
-			? parseInt(event.target.toYear.value)
-			: now.year()
-		const toMonth = event.target.toMonth.value
-			? parseInt(event.target.toMonth.value)
-			: null
-		const toDay = event.target.toDay.value
-			? parseInt(event.target.toDay.value)
-			: null
-		setDateParams({ fromDay, fromMonth, fromYear, toDay, toMonth, toYear })
-	}
-
 	const handleGameChange = event => {
 		setGameParam(event.value)
 	}
@@ -74,7 +51,7 @@ const SessionList = props => {
 
 	return (
 		<>
-			<DateRange formHandler={handleDateChange} />
+			<DateRange paramSetter={setDateParams} />
 			<GameSelector changeHandler={handleGameChange} />
 			<Container className="mt-4">{sessionsToShow}</Container>
 		</>
