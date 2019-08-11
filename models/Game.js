@@ -9,7 +9,8 @@ const gameSchema = mongoose.Schema({
 	bgg: Number,
 	rating: Number,
 	length: Number,
-	parent: String
+	parent: String,
+	totalPlays: Number
 })
 
 gameSchema.set("toJSON", {
