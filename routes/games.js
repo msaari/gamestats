@@ -2,12 +2,7 @@ const GameObject = require("../classes/Game")
 const Game = require("../models/Game")
 const Session = require("../models/Session")
 const jwt = require("../middlewares/jwt")
-
-function calculateYears(moment) {
-	var ageDifMs = Date.now() - moment.getTime()
-	var ageDate = new Date(ageDifMs)
-	return Math.abs(ageDate.getUTCFullYear() - 1970)
-}
+const dates = require("../utils/dates")
 
 function escapeRegExp(text) {
 	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
@@ -18,8 +13,12 @@ module.exports = ({ gamesRouter }) => {
 		let order = "name"
 		if (ctx.request.query.order === "plays") order = "plays"
 
+		let sessionParams = {}
+		let dateParam = dates.readDateParam(ctx.request.query)
+		if (dateParam) sessionParams = dateParam
+
 		const games = await Game.find({})
-		const sessions = await Session.find({})
+		const sessions = await Session.find(sessionParams)
 
 		const gameObjects = games.map(game => {
 			return new GameObject(game.name, game.id, game)
@@ -36,53 +35,27 @@ module.exports = ({ gamesRouter }) => {
 				)
 				if (parentObject) {
 					parentObject.addSession(sessions[i].plays, sessions[i].wins)
+					if (parentObject.parent) {
+						const grandParentObject = gameObjects.find(
+							game => game.name === parentObject.parent
+						)
+						if (grandParentObject) {
+							grandParentObject.addSession(sessions[i].plays, sessions[i].wins)
+						}
+					}
 				}
 			}
 		}
-		switch (order) {
-			case "plays":
-				gameObjects.sort((a, b) => b.plays - a.plays)
-				break
-			case "name":
-				gameObjects.sort((a, b) => {
-					if (a.name < b.name) return -1
-					return 1
-				})
-				break
-		}
 
-		ctx.body = gameObjects
-	})
-
-	gamesRouter.get("/top100", async (ctx, next) => {
-		let order = "name"
-		if (ctx.request.query.order === "plays") order = "plays"
-
-		const games = await Game.find({})
-		const sessions = await Session.find({})
-
-		const gameObjects = games.map(game => {
-			return new GameObject(game.name, game.id, game)
-		})
-
-		for (var i = 0; i < sessions.length; i++) {
-			if (calculateYears(sessions[i].date) > 2) continue
-			const object = gameObjects.find(game => game.name === sessions[i].game)
-			if (object) {
-				object.addSession(sessions[i].plays, sessions[i].wins)
-			}
-			if (object.parent) {
-				const parentObject = gameObjects.find(
-					game => game.name === object.parent
-				)
-				if (parentObject) {
-					parentObject.addSession(sessions[i].plays, sessions[i].wins)
-				}
-			}
-		}
-		const filteredGames = gameObjects.filter(
-			game => game.plays > 0 && game.rating >= 7 && !game.parent
-		)
+		let filteredGames = gameObjects
+		if (ctx.request.query.played)
+			filteredGames = filteredGames.filter(game => game.plays > 0)
+		if (ctx.request.query.noexpansions)
+			filteredGames = filteredGames.filter(game => !game.parent)
+		if (ctx.request.query.rating && !isNaN(parseInt(ctx.request.query.rating)))
+			filteredGames = filteredGames.filter(
+				game => game.rating >= parseInt(ctx.request.query.rating)
+			)
 
 		switch (order) {
 			case "plays":
