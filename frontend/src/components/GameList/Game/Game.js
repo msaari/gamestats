@@ -34,6 +34,7 @@ const Game = ({ game, counter, isAuth }) => {
 				<Rating value={game.rating} />
 			</td>
 			<td>{game.happiness}</td>
+			<td>{game.hotness}</td>
 		</tr>
 	)
 }
