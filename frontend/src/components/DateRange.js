@@ -32,13 +32,12 @@ const handleDateChange = event => {
 }
 
 const DateRange = ({ paramSetter }) => {
-	const from = moment()
 	const to = moment()
 
 	const [defaultValues, setDefaultValues] = useState({
-		fromDay: from.startOf("month").format("D"),
-		fromMonth: from.month() + 1,
-		fromYear: from.year(),
+		fromDay: 1,
+		fromMonth: 1,
+		fromYear: 2001,
 		toDay: to.date(),
 		toMonth: to.month() + 1,
 		toYear: to.year()
@@ -61,7 +60,7 @@ const DateRange = ({ paramSetter }) => {
 				setDefaultValues({
 					fromDay: 1,
 					fromMonth: 1,
-					fromYear: 1,
+					fromYear: 2001,
 					toDay: today.date(),
 					toMonth: today.month() + 1,
 					toYear: today.year()
@@ -80,11 +79,55 @@ const DateRange = ({ paramSetter }) => {
 				})
 				break
 			}
+			case "thisyear": {
+				const thisYear = moment().startOf("year")
+
+				setDefaultValues({
+					fromDay: thisYear.date(),
+					fromMonth: thisYear.month() + 1,
+					fromYear: thisYear.year(),
+					toDay: today.date(),
+					toMonth: today.month() + 1,
+					toYear: today.year()
+				})
+				break
+			}
+			case "lastyear": {
+				const lastYear = moment()
+					.subtract(1, "years")
+					.startOf("year")
+				const endOfLastYear = moment()
+					.subtract(1, "years")
+					.endOf("year")
+
+				setDefaultValues({
+					fromDay: lastYear.date(),
+					fromMonth: lastYear.month() + 1,
+					fromYear: lastYear.year(),
+					toDay: endOfLastYear.date(),
+					toMonth: endOfLastYear.month() + 1,
+					toYear: endOfLastYear.year()
+				})
+				break
+			}
+			case "thisquarter": {
+				const thisQuarter = moment().startOf("quarter")
+
+				setDefaultValues({
+					fromDay: thisQuarter.date(),
+					fromMonth: thisQuarter.month() + 1,
+					fromYear: thisQuarter.year(),
+					toDay: today.date(),
+					toMonth: today.month() + 1,
+					toYear: today.year()
+				})
+				break
+			}
 			default:
 				setDefaultValues({
-					fromDay: from.startOf("month").format("D"),
-					fromMonth: from.month() + 1,
-					fromYear: from.year(),
+					fromDay: 1,
+					fromMonth: 1,
+					fromYear: 2001,
 					toDay: to.date(),
 					toMonth: to.month() + 1,
 					toYear: to.year()
@@ -95,9 +138,9 @@ const DateRange = ({ paramSetter }) => {
 	setDateParams = paramSetter
 
 	return (
-		<Form onSubmit={handleDateChange}>
+		<Form onSubmit={handleDateChange} className="mt-4 mb-5">
 			<Form.Row>
-				<Form.Group as={Col} md="1" controlId="fromDay">
+				<Form.Group as={Col} xs="4" sm="1" controlId="fromDay">
 					<Form.Label>Day</Form.Label>
 					<Form.Control
 						type="number"
@@ -106,7 +149,7 @@ const DateRange = ({ paramSetter }) => {
 						value={defaultValues.fromDay}
 					/>
 				</Form.Group>
-				<Form.Group as={Col} md="1" controlId="fromMonth">
+				<Form.Group as={Col} xs="4" sm="1" controlId="fromMonth">
 					<Form.Label>Month</Form.Label>
 					<Form.Control
 						type="number"
@@ -115,7 +158,7 @@ const DateRange = ({ paramSetter }) => {
 						value={defaultValues.fromMonth}
 					/>
 				</Form.Group>
-				<Form.Group as={Col} md="2" controlId="fromYear">
+				<Form.Group as={Col} xs="4" sm="2" controlId="fromYear">
 					<Form.Label>Year</Form.Label>
 					<Form.Control
 						type="number"
@@ -124,11 +167,16 @@ const DateRange = ({ paramSetter }) => {
 						value={defaultValues.fromYear}
 					/>
 				</Form.Group>
-				<Form.Group as={Col} md="1" controlId="to">
+				<Form.Group
+					as={Col}
+					sm="1"
+					className="d-none d-sm-block"
+					controlId="to"
+				>
 					<Form.Label>&nbsp;</Form.Label>
 					<Form.Control plaintext readOnly defaultValue="to" />
 				</Form.Group>
-				<Form.Group as={Col} md="1" controlId="toDay">
+				<Form.Group as={Col} xs="4" sm="1" controlId="toDay">
 					<Form.Label>Day</Form.Label>
 					<Form.Control
 						type="number"
@@ -137,7 +185,7 @@ const DateRange = ({ paramSetter }) => {
 						value={defaultValues.toDay}
 					/>
 				</Form.Group>
-				<Form.Group as={Col} md="1" controlId="toMonth">
+				<Form.Group as={Col} xs="4" sm="1" controlId="toMonth">
 					<Form.Label>Month</Form.Label>
 					<Form.Control
 						type="number"
@@ -146,7 +194,7 @@ const DateRange = ({ paramSetter }) => {
 						value={defaultValues.toMonth}
 					/>
 				</Form.Group>
-				<Form.Group as={Col} md="2" controlId="toYear">
+				<Form.Group as={Col} xs="4" sm="2" controlId="toYear">
 					<Form.Label>Year</Form.Label>
 					<Form.Control
 						type="number"
@@ -155,22 +203,57 @@ const DateRange = ({ paramSetter }) => {
 						value={defaultValues.toYear}
 					/>
 				</Form.Group>
-				<Form.Group as={Col} md="3">
-					<Form.Label>&nbsp;</Form.Label>
+				<Form.Group as={Col} sm="3">
+					<Form.Label className="d-none d-sm-block">&nbsp;</Form.Label>
 					<Button type="submit" variant="primary" block>
 						Update
 					</Button>
 				</Form.Group>
 			</Form.Row>
 			<Form.Row>
-				<Col>
-					<Button onClick={() => setDate("alltime")} variant="primary">
+				<Col xs="4" sm="2">
+					<Button
+						block
+						onClick={() => setDate("alltime")}
+						variant="outline-primary"
+					>
 						All time
 					</Button>
 				</Col>
-				<Col>
-					<Button onClick={() => setDate("12months")} variant="primary">
+				<Col xs="4" sm="2">
+					<Button
+						block
+						onClick={() => setDate("12months")}
+						variant="outline-primary"
+					>
 						12 months
+					</Button>
+				</Col>
+				<Col xs="4" sm="2">
+					<Button
+						block
+						onClick={() => setDate("thisyear")}
+						variant="outline-primary"
+					>
+						This year
+					</Button>
+				</Col>
+				<Col xs="4" sm="2">
+					<Button
+						block
+						onClick={() => setDate("lastyear")}
+						variant="outline-primary"
+					>
+						Last year
+					</Button>
+				</Col>
+				<Col xs="4" sm="2">
+					<Button
+						block
+						onClick={() => setDate("thisquarter")}
+						variant="outline-primary"
+					>
+						Quarter
 					</Button>
 				</Col>
 			</Form.Row>
