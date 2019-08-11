@@ -5,11 +5,8 @@ import SessionForm from "../SessionForm/SessionForm"
 import sessionService from "../../../../services/sessions"
 import gameService from "../../../../services/games"
 
-const SessionEditForm = props => {
+const SessionEditForm = ({ session, modalCloser }) => {
 	const [gameNames, setGameNames] = useState([])
-	const [submitted, setSubmitted] = useState(false)
-
-	const session = props.session
 
 	useEffect(() => {
 		let isSubscribed = true
@@ -53,7 +50,7 @@ const SessionEditForm = props => {
 			await sessionService.update(session.id, newSession)
 			const notifier = new AWN()
 			notifier.success("Session updated!")
-			setSubmitted(true)
+			modalCloser()
 		} catch (exception) {
 			const notifier = new AWN()
 			notifier.alert(`There was a problem saving the session: ${exception}`)
@@ -63,19 +60,15 @@ const SessionEditForm = props => {
 	const date = new Date(session.date)
 
 	return (
-		<>
-			{!submitted ? (
-				<SessionForm
-					formHandler={formHandler}
-					date={date}
-					gameNames={gameNames}
-					gameDefaultValue={[{ label: session.game, value: session.game }]}
-					plays={session.plays}
-					wins={session.wins}
-					players={session.players}
-				/>
-			) : null}
-		</>
+		<SessionForm
+			formHandler={formHandler}
+			date={date}
+			gameNames={gameNames}
+			gameDefaultValue={[{ label: session.game, value: session.game }]}
+			plays={session.plays}
+			wins={session.wins}
+			players={session.players}
+		/>
 	)
 }
 
