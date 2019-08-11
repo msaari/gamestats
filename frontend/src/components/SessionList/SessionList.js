@@ -4,7 +4,7 @@ import Session from "./Session/Session"
 import DateRange from "../DateRange"
 import GameSelector from "./GameSelector/GameSelector"
 import sessionService from "../../services/sessions"
-import Container from "react-bootstrap/Container"
+import Table from "react-bootstrap/Table"
 
 const dateParamString = dateParams => {
 	let paramArray = []
@@ -53,7 +53,19 @@ const SessionList = props => {
 		<>
 			<DateRange paramSetter={setDateParams} />
 			<GameSelector changeHandler={handleGameChange} />
-			<Container className="mt-4">{sessionsToShow}</Container>
+			<Table className="mt-4">
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Game</th>
+						<th>Plays</th>
+						<th>Wins</th>
+						<th>Players</th>
+						{isAuth && <th>Tools</th>}
+					</tr>
+				</thead>
+				<tbody>{sessionsToShow}</tbody>
+			</Table>
 		</>
 	)
 }
