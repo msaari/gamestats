@@ -9,12 +9,12 @@ const SessionForm = props => {
 	return (
 		<form onSubmit={props.formHandler}>
 			<Form.Row>
-				<Form.Group as={Col} sm={3} controlId="sessionDate">
+				<Form.Group as={Col} sm={5} controlId="sessionDate">
 					<Form.Row>
 						<SessionDate date={props.date} />
 					</Form.Row>
 				</Form.Group>
-				<Form.Group as={Col} sm={9} controlId="sessionGame">
+				<Form.Group as={Col} sm={7} controlId="sessionGame">
 					<Form.Label>Game</Form.Label>
 					<CreatableSelect
 						name="game"
