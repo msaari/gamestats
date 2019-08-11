@@ -5,6 +5,7 @@ import DateRange from "../DateRange"
 import gameService from "../../services/games"
 import ExportList from "../ExportList"
 import Table from "react-bootstrap/Table"
+import Spinner from "react-bootstrap/Spinner"
 
 const dateParamString = dateParams => {
 	let paramArray = []
@@ -50,9 +51,10 @@ const GameList = ({ path, user }) => {
 		})
 	}, [path, dateParams])
 
-	let filteredGameList = gameList
+	let filteredGameList = gameList.filter(game => game.plays > 0)
+
 	if (gameFilter) {
-		filteredGameList = gameList.filter(game =>
+		filteredGameList = filteredGameList.filter(game =>
 			game.name.toLowerCase().includes(gameFilter.toLowerCase())
 		)
 	}
@@ -115,22 +117,28 @@ const GameList = ({ path, user }) => {
 				expansionsChangeEvent={handleExpansionFilterChange}
 			/>
 			<DateRange paramSetter={setDateParams} />
-			<Table striped responsive>
-				<thead>
-					<tr>
-						<th>#</th>
-						<th onClick={() => sortBy("names")}>Game</th>
-						<th onClick={() => sortBy("plays")}>Plays</th>
-						<th onClick={() => sortBy("wins")}>Wins</th>
-						<th onClick={() => sortBy("rating")}>Rating</th>
-						<th onClick={() => sortBy("happiness")}>
-							<abbr title="Huber Happiness Metric">HHM</abbr>
-						</th>
-						<th onClick={() => sortBy("hotness")}>Hotness</th>
-					</tr>
-				</thead>
-				<tbody>{gamesToShow}</tbody>
-			</Table>
+			{gamesToShow.length > 0 ? (
+				<Table striped responsive>
+					<thead>
+						<tr>
+							<th>#</th>
+							<th onClick={() => sortBy("names")}>Game</th>
+							<th onClick={() => sortBy("plays")}>Plays</th>
+							<th onClick={() => sortBy("wins")}>Wins</th>
+							<th onClick={() => sortBy("rating")}>Rating</th>
+							<th onClick={() => sortBy("happiness")}>
+								<abbr title="Huber Happiness Metric">HHM</abbr>
+							</th>
+							<th onClick={() => sortBy("hotness")}>Hotness</th>
+						</tr>
+					</thead>
+					<tbody>{gamesToShow}</tbody>
+				</Table>
+			) : (
+				<Spinner animation="border" role="status">
+					<span className="sr-only">Loading...</span>
+				</Spinner>
+			)}
 			{path === "top100" ? <ExportList text={plainText} /> : null}
 		</>
 	)
