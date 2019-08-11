@@ -3,6 +3,7 @@ const config = require("../utils/config")
 const parser = require("fast-xml-parser")
 const GameObject = require("../classes/Game")
 const Game = require("../models/Game")
+const Session = require("../models/Session")
 const jwt = require("../middlewares/jwt")
 
 const parseJSON = async xmlData => {
@@ -93,7 +94,55 @@ module.exports = ({ syncRouter }) => {
 		} catch (err) {
 			ctx.throw(400, err)
 		}
+	})
 
-		await next()
+	syncRouter.get("/totalplays", jwt, async (ctx, next) => {
+		const games = await Game.find({})
+		const sessions = await Session.find({})
+
+		const gameObjects = games.map(game => {
+			return new GameObject(game.name, game.id, game)
+		})
+
+		for (var i = 0; i < sessions.length; i++) {
+			const object = gameObjects.find(game => game.name === sessions[i].game)
+			if (object) {
+				object.addSession(sessions[i].plays, sessions[i].wins)
+			}
+			if (object.parent) {
+				const parentObject = gameObjects.find(
+					game => game.name === object.parent
+				)
+				if (parentObject) {
+					parentObject.addSession(sessions[i].plays, sessions[i].wins)
+					if (parentObject.parent) {
+						const grandParentObject = gameObjects.find(
+							game => game.name === parentObject.parent
+						)
+						if (grandParentObject) {
+							grandParentObject.addSession(sessions[i].plays, sessions[i].wins)
+						}
+					}
+				}
+			}
+		}
+
+		const changePromises = Object.keys(gameObjects).map(async gameID => {
+			const game = gameObjects[gameID]
+			if (game.totalPlays === game.plays) return null
+			try {
+				const updated = await Game.findOneAndUpdate(
+					{ _id: game.id },
+					{ totalPlays: game.plays },
+					{ new: true }
+				).exec()
+				return `${updated.name}: ${updated.plays} => ${updated.totalPlays}`
+			} catch (error) {
+				console.log(error)
+			}
+		})
+		const changes = (await Promise.all(changePromises)).filter(c => c)
+		if (changes.length === 0) changes.push("No changes!")
+		ctx.body = changes
 	})
 }
