@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 
 import Rating from "./Rating/Rating"
+import Plays from "./Plays/Plays"
 import GameEditForm from "./GameEditForm/GameEditForm"
 import GameDetails from "./GameDetails/GameDetails"
 
@@ -28,7 +29,9 @@ const Game = ({ game, counter, isAuth }) => {
 					{!isAuth && <GameDetails game={game} />}
 				</div>
 			</td>
-			<td>{game.plays}</td>
+			<td>
+				<Plays plays={game.plays} totalPlays={game.totalPlays} />
+			</td>
 			<td>{game.wins}</td>
 			<td>
 				<Rating value={game.rating} />
