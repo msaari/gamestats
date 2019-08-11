@@ -17,8 +17,9 @@ const getAll = async () => {
 	return response.data
 }
 
-const getPath = async path => {
-	const response = await axios.get(baseUrl + "/" + path)
+const getPath = async (path, params = null) => {
+	params = params ? "?" + params : ""
+	const response = await axios.get(baseUrl + "/" + path + params)
 	return response.data
 }
 
