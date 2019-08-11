@@ -72,6 +72,8 @@ const GameList = ({ path, user }) => {
 	if (sorting === "rating") filteredGameList.sort((a, b) => b.rating - a.rating)
 	if (sorting === "happiness")
 		filteredGameList.sort((a, b) => b.happiness - a.happiness)
+	if (sorting === "hotness")
+		filteredGameList.sort((a, b) => b.hotness - a.hotness)
 	if (sorting === "names")
 		filteredGameList.slice().sort((a, b) => {
 			if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
@@ -124,6 +126,7 @@ const GameList = ({ path, user }) => {
 						<th onClick={() => sortBy("happiness")}>
 							<abbr title="Huber Happiness Metric">HHM</abbr>
 						</th>
+						<th onClick={() => sortBy("hotness")}>Hotness</th>
 					</tr>
 				</thead>
 				<tbody>{gamesToShow}</tbody>
