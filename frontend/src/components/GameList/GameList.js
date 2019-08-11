@@ -1,8 +1,26 @@
 import React, { useState, useEffect } from "react"
 import Game from "./Game/Game"
 import GameFilter from "./GameFilter/GameFilter"
+import DateRange from "../DateRange"
 import gameService from "../../services/games"
 import ExportList from "../ExportList"
+import Table from "react-bootstrap/Table"
+
+const dateParamString = dateParams => {
+	let paramArray = []
+	if (Object.entries(dateParams).length !== 0) {
+		console.log(dateParams)
+		paramArray.push(
+			`from=${dateParams.fromYear}-${dateParams.fromMonth}-${
+				dateParams.fromDay
+			}`
+		)
+		paramArray.push(
+			`to=${dateParams.toYear}-${dateParams.toMonth}-${dateParams.toDay}`
+		)
+	}
+	return paramArray.join("&")
+}
 
 const GameList = ({ path, user }) => {
 	const [gameList, setGameList] = useState([])
@@ -10,14 +28,27 @@ const GameList = ({ path, user }) => {
 	const [incompleteFilter, setIncompleteFilter] = useState(false)
 	const [expansionFilter, setExpansionFilter] = useState(false)
 	const [sorting, setSorting] = useState("names")
+	const [dateParams, setDateParams] = useState({})
 
 	const isAuth = user ? true : false
 
 	useEffect(() => {
-		gameService.getPath(path).then(games => {
+		const params = []
+		let paramString = ""
+		if (path === "top100") {
+			const year = new Date().getFullYear() - 2
+			params.push("rating=7")
+			params.push(`from=${year}-01-01`)
+			params.push("noexpansions=1")
+			params.push("played=1")
+			paramString = params.join("&")
+		} else {
+			paramString = dateParamString(dateParams)
+		}
+		gameService.getPath("", paramString).then(games => {
 			setGameList(games)
 		})
-	}, [path])
+	}, [path, dateParams])
 
 	let filteredGameList = gameList
 	if (gameFilter) {
@@ -39,6 +70,8 @@ const GameList = ({ path, user }) => {
 	if (sorting === "plays") filteredGameList.sort((a, b) => b.plays - a.plays)
 	if (sorting === "wins") filteredGameList.sort((a, b) => b.wins - a.wins)
 	if (sorting === "rating") filteredGameList.sort((a, b) => b.rating - a.rating)
+	if (sorting === "happiness")
+		filteredGameList.sort((a, b) => b.happiness - a.happiness)
 	if (sorting === "names")
 		filteredGameList.slice().sort((a, b) => {
 			if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
@@ -79,7 +112,8 @@ const GameList = ({ path, user }) => {
 				expansionsFilter={expansionFilter}
 				expansionsChangeEvent={handleExpansionFilterChange}
 			/>
-			<table>
+			<DateRange paramSetter={setDateParams} />
+			<Table striped responsive>
 				<thead>
 					<tr>
 						<th>#</th>
@@ -87,10 +121,13 @@ const GameList = ({ path, user }) => {
 						<th onClick={() => sortBy("plays")}>Plays</th>
 						<th onClick={() => sortBy("wins")}>Wins</th>
 						<th onClick={() => sortBy("rating")}>Rating</th>
+						<th onClick={() => sortBy("happiness")}>
+							<abbr title="Huber Happiness Metric">HHM</abbr>
+						</th>
 					</tr>
 				</thead>
 				<tbody>{gamesToShow}</tbody>
-			</table>
+			</Table>
 			{path === "top100" ? <ExportList text={plainText} /> : null}
 		</>
 	)
