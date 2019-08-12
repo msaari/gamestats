@@ -28,19 +28,22 @@ module.exports = ({ gamesRouter }) => {
 			const object = gameObjects.find(game => game.name === sessions[i].game)
 			if (object) {
 				object.addSession(sessions[i].plays, sessions[i].wins)
-			}
-			if (object.parent) {
-				const parentObject = gameObjects.find(
-					game => game.name === object.parent
-				)
-				if (parentObject) {
-					parentObject.addSession(sessions[i].plays, sessions[i].wins)
-					if (parentObject.parent) {
-						const grandParentObject = gameObjects.find(
-							game => game.name === parentObject.parent
-						)
-						if (grandParentObject) {
-							grandParentObject.addSession(sessions[i].plays, sessions[i].wins)
+				if (object.parent) {
+					const parentObject = gameObjects.find(
+						game => game.name === object.parent
+					)
+					if (parentObject) {
+						parentObject.addSession(sessions[i].plays, sessions[i].wins)
+						if (parentObject.parent) {
+							const grandParentObject = gameObjects.find(
+								game => game.name === parentObject.parent
+							)
+							if (grandParentObject) {
+								grandParentObject.addSession(
+									sessions[i].plays,
+									sessions[i].wins
+								)
+							}
 						}
 					}
 				}
@@ -48,8 +51,10 @@ module.exports = ({ gamesRouter }) => {
 		}
 
 		let filteredGames = gameObjects
-		if (ctx.request.query.played)
-			filteredGames = filteredGames.filter(game => game.plays > 0)
+		if (ctx.request.query.plays && !isNaN(parseInt(ctx.request.query.plays)))
+			filteredGames = filteredGames.filter(
+				game => game.plays >= parseInt(ctx.request.query.plays)
+			)
 		if (ctx.request.query.noexpansions)
 			filteredGames = filteredGames.filter(game => !game.parent)
 		if (ctx.request.query.rating && !isNaN(parseInt(ctx.request.query.rating)))
