@@ -32,7 +32,7 @@ Gets games with session data included.
 - `from=YYYY-MM-DD&to=YYYY-MM-DD` (with `to` defaulting to current date, if missing).
 - `week=WW&month=MM&year=YYYY` (in any combination, if both `week` and `month` specified, `month` is used; `year` defaults to the current year).
 - `order=name|plays` to change the sort order, default `name`.
-- `played` if set will filter out unplayed games from the list.
+- `plays=N` will filter out games with less than N plays from the list.
 - `noexpansions` if set will filter out expansions (games with a parent game set).
 - `rating` will only include games with rating equal or higher than the specified value.
 
