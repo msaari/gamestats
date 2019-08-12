@@ -28,12 +28,16 @@ const SessionGeekLink = ({ session }) => {
 		return () => (isSubscribed = false)
 	}, [session.game])
 
+	const href = gameId
+		? "https://www.boardgamegeek.com/boardgame/" + gameId + "/"
+		: null
+
+	const onClick = gameId ? () => markSessionGeeked(session) : null
+
+	const style = gameId ? null : { color: "#aaaaaa" }
 	return (
-		<a
-			onClick={() => markSessionGeeked(session)}
-			href={"https://www.boardgamegeek.com/boardgame/" + gameId + "/"}
-		>
-			BGG
+		<a style={style} onClick={onClick} href={href}>
+			(BGG)
 		</a>
 	)
 }
