@@ -4,11 +4,18 @@ import sessionService from "../../../services/sessions"
 import SessionEditForm from "./SessionEditForm/SessionEditForm"
 import SessionGeekLink from "./SessionGeekLink/SessionGeekLink"
 import Button from "react-bootstrap/Button"
-import Modal from "react-bootstrap/Modal"
-import Octicon, { X } from "@primer/octicons-react"
+import FormModal from "../../FormModal"
 
 const Session = ({ session, isAuth }) => {
 	const [editForm, setEditForm] = useState(false)
+
+	const closeModal = () => {
+		setEditForm(false)
+	}
+
+	const openModal = () => {
+		setEditForm(true)
+	}
 
 	const deleteSession = async () => {
 		const notifier = new AWN()
@@ -23,14 +30,6 @@ const Session = ({ session, isAuth }) => {
 			onOk,
 			onCancel
 		)
-	}
-
-	const closeModal = () => {
-		setEditForm(false)
-	}
-
-	const openModal = () => {
-		setEditForm(true)
 	}
 
 	const date = session.date.substring(0, 10)
@@ -53,6 +52,22 @@ const Session = ({ session, isAuth }) => {
 					<Button variant="danger" size="sm" onClick={deleteSession}>
 						Delete
 					</Button>
+					<FormModal
+						heading="Edit session"
+						show={editForm}
+						closeModal={closeModal}
+					>
+						<SessionEditForm modalCloser={closeModal} session={session} />
+					</FormModal>
+				</td>
+			)}
+		</tr>
+	)
+}
+
+export default Session
+
+/*
 					<Modal size="lg" show={editForm} onHide={closeModal}>
 						<Modal.Header>
 							<h2>Edit session</h2>
@@ -68,10 +83,4 @@ const Session = ({ session, isAuth }) => {
 							<SessionEditForm modalCloser={closeModal} session={session} />
 						</Modal.Body>
 					</Modal>
-				</td>
-			)}
-		</tr>
-	)
-}
-
-export default Session
+*/

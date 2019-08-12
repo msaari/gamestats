@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 import Octicon, { LinkExternal } from "@primer/octicons-react"
 
-let toggleMoreVisibility = null
+let closeModal = null
 
 const handleFormChange = async event => {
 	event.persist()
@@ -30,15 +30,28 @@ const handleFormChange = async event => {
 		await gameService.update(event.target.id.value, newGame)
 		const notifier = new AWN()
 		notifier.success("Game updated!")
-		toggleMoreVisibility()
+		closeModal()
 	} catch (exception) {
 		const notifier = new AWN()
 		notifier.alert(`There was a problem saving the game: ${exception}`)
 	}
 }
 
-const GameEditForm = ({ game, toggleVisibility }) => {
-	toggleMoreVisibility = toggleVisibility
+const deleteGame = async id => {
+	console.log(id)
+	const notifier = new AWN()
+	const onOk = () => {
+		gameService.deleteGame(id)
+		closeModal()
+	}
+	const onCancel = () => {
+		notifier.info("User says no.")
+	}
+	notifier.confirm("Are you sure you want to remove this game?", onOk, onCancel)
+}
+
+const GameEditForm = ({ game, modalCloser }) => {
+	closeModal = modalCloser
 
 	return (
 		<form className="gameEditForm" onSubmit={handleFormChange}>
@@ -86,7 +99,10 @@ const GameEditForm = ({ game, toggleVisibility }) => {
 			<Form.Group as={Form.Row} controlId="gameBGG">
 				<Form.Label column sm={2}>
 					BGG ID:
-					<a href={"https://www.boardgamegeek.com/boardgame/" + game.bgg + "/"}>
+					<a
+						tabIndex="-1"
+						href={"https://www.boardgamegeek.com/boardgame/" + game.bgg + "/"}
+					>
 						<Octicon icon={LinkExternal} />
 					</a>
 				</Form.Label>
@@ -124,6 +140,13 @@ const GameEditForm = ({ game, toggleVisibility }) => {
 			</Form.Group>
 			<Button variant="primary" type="submit">
 				Save
+			</Button>
+			<Button
+				className="float-right"
+				variant="danger"
+				onClick={() => deleteGame(game.id)}
+			>
+				Delete
 			</Button>
 		</form>
 	)
