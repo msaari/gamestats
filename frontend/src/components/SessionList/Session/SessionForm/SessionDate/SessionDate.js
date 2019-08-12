@@ -14,7 +14,7 @@ const SessionDate = ({ date }) => {
 
 	return (
 		<Form.Row>
-			<Form.Group as={Col} sm="3" controlId="dateDD">
+			<Form.Group as={Col} xs="3" controlId="dateDD">
 				<Form.Label>DD</Form.Label>
 				<Form.Control
 					type="number"
@@ -22,7 +22,7 @@ const SessionDate = ({ date }) => {
 					placeholder={currentDay}
 				/>
 			</Form.Group>
-			<Form.Group as={Col} sm="3" controlId="dateMM">
+			<Form.Group as={Col} xs="3" controlId="dateMM">
 				<Form.Label>MM</Form.Label>
 				<Form.Control
 					type="number"
@@ -30,7 +30,7 @@ const SessionDate = ({ date }) => {
 					placeholder={currentMonth}
 				/>
 			</Form.Group>
-			<Form.Group as={Col} sm="6" controlId="dateYY">
+			<Form.Group as={Col} xs="6" controlId="dateYY">
 				<Form.Label>YY</Form.Label>
 				<Form.Control
 					type="number"
