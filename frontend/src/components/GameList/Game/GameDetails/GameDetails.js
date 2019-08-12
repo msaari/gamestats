@@ -8,11 +8,11 @@ const GameDetails = ({ game }) => {
 			<tbody>
 				<tr>
 					<td>Designers</td>
-					<td>{game.designers}</td>
+					<td>{game.designers.join(", ")}</td>
 				</tr>
 				<tr>
 					<td>Publisher</td>
-					<td>{game.publisher}</td>
+					<td>{game.publisher.join(", ")}</td>
 				</tr>
 				<tr>
 					<td>Year</td>
