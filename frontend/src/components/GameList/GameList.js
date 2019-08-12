@@ -41,7 +41,7 @@ const GameList = ({ path, user }) => {
 			params.push("rating=7")
 			params.push(`from=${year}-01-01`)
 			params.push("noexpansions=1")
-			params.push("played=1")
+			params.push("plays=1")
 			paramString = params.join("&")
 		} else {
 			paramString = dateParamString(dateParams)
@@ -117,23 +117,27 @@ const GameList = ({ path, user }) => {
 				expansionsChangeEvent={handleExpansionFilterChange}
 			/>
 			<DateRange paramSetter={setDateParams} />
-			{gamesToShow.length > 0 ? (
-				<Table striped responsive>
-					<thead>
-						<tr>
-							<th>#</th>
-							<th onClick={() => sortBy("names")}>Game</th>
-							<th onClick={() => sortBy("plays")}>Plays</th>
-							<th onClick={() => sortBy("wins")}>Wins</th>
-							<th onClick={() => sortBy("rating")}>Rating</th>
-							<th onClick={() => sortBy("happiness")}>
-								<abbr title="Huber Happiness Metric">HHM</abbr>
-							</th>
-							<th onClick={() => sortBy("hotness")}>Hotness</th>
-						</tr>
-					</thead>
-					<tbody>{gamesToShow}</tbody>
-				</Table>
+			{gameList.length > 0 ? (
+				gamesToShow.length > 0 ? (
+					<Table striped responsive>
+						<thead>
+							<tr>
+								<th>#</th>
+								<th onClick={() => sortBy("names")}>Game</th>
+								<th onClick={() => sortBy("plays")}>Plays</th>
+								<th onClick={() => sortBy("wins")}>Wins</th>
+								<th onClick={() => sortBy("rating")}>Rating</th>
+								<th onClick={() => sortBy("happiness")}>
+									<abbr title="Huber Happiness Metric">HHM</abbr>
+								</th>
+								<th onClick={() => sortBy("hotness")}>Hotness</th>
+							</tr>
+						</thead>
+						<tbody>{gamesToShow}</tbody>
+					</Table>
+				) : (
+					<p>Nothing found!</p>
+				)
 			) : (
 				<Spinner animation="border" role="status">
 					<span className="sr-only">Loading...</span>
