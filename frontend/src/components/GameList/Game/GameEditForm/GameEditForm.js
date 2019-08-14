@@ -1,6 +1,6 @@
 import React from "react"
-import gameService from "../../../../services/games"
 import AWN from "awesome-notifications"
+import { useOvermind } from "../../../../overmind"
 
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
@@ -8,6 +8,7 @@ import Button from "react-bootstrap/Button"
 import Octicon, { LinkExternal } from "@primer/octicons-react"
 
 let closeModal = null
+let action = null
 
 const handleFormChange = async event => {
 	event.persist()
@@ -27,7 +28,8 @@ const handleFormChange = async event => {
 			gameLength: event.target.gameLength.value,
 			parent: event.target.parent.value
 		}
-		await gameService.update(event.target.id.value, newGame)
+
+		action.updateGame({ id: event.target.id.value, object: newGame })
 		const notifier = new AWN()
 		notifier.success("Game updated!")
 		closeModal()
@@ -41,7 +43,7 @@ const deleteGame = async id => {
 	console.log(id)
 	const notifier = new AWN()
 	const onOk = () => {
-		gameService.deleteGame(id)
+		action.deleteGame(id)
 		closeModal()
 	}
 	const onCancel = () => {
@@ -51,6 +53,8 @@ const deleteGame = async id => {
 }
 
 const GameEditForm = ({ game, modalCloser }) => {
+	const { actions } = useOvermind()
+	action = actions
 	closeModal = modalCloser
 
 	return (

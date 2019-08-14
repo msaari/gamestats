@@ -3,8 +3,8 @@ import moment from "moment"
 import Session from "./Session/Session"
 import DateRange from "../DateRange"
 import GameSelector from "./GameSelector/GameSelector"
-import sessionService from "../../services/sessions"
 import Table from "react-bootstrap/Table"
+import { useOvermind } from "../../overmind"
 
 const dateParamString = dateParams => {
 	let paramArray = []
@@ -17,10 +17,11 @@ const dateParamString = dateParams => {
 	return paramArray.join("&")
 }
 
-const SessionList = props => {
+const SessionList = () => {
+	const { state, actions } = useOvermind()
+
 	const now = moment()
 
-	const [sessionList, setSessionList] = useState([])
 	const [dateParams, setDateParams] = useState({
 		fromDay: now.startOf("month").format("D"),
 		fromMonth: now.month() + 1,
@@ -30,22 +31,21 @@ const SessionList = props => {
 		toYear: now.year()
 	})
 	const [gameParam, setGameParam] = useState("")
-	const isAuth = props.user ? true : false
+	const isAuth = state.user ? true : false
+
+	let paramString = dateParamString(dateParams) + "&order=desc"
+	if (gameParam)
+		paramString = `game=${encodeURIComponent(gameParam)}&order=desc`
 
 	useEffect(() => {
-		let paramString = dateParamString(dateParams) + "&order=desc"
-		if (gameParam)
-			paramString = `game=${encodeURIComponent(gameParam)}&order=desc`
-		sessionService.getPath("", paramString).then(sessions => {
-			setSessionList(sessions)
-		})
-	}, [dateParams, gameParam])
+		if (state.sessionList.length === 0) actions.setupSessionList(paramString)
+	}, [paramString, actions, state.sessionList])
 
 	const handleGameChange = event => {
 		setGameParam(event.value)
 	}
 
-	const sessionsToShow = sessionList.map(entry => {
+	const sessionsToShow = state.sessionList.map(entry => {
 		return <Session key={entry.id} session={entry} isAuth={isAuth} />
 	})
 

@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import DisplayText from "./DisplayText"
-import sessionService from "../services/sessions"
+import { useOvermind } from "../overmind"
 import moment from "moment"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
@@ -39,6 +39,7 @@ const dateParamHeading = dateParams => {
 }
 
 const BBCode = () => {
+	const { actions, state } = useOvermind()
 	const now = moment()
 	const [dateParams, setDateParams] = useState({
 		week: null,
@@ -86,8 +87,8 @@ const BBCode = () => {
 				</Form.Row>
 			</Form>
 			<DisplayText
-				service={sessionService}
-				path="bbcode"
+				action={actions.getBBCode}
+				data={state.bbCode}
 				params={dateParamString(dateParams)}
 				heading={dateParamHeading(dateParams)}
 			/>

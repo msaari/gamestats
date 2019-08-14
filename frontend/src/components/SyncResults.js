@@ -1,15 +1,15 @@
 import React from "react"
 import Container from "react-bootstrap/Container"
 import DisplayText from "./DisplayText"
-import syncService from "../services/sync"
+import { useOvermind } from "../overmind"
 
-const SyncResults = ({ user }) => {
-	syncService.setToken(user.token)
+const SyncResults = () => {
+	const { actions, state } = useOvermind()
 
 	return (
 		<Container>
 			<h2>BGG Rating Synchronisation</h2>
-			<DisplayText service={syncService} path="/sync" />
+			<DisplayText action={actions.getSyncResults} data={state.syncResults} />
 		</Container>
 	)
 }

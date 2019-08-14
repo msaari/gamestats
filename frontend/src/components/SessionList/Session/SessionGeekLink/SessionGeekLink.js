@@ -1,32 +1,27 @@
-import React, { useState, useEffect } from "react"
-import gameService from "../../../../services/games"
-import sessionService from "../../../../services/sessions"
+import React, { useEffect } from "react"
 import AWN from "awesome-notifications"
-
-const markSessionGeeked = async session => {
-	const updatedSession = { ...session, ungeeked: false }
-	try {
-		sessionService.update(session.id, updatedSession)
-		const notifier = new AWN()
-		notifier.success("Session BGG flag cleared.")
-	} catch (exception) {
-		const notifier = new AWN()
-		notifier.alert(`Could not clear the BGG flag: ${exception}`)
-	}
-}
+import { useOvermind } from "../../../../overmind"
 
 const SessionGeekLink = ({ session }) => {
-	const [gameId, setGameId] = useState("")
+	const { state, actions } = useOvermind()
+
+	const markSessionGeeked = async session => {
+		const updatedSession = { ...session, ungeeked: false }
+		try {
+			actions.updateSession({ id: session.id, object: updatedSession })
+			const notifier = new AWN()
+			notifier.success("Session BGG flag cleared.")
+		} catch (exception) {
+			const notifier = new AWN()
+			notifier.alert(`Could not clear the BGG flag: ${exception}`)
+		}
+	}
 
 	useEffect(() => {
-		let isSubscribed = true
-		gameService.getByName(session.game).then(g => {
-			if (isSubscribed) {
-				setGameId(g.bgg)
-			}
-		})
-		return () => (isSubscribed = false)
-	}, [session.game])
+		if (!state.gameIds[session.game]) actions.getGameId(session.game)
+	}, [session.game, state.gameIds, actions])
+
+	const gameId = state.gameIds[session.game]
 
 	const href = gameId
 		? "https://www.boardgamegeek.com/boardgame/" + gameId + "/"

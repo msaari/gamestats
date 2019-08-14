@@ -3,8 +3,11 @@ import { Link } from "react-router-dom"
 import { Nav, Navbar, NavDropdown } from "react-bootstrap"
 import { LinkContainer } from "react-router-bootstrap"
 import LoginForm from "./LoginForm"
+import { useOvermind } from "../overmind"
 
-const Header = ({ user, setUser }) => {
+const Header = () => {
+	const { state } = useOvermind()
+
 	return (
 		<Navbar bg="light" expand="lg" className="mb-3">
 			<Navbar.Brand>
@@ -34,8 +37,8 @@ const Header = ({ user, setUser }) => {
 						</LinkContainer>
 					</NavDropdown>
 				</Nav>
-				{!user && <LoginForm setUser={setUser} />}
-				{user && <div>Hi, {user.username}!</div>}
+				{!state.user && <LoginForm />}
+				{state.user && <div>Hi, {state.user.username}!</div>}
 			</Navbar.Collapse>
 		</Navbar>
 	)

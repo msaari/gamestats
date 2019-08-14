@@ -1,11 +1,20 @@
-import React from "react"
+import React, { useEffect } from "react"
 import CreatableSelect from "react-select/lib/Creatable"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 import SessionDate from "./SessionDate/SessionDate"
+import { useOvermind } from "../../../../overmind"
 
 const SessionForm = props => {
+	const { state, actions } = useOvermind()
+
+	useEffect(() => {
+		if (state.gameNames.length === 0) {
+			actions.getGameNames()
+		}
+	}, [state.gameNames, actions])
+
 	return (
 		<form onSubmit={props.formHandler}>
 			<Form.Row>
@@ -19,7 +28,7 @@ const SessionForm = props => {
 					<CreatableSelect
 						name="game"
 						defaultValue={props.gameDefaultValue}
-						options={props.gameNames}
+						options={state.gameNames}
 					/>
 				</Form.Group>
 			</Form.Row>

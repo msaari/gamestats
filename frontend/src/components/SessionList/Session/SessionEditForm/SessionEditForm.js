@@ -1,29 +1,10 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import AWN from "awesome-notifications"
 import SessionForm from "../SessionForm/SessionForm"
-
-import sessionService from "../../../../services/sessions"
-import gameService from "../../../../services/games"
+import { useOvermind } from "../../../../overmind"
 
 const SessionEditForm = ({ session, modalCloser }) => {
-	const [gameNames, setGameNames] = useState([])
-
-	useEffect(() => {
-		let isSubscribed = true
-		gameService.getAll().then(games => {
-			if (isSubscribed) {
-				setGameNames(
-					games.map(game => {
-						return {
-							label: game.name,
-							value: game.name
-						}
-					})
-				)
-			}
-		})
-		return () => (isSubscribed = false)
-	}, [])
+	const { actions } = useOvermind()
 
 	const zeroPad = (input, length) => {
 		return (Array(length + 1).join("0") + input).slice(-length)
@@ -47,7 +28,7 @@ const SessionEditForm = ({ session, modalCloser }) => {
 				wins: event.target.wins.value,
 				players: event.target.players.value
 			}
-			await sessionService.update(session.id, newSession)
+			actions.updateSession({ id: session.id, object: newSession })
 			const notifier = new AWN()
 			notifier.success("Session updated!")
 			modalCloser()
@@ -63,7 +44,6 @@ const SessionEditForm = ({ session, modalCloser }) => {
 		<SessionForm
 			formHandler={formHandler}
 			date={date}
-			gameNames={gameNames}
 			gameDefaultValue={[{ label: session.game, value: session.game }]}
 			plays={session.plays}
 			wins={session.wins}

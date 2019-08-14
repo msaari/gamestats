@@ -1,12 +1,15 @@
 import React, { useState } from "react"
 import AWN from "awesome-notifications"
-import sessionService from "../../../services/sessions"
 import SessionEditForm from "./SessionEditForm/SessionEditForm"
 import SessionGeekLink from "./SessionGeekLink/SessionGeekLink"
 import Button from "react-bootstrap/Button"
 import FormModal from "../../FormModal"
+import { useOvermind } from "../../../overmind"
 
-const Session = ({ session, isAuth }) => {
+const Session = ({ session }) => {
+	const { state, actions } = useOvermind()
+	const isAuth = state.user ? true : false
+
 	const [editForm, setEditForm] = useState(false)
 
 	const closeModal = () => {
@@ -20,7 +23,7 @@ const Session = ({ session, isAuth }) => {
 	const deleteSession = async () => {
 		const notifier = new AWN()
 		const onOk = () => {
-			sessionService.deleteSession(session.id)
+			actions.deleteSession(session.id)
 		}
 		const onCancel = () => {
 			notifier.info("User says no.")
@@ -66,21 +69,3 @@ const Session = ({ session, isAuth }) => {
 }
 
 export default Session
-
-/*
-					<Modal size="lg" show={editForm} onHide={closeModal}>
-						<Modal.Header>
-							<h2>Edit session</h2>
-							<Button
-								onClick={closeModal}
-								variant="outline-dark"
-								className="float-right"
-							>
-								<Octicon icon={X} />
-							</Button>
-						</Modal.Header>
-						<Modal.Body>
-							<SessionEditForm modalCloser={closeModal} session={session} />
-						</Modal.Body>
-					</Modal>
-*/

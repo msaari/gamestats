@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect } from "react"
 
-const DisplayText = ({ service, path, params, heading }) => {
-	const [textContent, setTextContent] = useState("")
-
+const DisplayText = ({ action, data, params, heading }) => {
 	useEffect(() => {
-		service.getPath(path, params).then(response => {
-			setTextContent(response)
-		})
-	}, [path, params, service])
+		if (data.length === 0) action(params)
+	}, [action, data, params])
 
 	return (
 		<>
 			<h3>{heading}</h3>
 			<div>
-				{textContent.split("\n").map((item, key) => (
+				{data.split("\n").map((item, key) => (
 					<span key={key}>
 						{item}
 						<br />

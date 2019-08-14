@@ -1,11 +1,14 @@
 import React from "react"
 import SyncResults from "../components/SyncResults"
 import Container from "react-bootstrap/Container"
+import { useOvermind } from "../overmind"
 
-const Sync = ({ user }) => {
+const Sync = () => {
+	const { state } = useOvermind()
+
 	return (
 		<Container>
-			{user !== null ? <SyncResults user={user} /> : <p>Please log in!</p>}
+			{state.user !== null ? <SyncResults /> : <p>Please log in!</p>}
 		</Container>
 	)
 }

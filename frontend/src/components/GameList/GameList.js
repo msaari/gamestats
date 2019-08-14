@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react"
 import Game from "./Game/Game"
 import GameFilter from "./GameFilter/GameFilter"
 import DateRange from "../DateRange"
-import gameService from "../../services/games"
 import ExportList from "../ExportList"
 import Table from "react-bootstrap/Table"
 import Spinner from "react-bootstrap/Spinner"
+import { useOvermind } from "../../overmind"
 
 const dateParamString = dateParams => {
 	let paramArray = []
@@ -23,35 +23,33 @@ const dateParamString = dateParams => {
 	return paramArray.join("&")
 }
 
-const GameList = ({ path, user }) => {
-	const [gameList, setGameList] = useState([])
+const GameList = ({ path }) => {
+	const { state, actions } = useOvermind()
+
 	const [gameFilter, setGameFilter] = useState("")
 	const [incompleteFilter, setIncompleteFilter] = useState(false)
 	const [expansionFilter, setExpansionFilter] = useState(false)
 	const [sorting, setSorting] = useState("names")
 	const [dateParams, setDateParams] = useState({})
 
-	const isAuth = user ? true : false
+	let paramString = ""
+	if (path === "top100") {
+		const params = []
+		const year = new Date().getFullYear() - 2
+		params.push("rating=7")
+		params.push(`from=${year}-01-01`)
+		params.push("noexpansions=1")
+		params.push("plays=1")
+		paramString = params.join("&")
+	} else {
+		paramString = dateParamString(dateParams)
+	}
 
 	useEffect(() => {
-		const params = []
-		let paramString = ""
-		if (path === "top100") {
-			const year = new Date().getFullYear() - 2
-			params.push("rating=7")
-			params.push(`from=${year}-01-01`)
-			params.push("noexpansions=1")
-			params.push("plays=1")
-			paramString = params.join("&")
-		} else {
-			paramString = dateParamString(dateParams)
-		}
-		gameService.getPath("", paramString).then(games => {
-			setGameList(games)
-		})
-	}, [path, dateParams])
+		if (state.gameList.length === 0) actions.setupGameList(paramString)
+	}, [paramString, actions, state.gameList])
 
-	let filteredGameList = gameList.filter(game => game.plays > 0)
+	let filteredGameList = state.gameList.filter(game => game.plays > 0)
 
 	if (gameFilter) {
 		filteredGameList = filteredGameList.filter(game =>
@@ -77,7 +75,7 @@ const GameList = ({ path, user }) => {
 	if (sorting === "hotness")
 		filteredGameList.sort((a, b) => b.hotness - a.hotness)
 	if (sorting === "names")
-		filteredGameList.slice().sort((a, b) => {
+		filteredGameList.sort((a, b) => {
 			if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
 			return 1
 		})
@@ -85,7 +83,7 @@ const GameList = ({ path, user }) => {
 	let counter = 0
 	const gamesToShow = filteredGameList.map(game => {
 		counter += 1
-		return <Game counter={counter} key={game.id} game={game} isAuth={isAuth} />
+		return <Game counter={counter} key={game.id} game={game} />
 	})
 
 	const plainText = filteredGameList.map(game => game.name)
@@ -117,31 +115,31 @@ const GameList = ({ path, user }) => {
 				expansionsChangeEvent={handleExpansionFilterChange}
 			/>
 			<DateRange paramSetter={setDateParams} />
-			{gameList.length > 0 ? (
-				gamesToShow.length > 0 ? (
-					<Table striped responsive>
-						<thead>
-							<tr>
-								<th>#</th>
-								<th onClick={() => sortBy("names")}>Game</th>
-								<th onClick={() => sortBy("plays")}>Plays</th>
-								<th onClick={() => sortBy("wins")}>Wins</th>
-								<th onClick={() => sortBy("rating")}>Rating</th>
-								<th onClick={() => sortBy("happiness")}>
-									<abbr title="Huber Happiness Metric">HHM</abbr>
-								</th>
-								<th onClick={() => sortBy("hotness")}>Hotness</th>
-							</tr>
-						</thead>
-						<tbody>{gamesToShow}</tbody>
-					</Table>
-				) : (
-					<p>Nothing found!</p>
-				)
-			) : (
+			{state.isFetchingGames && (
 				<Spinner animation="border" role="status">
 					<span className="sr-only">Loading...</span>
 				</Spinner>
+			)}
+			{!state.isFetchingGames && gamesToShow.length > 0 && (
+				<Table striped responsive>
+					<thead>
+						<tr>
+							<th>#</th>
+							<th onClick={() => sortBy("names")}>Game</th>
+							<th onClick={() => sortBy("plays")}>Plays</th>
+							<th onClick={() => sortBy("wins")}>Wins</th>
+							<th onClick={() => sortBy("rating")}>Rating</th>
+							<th onClick={() => sortBy("happiness")}>
+								<abbr title="Huber Happiness Metric">HHM</abbr>
+							</th>
+							<th onClick={() => sortBy("hotness")}>Hotness</th>
+						</tr>
+					</thead>
+					<tbody>{gamesToShow}</tbody>
+				</Table>
+			)}
+			{!state.isFetchingGames && gamesToShow.length < 1 && (
+				<p>Nothing found!</p>
 			)}
 			{path === "top100" ? <ExportList text={plainText} /> : null}
 		</>

@@ -4,8 +4,12 @@ import Plays from "./Plays/Plays"
 import GameEditForm from "./GameEditForm/GameEditForm"
 import GameDetails from "./GameDetails/GameDetails"
 import FormModal from "../../FormModal"
+import { useOvermind } from "../../../overmind"
 
-const Game = ({ game, counter, isAuth }) => {
+const Game = ({ game, counter }) => {
+	const { state } = useOvermind()
+	const isAuth = state.user ? true : false
+
 	const [editForm, setEditForm] = useState(false)
 
 	const closeModal = () => {

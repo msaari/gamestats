@@ -3,8 +3,11 @@ import loginService from "../services/login"
 import AWN from "awesome-notifications"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
+import { useOvermind } from "../overmind"
 
-const LoginForm = ({ setUser }) => {
+const LoginForm = () => {
+	const { actions } = useOvermind()
+
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")
 
@@ -16,7 +19,7 @@ const LoginForm = ({ setUser }) => {
 				password
 			})
 
-			setUser(user)
+			actions.setUser(user)
 			const notifier = new AWN()
 			notifier.success(`Logged in as ${username}.`)
 			window.localStorage.setItem("gamestatsLoggedUser", JSON.stringify(user))

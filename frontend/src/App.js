@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect } from "react"
 import { BrowserRouter as Router, Route } from "react-router-dom"
 
 import "./index.css"
@@ -12,28 +12,21 @@ import BBCodes from "./views/BBCodes"
 
 import Header from "./components/Header"
 
-import gameService from "./services/games"
-import sessionService from "./services/sessions"
+import { useOvermind } from "./overmind"
 
-const App = props => {
-	const [user, setUser] = useState(null)
+const App = () => {
+	const { actions } = useOvermind()
 
 	useEffect(() => {
-		const loggedUserJSON = window.localStorage.getItem("gamestatsLoggedUser")
-		if (loggedUserJSON) {
-			const user = JSON.parse(loggedUserJSON)
-			setUser(user)
-			gameService.setToken(user.token)
-			sessionService.setToken(user.token)
-		}
-	}, [])
+		actions.setupUser()
+	}, [actions])
 
 	return (
 		<Router>
-			<Header user={user} setUser={setUser} />
-			<Route path="/" exact render={() => <Home user={user} />} />
-			<Route path="/add_session" render={() => <NewSession user={user} />} />
-			<Route path="/sessions" exact render={() => <Sessions user={user} />} />
+			<Header />
+			<Route path="/" exact render={() => <Home />} />
+			<Route path="/add_session" render={() => <NewSession />} />
+			<Route path="/sessions" exact render={() => <Sessions />} />
 			<Route
 				path="/sessions/bbcode"
 				render={routeProps => <BBCodes {...routeProps} />}
@@ -41,17 +34,17 @@ const App = props => {
 			<Route
 				path="/games"
 				exact
-				render={routeProps => <Games user={user} {...routeProps} />}
+				render={routeProps => <Games {...routeProps} />}
 			/>
 			<Route
 				path="/games/top100"
 				exact
-				render={routeProps => <Games user={user} {...routeProps} />}
+				render={routeProps => <Games {...routeProps} />}
 			/>
 			<Route
 				path="/sync"
 				exact
-				render={routeProps => <Sync user={user} {...routeProps} />}
+				render={routeProps => <Sync {...routeProps} />}
 			/>
 		</Router>
 	)

@@ -3,30 +3,18 @@ import Select from "react-select"
 import Button from "react-bootstrap/Button"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import gameService from "../../../services/games"
+import { useOvermind } from "../../../overmind"
 
 const GameSelector = ({ changeHandler }) => {
-	const [gameNames, setGameNames] = useState([])
+	const { state, actions } = useOvermind()
+
 	const [showSelect, setShowSelect] = useState(false)
 
 	useEffect(() => {
-		if (showSelect) {
-			let isSubscribed = true
-			gameService.getAll().then(games => {
-				if (isSubscribed) {
-					setGameNames(
-						games.map(game => {
-							return {
-								label: game.name,
-								value: game.name
-							}
-						})
-					)
-				}
-			})
-			return () => (isSubscribed = false)
+		if (showSelect && state.gameNames.length === 0) {
+			actions.getGameNames()
 		}
-	}, [showSelect])
+	}, [showSelect, actions, state.gameNames])
 
 	const toggleSelect = () => {
 		setShowSelect(!showSelect)
@@ -41,7 +29,11 @@ const GameSelector = ({ changeHandler }) => {
 			</Col>
 			<Col>
 				{showSelect ? (
-					<Select onChange={changeHandler} id="game" options={gameNames} />
+					<Select
+						onChange={changeHandler}
+						id="game"
+						options={state.gameNames}
+					/>
 				) : null}
 			</Col>
 		</Row>
