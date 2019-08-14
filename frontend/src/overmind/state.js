@@ -8,7 +8,7 @@ export default {
 	syncResults: "",
 	isFetchingNames: false,
 	isFetchingGames: false,
-	isFetchingId: false,
+	isFetchingId: [],
 	isFetchingBBCode: false,
 	isSyncing: false
 }

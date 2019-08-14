@@ -79,11 +79,11 @@ export const getGameNames = async ({ effects, state }) => {
 }
 
 export const getGameId = async ({ effects, state }, gameName) => {
-	if (!state.isFetchingId) {
-		state.isFetchingId = true
+	if (!state.isFetchingId[gameName]) {
+		state.isFetchingId[gameName] = true
 		const game = await effects.games.getPath(`name/${gameName}`)
 		state.gameIds[gameName] = game.bgg
-		state.isFetchingId = false
+		state.isFetchingId[gameName] = false
 	}
 }
 
