@@ -11,7 +11,7 @@ export class Api {
 		const loggedUserJSON = window.localStorage.getItem("gamestatsLoggedUser")
 		if (loggedUserJSON) {
 			const user = JSON.parse(loggedUserJSON)
-			this.token = user.token
+			this.setToken(user.token)
 		}
 	}
 
@@ -38,13 +38,11 @@ export class Api {
 	}
 
 	getWithToken = async (path, params = null) => {
-		console.log(this.token)
 		const config = {
 			headers: { Authorization: this.token }
 		}
 		params = params ? "?" + params : ""
 
-		console.log(config)
 		const response = await axios.get(this.baseUrl + "/" + path + params, config)
 		return response.data
 	}
