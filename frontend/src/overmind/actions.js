@@ -61,7 +61,11 @@ export const setupGameList = async ({ effects, state }, paramString) => {
 }
 
 export const setupSessionList = async ({ effects, state }, paramString) => {
-	state.sessionList = await effects.sessions.getPath("", paramString)
+	if (!state.isFetchingSessions) {
+		state.isFetchingSessions = true
+		state.sessionList = await effects.sessions.getPath("", paramString)
+		state.isFetchingSessions = false
+	}
 }
 
 export const getGameNames = async ({ effects, state }) => {

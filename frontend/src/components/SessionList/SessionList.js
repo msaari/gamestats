@@ -38,8 +38,8 @@ const SessionList = () => {
 		paramString = `game=${encodeURIComponent(gameParam)}&order=desc`
 
 	useEffect(() => {
-		if (state.sessionList.length === 0) actions.setupSessionList(paramString)
-	}, [paramString, actions, state.sessionList])
+		actions.setupSessionList(paramString)
+	}, [paramString, actions])
 
 	const handleGameChange = event => {
 		setGameParam(event.value)

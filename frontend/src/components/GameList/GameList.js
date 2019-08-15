@@ -46,8 +46,8 @@ const GameList = ({ path }) => {
 	}
 
 	useEffect(() => {
-		if (state.gameList.length === 0) actions.setupGameList(paramString)
-	}, [paramString, actions, state.gameList])
+		actions.setupGameList(paramString)
+	}, [paramString, actions])
 
 	let filteredGameList = state.gameList.filter(game => game.plays > 0)
 
