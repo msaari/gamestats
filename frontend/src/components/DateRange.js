@@ -48,9 +48,11 @@ const DateRange = ({ paramSetter }) => {
 		const value = target.value
 		const name = target.name
 
-		setDefaultValues({
-			[name]: value
-		})
+		const newValues = {
+			...defaultValues,
+			[name]: parseInt(value)
+		}
+		setDefaultValues(newValues)
 	}
 
 	const setDate = mode => {

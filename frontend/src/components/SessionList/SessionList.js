@@ -8,12 +8,14 @@ import { useOvermind } from "../../overmind"
 
 const dateParamString = dateParams => {
 	let paramArray = []
+	const to = moment(
+		`${dateParams.toYear}-${dateParams.toMonth}-${dateParams.toDay}`,
+		"YYYY-MM-DD"
+	).add(1, "days")
 	paramArray.push(
 		`from=${dateParams.fromYear}-${dateParams.fromMonth}-${dateParams.fromDay}`
 	)
-	paramArray.push(
-		`to=${dateParams.toYear}-${dateParams.toMonth}-${dateParams.toDay}`
-	)
+	paramArray.push(`to=${to.format("YYYY-MM-DD")}`)
 	return paramArray.join("&")
 }
 
