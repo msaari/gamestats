@@ -76,6 +76,14 @@ export class Api {
 	}
 }
 
+class LoginApi extends Api {
+	login = async credentials => {
+		const response = await axios.post(this.baseUrl, credentials)
+		return response.data
+	}
+}
+
 export const sessions = new Api("/api/sessions", axios)
 export const games = new Api("/api/games", axios)
 export const sync = new Api("/api/sync", axios)
+export const login = new LoginApi("/api/login", axios)

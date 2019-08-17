@@ -1,15 +1,16 @@
-export const setUser = ({ state }, user) => {
+export const setUser = ({ effects, state }, user) => {
 	state.user = user
+	window.localStorage.setItem("gamestatsLoggedUser", JSON.stringify(user))
+	effects.sessions.setToken(user.token)
+	effects.games.setToken(user.token)
+	effects.sync.setToken(user.token)
 }
 
-export const setupUser = ({ effects, state }) => {
+export const setupUser = ({ actions }) => {
 	const loggedUserJSON = window.localStorage.getItem("gamestatsLoggedUser")
 	if (loggedUserJSON) {
 		const user = JSON.parse(loggedUserJSON)
-		state.user = user
-		effects.sessions.setToken(user.token)
-		effects.games.setToken(user.token)
-		effects.sync.setToken(user.token)
+		actions.setUser(user)
 	}
 }
 
@@ -94,7 +95,8 @@ export const getGameId = async ({ effects, state }, gameName) => {
 export const getBBCode = async ({ effects, state }, params) => {
 	if (!state.isFetchingBBCode) {
 		state.isFetchingBBCode = true
-		const bbCode = await effects.sessions.getPath("bbcode/", params)
+		params += "&order=rating&output=bbcode&plays=1"
+		const bbCode = await effects.games.getPath("", params)
 		state.bbCode = bbCode
 		state.isFetchingBBCode = false
 	}
@@ -107,4 +109,9 @@ export const getSyncResults = async ({ effects, state }) => {
 		state.syncResults = syncResults
 		state.isSyncing = false
 	}
+}
+
+export const login = async ({ actions, effects, state }, credentials) => {
+	const user = await effects.login.login(credentials)
+	actions.setUser(user)
 }

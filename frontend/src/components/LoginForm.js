@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import loginService from "../services/login"
 import AWN from "awesome-notifications"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
@@ -14,15 +13,9 @@ const LoginForm = () => {
 	const handleLogin = async event => {
 		event.preventDefault()
 		try {
-			const user = await loginService.login({
-				username,
-				password
-			})
-
-			actions.setUser(user)
+			await actions.login({ username, password })
 			const notifier = new AWN()
 			notifier.success(`Logged in as ${username}.`)
-			window.localStorage.setItem("gamestatsLoggedUser", JSON.stringify(user))
 		} catch (exception) {
 			const notifier = new AWN()
 			notifier.alert("Wrong credentials.")
