@@ -76,13 +76,14 @@ Get session information.
 - `order=asc|desc` to change the direction of sorting by date (default `asc`).
 - `limit=N` to show only N first sessions.
 
-## GET /api/sessions/bbcode
+## GET /api/sessions/games
 
-Returns a list of games played, with BBCode formatting to use for forum summaries.
+Returns a list of games played during the specified period.
 
 - `from=YYYY-MM-DD&to=YYYY-MM-DD` (with `to` defaulting to current date, if missing).
 - `week=WW&month=MM&year=YYYY` (in any combination, if both `week` and `month` specified, `month` is used; `year` defaults to the current year).
 - `order=rating|name` to set the sort order (default `rating`).
+- `output=bbcode` to get results in BBCode formatting as a JSON string.
 
 ## GET /api/sessions/:id
 
