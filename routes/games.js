@@ -1,140 +1,87 @@
-const GameObject = require("../classes/Game")
 const Game = require("../models/Game")
-const Session = require("../models/Session")
 const jwt = require("../middlewares/jwt")
 const dates = require("../utils/dates")
+const bbCodify = require("../utils/bbcodify")
+const getGameObjects = require("../utils/getGameObjects")
 
 function escapeRegExp(text) {
 	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
 }
 
-const bbCodify = games => {
-	const output = games.reduce((result, game) => {
-		let text = ""
-		switch (game.rating) {
-			case 10:
-				text =
-					"[b][bgcolor=#00cc00][color=#00cc00].[/color][color=#000000]10[/color][color=#00cc00]![/color][/bgcolor][/b]"
-				break
-			case 9:
-				text =
-					"[b][bgcolor=#33cc99][color=#33cc99]_[/color][color=#000000]9[/color][color=#33cc99]_[/color][/bgcolor][/b]"
-				break
-			case 8:
-				text =
-					"[b][bgcolor=#66ff99][color=#66ff99]_[/color][color=#000000]8[/color][color=#66ff99]_[/color][/bgcolor][/b]"
-				break
-			case 7:
-				text =
-					"[b][bgcolor=#99ffff][color=#99ffff]_[/color][color=#000000]7[/color][color=#99ffff]_[/color][/bgcolor][/b]"
-				break
-			case 6:
-				text =
-					"[b][bgcolor=#9999ff][color=#9999ff]_[/color][color=#000000]6[/color][color=#9999ff]_[/color][/bgcolor][/b]"
-				break
-			case 5:
-				text =
-					"[b][bgcolor=#cc99ff][color=#cc99ff]_[/color][color=#000000]5[/color][color=#cc99ff]_[/color][/bgcolor][/b]"
-				break
-			case 4:
-				text =
-					"[b][bgcolor=#ff66cc][color=#ff66cc]_[/color][color=#000000]4[/color][color=#ff66cc]_[/color][/bgcolor][/b]"
-				break
-			case 3:
-				text =
-					"[b][bgcolor=#ff6699][color=#ff6699]_[/color][color=#000000]3[/color][color=#ff6699]_[/color][/bgcolor][/b]"
-				break
-			case 2:
-				text =
-					"[b][bgcolor=#ff3366][color=#ff3366]_[/color][color=#000000]2[/color][color=#ff3366]_[/color][/bgcolor][/b]"
-				break
-			default:
-				text = ""
-		}
-		result += `${game.plays} × ${text} ${game.name}\n`
-		return result
-	}, "")
-	return output
+const queryFiltering = (games, query) => {
+	if (query.plays && !isNaN(parseInt(query.plays)))
+		games = games.filter(game => game.plays >= parseInt(query.plays))
+	if (query.noexpansions) games = games.filter(game => !game.parent)
+	if (query.rating && !isNaN(parseInt(query.rating)))
+		games = games.filter(game => game.rating >= parseInt(query.rating))
+
+	return games
+}
+
+const sortGames = (games, query) => {
+	const validOrders = ["name", "plays", "rating"]
+	let order = "name"
+	if (validOrders.indexOf(query.order)) order = query.order
+
+	switch (order) {
+		case "plays":
+			games.sort((a, b) => b.plays - a.plays)
+			break
+		case "name":
+			games.sort((a, b) => {
+				if (a.name < b.name) return -1
+				return 1
+			})
+			break
+		case "rating":
+			games.sort((a, b) => b.rating - a.rating)
+			break
+	}
+	return games
 }
 
 module.exports = ({ gamesRouter }) => {
 	gamesRouter.get("/", async (ctx, next) => {
-		const validOrders = ["name", "plays", "rating"]
-		let order = "name"
-		if (validOrders.indexOf(ctx.request.query.order))
-			order = ctx.request.query.order
-
 		let sessionParams = {}
 		let dateParam = dates.readDateParam(ctx.request.query)
 		if (dateParam) sessionParams = dateParam
 
-		const games = await Game.find({})
-		const sessions = await Session.find(sessionParams)
-
-		const gameObjects = games.map(game => {
-			return new GameObject(game.name, game.id, game)
-		})
-
-		for (var i = 0; i < sessions.length; i++) {
-			const object = gameObjects.find(game => game.name === sessions[i].game)
-			if (object) {
-				object.addSession(sessions[i].plays, sessions[i].wins)
-				if (object.parent) {
-					const parentObject = gameObjects.find(
-						game => game.name === object.parent
-					)
-					if (parentObject) {
-						parentObject.addSession(sessions[i].plays, sessions[i].wins)
-						if (parentObject.parent) {
-							const grandParentObject = gameObjects.find(
-								game => game.name === parentObject.parent
-							)
-							if (grandParentObject) {
-								grandParentObject.addSession(
-									sessions[i].plays,
-									sessions[i].wins
-								)
-							}
-						}
-					}
-				}
-			}
-		}
-
-		let filteredGames = gameObjects
-		if (ctx.request.query.plays && !isNaN(parseInt(ctx.request.query.plays)))
-			filteredGames = filteredGames.filter(
-				game => game.plays >= parseInt(ctx.request.query.plays)
-			)
-		if (ctx.request.query.noexpansions)
-			filteredGames = filteredGames.filter(game => !game.parent)
-		if (ctx.request.query.rating && !isNaN(parseInt(ctx.request.query.rating)))
-			filteredGames = filteredGames.filter(
-				game => game.rating >= parseInt(ctx.request.query.rating)
-			)
-
-		switch (order) {
-			case "plays":
-				filteredGames.sort((a, b) => b.plays - a.plays)
-				break
-			case "name":
-				filteredGames.sort((a, b) => {
-					if (a.name < b.name) return -1
-					return 1
-				})
-				break
-			case "rating":
-				filteredGames.sort((a, b) => b.rating - a.rating)
-				break
-		}
+		const games = sortGames(
+			queryFiltering(
+				await getGameObjects(sessionParams, false),
+				ctx.request.query
+			),
+			ctx.request.query
+		)
 
 		switch (ctx.request.query.output) {
 			case "bbcode":
-				ctx.body = JSON.stringify(bbCodify(filteredGames))
+				ctx.body = JSON.stringify(bbCodify(games))
 				break
 			default:
-				ctx.body = filteredGames
+				ctx.body = games
 		}
+	})
+
+	gamesRouter.get("/firstplays", async (ctx, next) => {
+		let sessionParams = {}
+		let dateParam = dates.readDateParam(ctx.request.query)
+		if (dateParam) sessionParams = dateParam
+
+		const games = queryFiltering(
+			await getGameObjects(sessionParams, true),
+			ctx.request.query
+		)
+		const gamesPlays = games.map(game => {
+			const firstPlayDate = game.sessions.reduce((date, session) => {
+				return session.date < date ? session.date : date
+			}, Date.now())
+			return firstPlayDate ? { game: game.name, date: firstPlayDate } : null
+		})
+
+		gamesPlays.sort((a, b) => a.date - b.date)
+
+		ctx.body = gamesPlays
 	})
 
 	gamesRouter.get("/name/:name", async (ctx, next) => {
