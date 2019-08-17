@@ -5,6 +5,7 @@ import moment from "moment"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
+import Spinner from "react-bootstrap/Spinner"
 
 const dateParamString = dateParams => {
 	let paramArray = []
@@ -86,12 +87,19 @@ const BBCode = () => {
 					</Form.Group>
 				</Form.Row>
 			</Form>
-			<DisplayText
-				action={actions.getBBCode}
-				data={state.bbCode}
-				params={dateParamString(dateParams)}
-				heading={dateParamHeading(dateParams)}
-			/>
+			{state.isFetchingBBCode && (
+				<Spinner animation="border" role="status">
+					<span className="sr-only">Loading...</span>
+				</Spinner>
+			)}
+			{!state.isFetchingBBCode && (
+				<DisplayText
+					action={actions.getBBCode}
+					data={state.bbCode}
+					params={dateParamString(dateParams)}
+					heading={dateParamHeading(dateParams)}
+				/>
+			)}
 		</>
 	)
 }
