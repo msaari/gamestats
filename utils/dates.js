@@ -30,7 +30,6 @@ const generateWeekDateParam = ({ week, month, year }) => {
 				$lte: `${theMonth.endOf("month").format("YYYY-MM-DD")}`
 			}
 		}
-		console.log(dateParam)
 	} else if (year && week) {
 		const theWeek = moment(year + "W" + week)
 		dateParam = {
