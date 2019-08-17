@@ -10,7 +10,6 @@ import { useOvermind } from "../../overmind"
 const dateParamString = dateParams => {
 	let paramArray = []
 	if (Object.entries(dateParams).length !== 0) {
-		console.log(dateParams)
 		paramArray.push(
 			`from=${dateParams.fromYear}-${dateParams.fromMonth}-${
 				dateParams.fromDay
