@@ -40,7 +40,6 @@ const handleFormChange = async event => {
 }
 
 const deleteGame = async id => {
-	console.log(id)
 	const notifier = new AWN()
 	const onOk = () => {
 		action.deleteGame(id)
