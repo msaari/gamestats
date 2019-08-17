@@ -15,11 +15,20 @@ class Game {
 		this.happiness = 0
 		this.hotness = 0
 		this.totalPlays = data.totalPlays
+		this.sessions = []
 	}
 
-	addSession(plays, wins) {
-		this.addPlays(plays)
-		this.addWins(wins)
+	addSession(session, includeSessions) {
+		this.addPlays(session.plays)
+		this.addWins(session.wins)
+		if (includeSessions) {
+			this.sessions.push({
+				date: session.date,
+				players: session.players,
+				plays: session.plays,
+				wins: session.wins
+			})
+		}
 	}
 
 	addPlays(plays) {
