@@ -102,6 +102,15 @@ export const getBBCode = async ({ effects, state }, params) => {
 	}
 }
 
+export const getFirstPlays = async ({ effects, state }) => {
+	if (!state.isFetchingFirstPlays) {
+		state.isFetchingFirstPlays = true
+		const firstPlays = await effects.games.getPath("firstplays")
+		state.firstPlays = firstPlays
+		state.isFetchingFirstPlays = false
+	}
+}
+
 export const getSyncResults = async ({ effects, state }) => {
 	if (!state.isSyncing) {
 		state.isSyncing = true
@@ -111,7 +120,7 @@ export const getSyncResults = async ({ effects, state }) => {
 	}
 }
 
-export const login = async ({ actions, effects, state }, credentials) => {
+export const login = async ({ actions, effects }, credentials) => {
 	const user = await effects.login.login(credentials)
 	actions.setUser(user)
 }

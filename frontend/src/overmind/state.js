@@ -6,10 +6,12 @@ export default {
 	gameIds: [],
 	bbCode: "",
 	syncResults: "",
+	firstPlays: [],
 	isFetchingNames: false,
 	isFetchingGames: false,
 	isFetchingSessions: false,
 	isFetchingId: [],
 	isFetchingBBCode: false,
-	isSyncing: false
+	isSyncing: false,
+	isFetchingFirstPlays: false
 }
