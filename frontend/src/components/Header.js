@@ -16,19 +16,24 @@ const Header = () => {
 			<Navbar.Toggle aria-controls="basic-navbar-nav" />
 			<Navbar.Collapse id="basic-navbar-nav">
 				<Nav className="mr-auto">
-					<LinkContainer className="mr-4" to="/sessions">
+					<LinkContainer exact className="mr-4" to="/sessions">
 						<Nav.Link>Sessions</Nav.Link>
 					</LinkContainer>
 					<LinkContainer className="mr-4" to="/add_session">
 						<Nav.Link>New Session</Nav.Link>
 					</LinkContainer>
-					<LinkContainer className="mr-4" to="/games">
-						<Nav.Link>Games</Nav.Link>
-					</LinkContainer>
-					<NavDropdown title="Misc" id="misc-elements">
+					<NavDropdown className="mr-4" title="Games" id="game-dropdown">
+						<LinkContainer exact to="/games">
+							<NavDropdown.Item>All games</NavDropdown.Item>
+						</LinkContainer>
 						<LinkContainer to="/games/top100">
 							<NavDropdown.Item>Top 100 candidates</NavDropdown.Item>
 						</LinkContainer>
+						<LinkContainer to="/games/firstplays">
+							<NavDropdown.Item>First plays</NavDropdown.Item>
+						</LinkContainer>
+					</NavDropdown>
+					<NavDropdown title="Misc" id="misc-elements">
 						<LinkContainer to="/sessions/bbcode">
 							<NavDropdown.Item>BBCode sessions</NavDropdown.Item>
 						</LinkContainer>
