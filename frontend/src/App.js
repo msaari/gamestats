@@ -9,6 +9,7 @@ import NewSession from "./views/NewSession"
 import Sessions from "./views/Sessions"
 import Sync from "./views/Sync"
 import BBCodes from "./views/BBCodes"
+import FirstPlays from "./views/FirstPlays"
 
 import Header from "./components/Header"
 
@@ -40,6 +41,11 @@ const App = () => {
 				path="/games/top100"
 				exact
 				render={routeProps => <Games {...routeProps} />}
+			/>
+			<Route
+				path="/games/firstplays"
+				exact
+				render={routeProps => <FirstPlays {...routeProps} />}
 			/>
 			<Route
 				path="/sync"
