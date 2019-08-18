@@ -72,12 +72,14 @@ module.exports = ({ gamesRouter }) => {
 			await getGameObjects(sessionParams, true),
 			ctx.request.query
 		)
-		const gamesPlays = games.map(game => {
-			const firstPlayDate = game.sessions.reduce((date, session) => {
-				return session.date < date ? session.date : date
-			}, Date.now())
-			return firstPlayDate ? { game: game.name, date: firstPlayDate } : null
-		})
+		const gamesPlays = games
+			.filter(game => game.plays > 0)
+			.map(game => {
+				const firstPlayDate = game.sessions.reduce((date, session) => {
+					return session.date < date ? session.date : date
+				}, Date.now())
+				return firstPlayDate ? { game: game.name, date: firstPlayDate } : null
+			})
 
 		gamesPlays.sort((a, b) => a.date - b.date)
 
