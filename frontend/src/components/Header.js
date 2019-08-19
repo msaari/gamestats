@@ -32,6 +32,9 @@ const Header = () => {
 						<LinkContainer to="/games/firstplays">
 							<NavDropdown.Item>First plays</NavDropdown.Item>
 						</LinkContainer>
+						<LinkContainer to="/games/fiftyplays">
+							<NavDropdown.Item>Fifty plays</NavDropdown.Item>
+						</LinkContainer>
 					</NavDropdown>
 					<NavDropdown title="Misc" id="misc-elements">
 						<LinkContainer to="/sessions/bbcode">

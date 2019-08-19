@@ -1,17 +1,19 @@
 export default {
 	user: null,
 	sessionList: [],
-	gameList: [],
-	gameNames: [],
-	gameIds: [],
-	bbCode: "",
-	syncResults: "",
-	firstPlays: [],
-	isFetchingNames: false,
-	isFetchingGames: false,
 	isFetchingSessions: false,
+	gameList: [],
+	isFetchingGames: false,
+	gameNames: [],
+	isFetchingNames: false,
+	gameIds: [],
 	isFetchingId: [],
+	bbCode: "",
 	isFetchingBBCode: false,
+	syncResults: "",
 	isSyncing: false,
-	isFetchingFirstPlays: false
+	firstPlays: [],
+	isFetchingFirstPlays: false,
+	fiftyPlays: [],
+	isFetchingFiftyPlays: false
 }

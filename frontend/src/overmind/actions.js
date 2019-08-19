@@ -111,6 +111,15 @@ export const getFirstPlays = async ({ effects, state }) => {
 	}
 }
 
+export const getFiftyPlays = async ({ effects, state }) => {
+	if (!state.isFetchingFiftyPlays) {
+		state.isFetchingFiftyPlays = true
+		const fiftyPlays = await effects.games.getPath("playgoal", "goal=50")
+		state.fiftyPlays = fiftyPlays
+		state.isFetchingFiftyPlays = false
+	}
+}
+
 export const getSyncResults = async ({ effects, state }) => {
 	if (!state.isSyncing) {
 		state.isSyncing = true
