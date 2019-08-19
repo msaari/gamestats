@@ -3,6 +3,7 @@ const jwt = require("../middlewares/jwt")
 const dates = require("../utils/dates")
 const bbCodify = require("../utils/bbcodify")
 const getGameObjects = require("../utils/getGameObjects")
+const moment = require("moment")
 
 function escapeRegExp(text) {
 	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
@@ -82,6 +83,60 @@ module.exports = ({ gamesRouter }) => {
 			})
 
 		gamesPlays.sort((a, b) => a.date - b.date)
+
+		ctx.body = gamesPlays
+	})
+
+	gamesRouter.get("/playgoal", async (ctx, next) => {
+		let sessionParams = {}
+		let dateParam = dates.readDateParam(ctx.request.query)
+		if (dateParam) sessionParams = dateParam
+		let goal = 50
+		if (!isNaN(parseInt(ctx.request.query.goal)))
+			goal = parseInt(ctx.request.query.goal)
+		const bubbleLimit = goal - 10 > 0 ? goal - 10 : 0
+
+		const games = queryFiltering(
+			await getGameObjects(sessionParams, true),
+			ctx.request.query
+		)
+		const gamesPlays = games
+			.filter(game => game.plays > bubbleLimit)
+			.map(game => {
+				game.sessions.sort((a, b) => a.date - b.date)
+
+				const firstPlayDate = game.sessions.reduce(
+					(date, session) => (session.date < date ? session.date : date),
+					Date.now()
+				)
+				const goalPlayDate = game.sessions.reduce(
+					(datePlays, session) => {
+						datePlays.plays += session.plays
+						if (datePlays.plays >= goal && !datePlays.reachedGoal) {
+							datePlays.date = session.date
+							datePlays.reachedGoal = true
+						}
+						return datePlays
+					},
+					{ date: 0, plays: 0, reachedGoal: false }
+				)
+				const firstMoment = moment(firstPlayDate)
+				const lastMoment = moment(goalPlayDate.date)
+				const differenceInDays = goalPlayDate.date
+					? lastMoment.diff(firstMoment, "days")
+					: 0
+				return firstPlayDate && goalPlayDate
+					? {
+							game: game.name,
+							plays: game.plays,
+							firstPlayDate,
+							goalPlayDate: goalPlayDate.date,
+							differenceInDays
+					  }
+					: null
+			})
+
+		gamesPlays.sort((a, b) => a.goalPlayDate - b.goalPlayDate)
 
 		ctx.body = gamesPlays
 	})
