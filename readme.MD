@@ -36,15 +36,30 @@ Gets games with session data included.
 - `noexpansions` if set will filter out expansions (games with a parent game set).
 - `rating` will only include games with rating equal or higher than the specified value.
 
-## GET /api/games/name/:name
+### GET /api/games/name/:name
 
 Returns basic game information (no session data) for the named game.
 
-## GET /api/games/:id
+### GET /api/games/:id
 
 Returns basic game information (no session data) based on database ID.
 
-## POST /api/games
+### GET /api/games/firstplays
+
+Returns a list of first plays for games.
+
+- `from=YYYY-MM-DD&to=YYYY-MM-DD` (with `to` defaulting to current date, if missing).
+- `week=WW&month=MM&year=YYYY` (in any combination, if both `week` and `month` specified, `month` is used; `year` defaults to the current year).
+
+### GET /api/games/playgoal
+
+Returns a list of games that have reached (or almost reached) a goal number of plays.
+
+- `goal=N` sets the goal. The bottom limit is the goal - 10. Default 50.
+- `from=YYYY-MM-DD&to=YYYY-MM-DD` (with `to` defaulting to current date, if missing).
+- `week=WW&month=MM&year=YYYY` (in any combination, if both `week` and `month` specified, `month` is used; `year` defaults to the current year).
+
+### POST /api/games
 
 Create a game. Following fields can be specified:
 
@@ -58,15 +73,15 @@ Create a game. Following fields can be specified:
 - `gameLength`, integer
 - `parent`, string
 
-## PUT /api/games/:id
+### PUT /api/games/:id
 
 Update an existing game based on database ID.
 
-## DELETE /api/games/:id
+### DELETE /api/games/:id
 
 Delete a game based on database ID.
 
-## GET /api/sessions
+### GET /api/sessions
 
 Get session information.
 
@@ -76,7 +91,7 @@ Get session information.
 - `order=asc|desc` to change the direction of sorting by date (default `asc`).
 - `limit=N` to show only N first sessions.
 
-## GET /api/sessions/games
+### GET /api/sessions/games
 
 Returns a list of games played during the specified period.
 
@@ -85,11 +100,11 @@ Returns a list of games played during the specified period.
 - `order=rating|name` to set the sort order (default `rating`).
 - `output=bbcode` to get results in BBCode formatting as a JSON string.
 
-## GET /api/sessions/:id
+### GET /api/sessions/:id
 
 Returns basic session information based on database ID.
 
-## POST /api/sessions
+### POST /api/sessions
 
 Create a session. Following fields can be specified:
 
@@ -99,11 +114,11 @@ Create a session. Following fields can be specified:
 - `plays`, integer (required)
 - `date`, string in a format Date.parse() understands (required)
 
-## PUT /api/sessions/:id
+### PUT /api/sessions/:id
 
 Update an existing session based on database ID.
 
-## DELETE /api/sessions/:id
+### DELETE /api/sessions/:id
 
 Delete a session based on database ID.
 
