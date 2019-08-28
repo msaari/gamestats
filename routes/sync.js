@@ -50,9 +50,7 @@ const getXMLData = async () => {
 
 		return async (max, timeout, next) => {
 			const response = await axios.get(
-				`https://www.boardgamegeek.com/xmlapi2/collection?username=${
-					config.bggID
-				}&stats=1`
+				`https://www.boardgamegeek.com/xmlapi2/collection?username=${config.bggID}&stats=1`
 			)
 			if (response.status !== 200) {
 				console.log(`Status: ${response.status}`)
@@ -89,7 +87,6 @@ module.exports = ({ syncRouter }) => {
 		try {
 			const changes = await parseJSON(await getXMLData())
 			const result = JSON.stringify(changes.join("\n"))
-			console.log(result)
 			ctx.body = result
 		} catch (err) {
 			ctx.throw(400, err)
@@ -107,20 +104,20 @@ module.exports = ({ syncRouter }) => {
 		for (var i = 0; i < sessions.length; i++) {
 			const object = gameObjects.find(game => game.name === sessions[i].game)
 			if (object) {
-				object.addSession(sessions[i].plays, sessions[i].wins)
+				object.addSession(sessions[i], false)
 			}
 			if (object.parent) {
 				const parentObject = gameObjects.find(
 					game => game.name === object.parent
 				)
 				if (parentObject) {
-					parentObject.addSession(sessions[i].plays, sessions[i].wins)
+					parentObject.addSession(sessions[i], false)
 					if (parentObject.parent) {
 						const grandParentObject = gameObjects.find(
 							game => game.name === parentObject.parent
 						)
 						if (grandParentObject) {
-							grandParentObject.addSession(sessions[i].plays, sessions[i].wins)
+							grandParentObject.addSession(sessions[i], false)
 						}
 					}
 				}
