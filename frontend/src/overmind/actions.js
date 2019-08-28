@@ -79,6 +79,10 @@ export const getGameNames = async ({ effects, state }) => {
 				value: game.name
 			}
 		})
+		state.gameNames.sort((a, b) => {
+			if (a.label.toLowerCase() < b.label.toLowerCase()) return -1
+			return 1
+		})
 		state.isFetchingNames = false
 	}
 }
@@ -127,6 +131,10 @@ export const getSyncResults = async ({ effects, state }) => {
 		state.syncResults = syncResults
 		state.isSyncing = false
 	}
+}
+
+export const syncTotalPlays = ({ effects }) => {
+	effects.sync.getWithToken("/totalplays")
 }
 
 export const login = async ({ actions, effects }, credentials) => {

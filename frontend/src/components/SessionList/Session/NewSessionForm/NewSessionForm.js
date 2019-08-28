@@ -39,6 +39,7 @@ const NewSessionForm = () => {
 				ungeeked: true
 			}
 			actions.createSession(newSession)
+			actions.syncTotalPlays()
 			const notifier = new AWN()
 			notifier.success("Session saved!")
 		} catch (exception) {
