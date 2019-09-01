@@ -41,8 +41,13 @@ module.exports = games => {
 			default:
 				text = ""
 		}
-		result += `${game.plays} × ${text} ${game.name}\n`
+		const totalPlays =
+			game.plays === game.totalPlays
+				? "[size=85][color=#ff0000]UUSI![/color][/size]"
+				: `[size=85](${game.totalPlays} yhteensä)[/size]`
+		result += `${text} ${game.name} × ${game.plays} ${totalPlays}\n`
 		return result
 	}, "")
+	if (!output) return "No result"
 	return output
 }
