@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import DisplayText from "./DisplayText"
 import { useOvermind } from "../overmind"
 import moment from "moment"
@@ -48,6 +48,14 @@ const BBCode = () => {
 		year: now.year()
 	})
 
+	useEffect(() => {
+		actions.syncTotalPlays()
+	}, [actions])
+
+	useEffect(() => {
+		actions.getBBCode(dateParamString(dateParams))
+	}, [actions, dateParams])
+
 	const formHandler = event => {
 		event.preventDefault()
 		const year = event.target.year.value
@@ -94,9 +102,7 @@ const BBCode = () => {
 			)}
 			{!state.isFetchingBBCode && (
 				<DisplayText
-					action={actions.getBBCode}
 					data={state.bbCode}
-					params={dateParamString(dateParams)}
 					heading={dateParamHeading(dateParams)}
 				/>
 			)}
