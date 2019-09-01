@@ -1,10 +1,6 @@
-import React, { useEffect } from "react"
+import React from "react"
 
-const DisplayText = ({ action, data, params, heading }) => {
-	useEffect(() => {
-		if (data.length === 0) action(params)
-	}, [action, data, params])
-
+const DisplayText = ({ data, heading }) => {
 	return (
 		<>
 			<h3>{heading}</h3>
