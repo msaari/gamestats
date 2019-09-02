@@ -47,9 +47,10 @@ module.exports = ({ gamesRouter }) => {
 		let dateParam = dates.readDateParam(ctx.request.query)
 		if (dateParam) sessionParams = dateParam
 
+		const countForParents = ctx.request.query.parents === "0" ? false : true
 		const games = sortGames(
 			queryFiltering(
-				await getGameObjects(sessionParams, false),
+				await getGameObjects(sessionParams, false, countForParents),
 				ctx.request.query
 			),
 			ctx.request.query
@@ -69,8 +70,9 @@ module.exports = ({ gamesRouter }) => {
 		let dateParam = dates.readDateParam(ctx.request.query)
 		if (dateParam) sessionParams = dateParam
 
+		const countForParents = ctx.request.query.parents === "0" ? false : true
 		const games = queryFiltering(
-			await getGameObjects(sessionParams, true),
+			await getGameObjects(sessionParams, true, countForParents),
 			ctx.request.query
 		)
 		const gamesPlays = games
@@ -96,8 +98,9 @@ module.exports = ({ gamesRouter }) => {
 			goal = parseInt(ctx.request.query.goal)
 		const bubbleLimit = goal - 10 > 0 ? goal - 10 : 0
 
+		const countForParents = ctx.request.query.parents === "0" ? false : true
 		const games = queryFiltering(
-			await getGameObjects(sessionParams, true),
+			await getGameObjects(sessionParams, true, countForParents),
 			ctx.request.query
 		)
 		const gamesPlays = games

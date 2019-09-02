@@ -99,7 +99,7 @@ export const getGameId = async ({ effects, state }, gameName) => {
 export const getBBCode = async ({ effects, state }, params) => {
 	if (!state.isFetchingBBCode) {
 		state.isFetchingBBCode = true
-		params += "&order=rating&output=bbcode&plays=1"
+		params += "&order=rating&output=bbcode&plays=1&parents=0"
 		const bbCode = await effects.games.getPath("", params)
 		state.bbCode = bbCode
 		state.isFetchingBBCode = false

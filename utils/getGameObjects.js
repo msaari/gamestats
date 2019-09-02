@@ -2,7 +2,11 @@ const Session = require("../models/Session")
 const Game = require("../models/Game")
 const GameObject = require("../classes/Game")
 
-module.exports = async (sessionParams, includeSessions) => {
+module.exports = async (
+	sessionParams,
+	includeSessions,
+	countForParents = true
+) => {
 	const games = await Game.find({})
 	const sessions = await Session.find(sessionParams)
 
@@ -14,7 +18,7 @@ module.exports = async (sessionParams, includeSessions) => {
 		const object = gameObjects.find(game => game.name === sessions[i].game)
 		if (object) {
 			object.addSession(sessions[i], includeSessions)
-			if (object.parent) {
+			if (object.parent && countForParents) {
 				const parentObject = gameObjects.find(
 					game => game.name === object.parent
 				)
