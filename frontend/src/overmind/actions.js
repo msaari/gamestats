@@ -134,7 +134,7 @@ export const getSyncResults = async ({ effects, state }) => {
 }
 
 export const syncTotalPlays = ({ effects }) => {
-	effects.sync.getWithToken("/totalplays")
+	effects.sync.getWithToken("totalplays")
 }
 
 export const login = async ({ actions, effects }, credentials) => {
