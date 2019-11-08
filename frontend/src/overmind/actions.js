@@ -90,7 +90,8 @@ export const getGameNames = async ({ effects, state }) => {
 export const getGameId = async ({ effects, state }, gameName) => {
 	if (!state.isFetchingId[gameName]) {
 		state.isFetchingId[gameName] = true
-		const game = await effects.games.getPath(`name/${gameName}`)
+		const encodedName = encodeURIComponent(gameName)
+		const game = await effects.games.getPath(`name/${encodedName}`)
 		state.gameIds[gameName] = game.bgg
 		state.isFetchingId[gameName] = false
 	}
