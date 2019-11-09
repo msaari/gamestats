@@ -72,11 +72,11 @@ export const setupSessionList = async ({ effects, state }, paramString) => {
 export const getGameNames = async ({ effects, state }) => {
 	if (!state.isFetchingNames) {
 		state.isFetchingNames = true
-		const games = await effects.games.getAll()
+		const games = await effects.games.getPath("gamenames")
 		state.gameNames = games.map(game => {
 			return {
-				label: game.name,
-				value: game.name
+				label: game,
+				value: game
 			}
 		})
 		state.gameNames.sort((a, b) => {

@@ -44,6 +44,10 @@ Returns basic game information (no session data) for the named game.
 
 Returns basic game information (no session data) based on database ID.
 
+### GET /api/games/gamenames
+
+Returns a list of game names.
+
 ### GET /api/games/firstplays
 
 Returns a list of first plays for games.

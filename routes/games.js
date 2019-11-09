@@ -65,6 +65,12 @@ module.exports = ({ gamesRouter }) => {
 		}
 	})
 
+	gamesRouter.get("/gamenames", async (ctx, next) => {
+		const games = await Game.find({})
+		const gameNames = games.map(game => game.name)
+		ctx.body = gameNames
+	})
+
 	gamesRouter.get("/firstplays", async (ctx, next) => {
 		let sessionParams = {}
 		let dateParam = dates.readDateParam(ctx.request.query)
