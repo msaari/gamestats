@@ -16,11 +16,17 @@ class Game {
 		this.hotness = 0
 		this.totalPlays = data.totalPlays
 		this.sessions = []
+		this.monthMetric = 0
+		this.months = new Set()
+		this.yearMetric = 0
+		this.years = new Set()
+		this.firstYear = null
 	}
 
 	addSession(session, includeSessions) {
 		this.addPlays(session.plays)
 		this.addWins(session.wins)
+		this.manageDateData(session.date)
 		if (includeSessions) {
 			this.sessions.push({
 				date: session.date,
@@ -38,6 +44,20 @@ class Game {
 
 	addWins(wins) {
 		this.wins += parseInt(wins)
+	}
+
+	manageDateData(date) {
+		const month = date.getMonth()
+		const year = date.getFullYear()
+		const metricMonth = `${year}/${month}`
+
+		this.months = this.months.add(metricMonth)
+		this.monthMetric = this.months.size
+
+		this.years = this.years.add(year)
+		this.yearMetric = this.years.size
+
+		if (!this.firstYear || this.firstYear > year) this.firstYear = year
 	}
 
 	updateHappiness() {

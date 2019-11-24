@@ -11,9 +11,7 @@ const dateParamString = dateParams => {
 	let paramArray = []
 	if (Object.entries(dateParams).length !== 0) {
 		paramArray.push(
-			`from=${dateParams.fromYear}-${dateParams.fromMonth}-${
-				dateParams.fromDay
-			}`
+			`from=${dateParams.fromYear}-${dateParams.fromMonth}-${dateParams.fromDay}`
 		)
 		paramArray.push(
 			`to=${dateParams.toYear}-${dateParams.toMonth}-${dateParams.toDay}`
@@ -73,6 +71,10 @@ const GameList = ({ path }) => {
 		filteredGameList.sort((a, b) => b.happiness - a.happiness)
 	if (sorting === "hotness")
 		filteredGameList.sort((a, b) => b.hotness - a.hotness)
+	if (sorting === "monthmetric")
+		filteredGameList.sort((a, b) => b.monthMetric - a.monthMetric)
+	if (sorting === "yearmetric")
+		filteredGameList.sort((a, b) => b.yearMetric - a.yearMetric)
 	if (sorting === "names")
 		filteredGameList.sort((a, b) => {
 			if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
@@ -128,6 +130,8 @@ const GameList = ({ path }) => {
 							<th onClick={() => sortBy("plays")}>Plays</th>
 							<th onClick={() => sortBy("wins")}>Wins</th>
 							<th onClick={() => sortBy("rating")}>Rating</th>
+							<th onClick={() => sortBy("monthmetric")}>MM</th>
+							<th onClick={() => sortBy("yearmetric")}>YM</th>
 							<th onClick={() => sortBy("happiness")}>
 								<abbr title="Huber Happiness Metric">HHM</abbr>
 							</th>

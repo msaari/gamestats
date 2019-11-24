@@ -20,6 +20,8 @@ const Game = ({ game, counter }) => {
 		setEditForm(true)
 	}
 
+	const years = new Date().getFullYear() - game.firstYear + 1
+
 	return (
 		<tr>
 			<td className="counter">{counter}</td>
@@ -50,6 +52,10 @@ const Game = ({ game, counter }) => {
 			<td>{game.wins}</td>
 			<td>
 				<Rating value={game.rating} />
+			</td>
+			<td>{game.monthMetric}</td>
+			<td>
+				{game.yearMetric}/{years}
 			</td>
 			<td>{game.happiness}</td>
 			<td>{game.hotness}</td>
