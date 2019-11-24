@@ -74,7 +74,15 @@ const GameList = ({ path }) => {
 	if (sorting === "monthmetric")
 		filteredGameList.sort((a, b) => b.monthMetric - a.monthMetric)
 	if (sorting === "yearmetric")
-		filteredGameList.sort((a, b) => b.yearMetric - a.yearMetric)
+		filteredGameList.sort((a, b) => {
+			const aYears = new Date().getFullYear() - a.firstYear + 1
+			const bYears = new Date().getFullYear() - b.firstYear + 1
+
+			const aScore = a.yearMetric * 2 - aYears + a.yearMetric
+			const bScore = b.yearMetric * 2 - bYears + b.yearMetric
+
+			return bScore - aScore
+		})
 	if (sorting === "names")
 		filteredGameList.sort((a, b) => {
 			if (a.name.toLowerCase() < b.name.toLowerCase()) return -1

@@ -20,7 +20,9 @@ const Game = ({ game, counter }) => {
 		setEditForm(true)
 	}
 
-	const years = new Date().getFullYear() - game.firstYear + 1
+	const thisYear = new Date().getFullYear()
+	const years = thisYear - game.firstYear + 1
+	const yearMetricAsterisk = game.lastYear !== thisYear ? "*" : ""
 
 	return (
 		<tr>
@@ -56,6 +58,7 @@ const Game = ({ game, counter }) => {
 			<td>{game.monthMetric}</td>
 			<td>
 				{game.yearMetric}/{years}
+				{yearMetricAsterisk}
 			</td>
 			<td>{game.happiness}</td>
 			<td>{game.hotness}</td>

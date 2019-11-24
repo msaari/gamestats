@@ -21,6 +21,7 @@ class Game {
 		this.yearMetric = 0
 		this.years = new Set()
 		this.firstYear = null
+		this.lastYear = null
 	}
 
 	addSession(session, includeSessions) {
@@ -58,6 +59,7 @@ class Game {
 		this.yearMetric = this.years.size
 
 		if (!this.firstYear || this.firstYear > year) this.firstYear = year
+		if (!this.lastYear || this.lastYear < year) this.lastYear = year
 	}
 
 	updateHappiness() {
