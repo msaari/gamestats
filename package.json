@@ -23,6 +23,7 @@
   "author": "Mikko Saari",
   "license": "MIT",
   "dependencies": {
+    "async-redis": "^1.1.7",
     "axios": "^0.19.0",
     "bcrypt": "^3.0.6",
     "dotenv": "^8.0.0",
@@ -34,8 +35,10 @@
     "koa-logger": "^3.2.0",
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
+    "md5": "^2.2.1",
     "moment": "^2.24.0",
     "mongoose": "^5.7.5",
+    "redis": "^2.8.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   },

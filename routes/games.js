@@ -5,6 +5,10 @@ const bbCodify = require("../utils/bbcodify")
 const getGameObjects = require("../utils/getGameObjects")
 const moment = require("moment")
 
+const redis = require("async-redis")
+const redisClient = redis.createClient(process.env.REDIS_URL)
+const md5 = require("md5")
+
 function escapeRegExp(text) {
 	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
 }
@@ -48,27 +52,52 @@ module.exports = ({ gamesRouter }) => {
 		if (dateParam) sessionParams = dateParam
 
 		const countForParents = ctx.request.query.parents === "0" ? false : true
-		const games = sortGames(
-			queryFiltering(
-				await getGameObjects(sessionParams, false, countForParents),
-				ctx.request.query
-			),
-			ctx.request.query
+
+		const key = md5(
+			"getgames" +
+				JSON.stringify(sessionParams) +
+				JSON.stringify(countForParents) +
+				JSON.stringify(ctx.request.query.output)
 		)
+
+		const redisGames = await redisClient.get(key)
+		const games = redisGames
+			? JSON.parse(redisGames)
+			: sortGames(
+					queryFiltering(
+						await getGameObjects(sessionParams, false, countForParents),
+						ctx.request.query
+					),
+					ctx.request.query
+			  )
 
 		switch (ctx.request.query.output) {
 			case "bbcode":
+				redisClient
+					.set(key, JSON.stringify(games))
+					.catch(error => console.log("redis error", error))
 				ctx.body = JSON.stringify(bbCodify(games))
 				break
 			default:
+				redisClient
+					.set(key, JSON.stringify(games))
+					.catch(error => console.log("redis error", error))
 				ctx.body = games
 		}
 	})
 
 	gamesRouter.get("/gamenames", async (ctx, next) => {
-		const games = await Game.find({})
-		const gameNames = games.map(game => game.name)
-		ctx.body = gameNames
+		const redisGames = await redisClient.get("gamenames")
+		if (redisGames) {
+			ctx.body = JSON.parse(redisGames)
+		} else {
+			const games = await Game.find({})
+			const gameNames = games.map(game => game.name)
+			redisClient
+				.set("gamenames", JSON.stringify(gameNames))
+				.catch(error => console.log("redis error", error))
+			ctx.body = gameNames
+		}
 	})
 
 	gamesRouter.get("/firstplays", async (ctx, next) => {
@@ -77,22 +106,38 @@ module.exports = ({ gamesRouter }) => {
 		if (dateParam) sessionParams = dateParam
 
 		const countForParents = ctx.request.query.parents === "0" ? false : true
-		const games = queryFiltering(
-			await getGameObjects(sessionParams, true, countForParents),
-			ctx.request.query
+		const key = md5(
+			"firstplays" +
+				JSON.stringify(sessionParams) +
+				JSON.stringify(countForParents) +
+				JSON.stringify(ctx.request.query.output)
 		)
-		const gamesPlays = games
-			.filter(game => game.plays > 0)
-			.map(game => {
-				const firstPlayDate = game.sessions.reduce((date, session) => {
-					return session.date < date ? session.date : date
-				}, Date.now())
-				return firstPlayDate ? { game: game.name, date: firstPlayDate } : null
-			})
 
-		gamesPlays.sort((a, b) => a.date - b.date)
+		const redisPlays = await redisClient.get(key)
+		if (redisPlays) {
+			ctx.body = JSON.parse(redisPlays)
+		} else {
+			const games = queryFiltering(
+				await getGameObjects(sessionParams, true, countForParents),
+				ctx.request.query
+			)
+			const gamesPlays = games
+				.filter(game => game.plays > 0)
+				.map(game => {
+					const firstPlayDate = game.sessions.reduce((date, session) => {
+						return session.date < date ? session.date : date
+					}, Date.now())
+					return firstPlayDate ? { game: game.name, date: firstPlayDate } : null
+				})
 
-		ctx.body = gamesPlays
+			gamesPlays.sort((a, b) => a.date - b.date)
+
+			redisClient
+				.set(key, JSON.stringify(gamesPlays))
+				.catch(error => console.log("redis error", error))
+
+			ctx.body = gamesPlays
+		}
 	})
 
 	gamesRouter.get("/playgoal", async (ctx, next) => {
@@ -105,49 +150,66 @@ module.exports = ({ gamesRouter }) => {
 		const bubbleLimit = goal - 10 > 0 ? goal - 10 : 0
 
 		const countForParents = ctx.request.query.parents === "0" ? false : true
-		const games = queryFiltering(
-			await getGameObjects(sessionParams, true, countForParents),
-			ctx.request.query
+
+		const key = md5(
+			"playgoal" +
+				JSON.stringify(sessionParams) +
+				JSON.stringify(countForParents) +
+				JSON.stringify(goal)
 		)
-		const gamesPlays = games
-			.filter(game => game.plays > bubbleLimit)
-			.map(game => {
-				game.sessions.sort((a, b) => a.date - b.date)
 
-				const firstPlayDate = game.sessions.reduce(
-					(date, session) => (session.date < date ? session.date : date),
-					Date.now()
-				)
-				const goalPlayDate = game.sessions.reduce(
-					(datePlays, session) => {
-						datePlays.plays += session.plays
-						if (datePlays.plays >= goal && !datePlays.reachedGoal) {
-							datePlays.date = session.date
-							datePlays.reachedGoal = true
-						}
-						return datePlays
-					},
-					{ date: 0, plays: 0, reachedGoal: false }
-				)
-				const firstMoment = moment(firstPlayDate)
-				const lastMoment = moment(goalPlayDate.date)
-				const differenceInDays = goalPlayDate.date
-					? lastMoment.diff(firstMoment, "days")
-					: 0
-				return firstPlayDate && goalPlayDate
-					? {
-							game: game.name,
-							plays: game.plays,
-							firstPlayDate,
-							goalPlayDate: goalPlayDate.date,
-							differenceInDays
-					  }
-					: null
-			})
+		const redisPlays = await redisClient.get(key)
+		if (redisPlays) {
+			ctx.body = JSON.parse(redisPlays)
+		} else {
+			const games = queryFiltering(
+				await getGameObjects(sessionParams, true, countForParents),
+				ctx.request.query
+			)
+			const gamesPlays = games
+				.filter(game => game.plays > bubbleLimit)
+				.map(game => {
+					game.sessions.sort((a, b) => a.date - b.date)
 
-		gamesPlays.sort((a, b) => a.goalPlayDate - b.goalPlayDate)
+					const firstPlayDate = game.sessions.reduce(
+						(date, session) => (session.date < date ? session.date : date),
+						Date.now()
+					)
+					const goalPlayDate = game.sessions.reduce(
+						(datePlays, session) => {
+							datePlays.plays += session.plays
+							if (datePlays.plays >= goal && !datePlays.reachedGoal) {
+								datePlays.date = session.date
+								datePlays.reachedGoal = true
+							}
+							return datePlays
+						},
+						{ date: 0, plays: 0, reachedGoal: false }
+					)
+					const firstMoment = moment(firstPlayDate)
+					const lastMoment = moment(goalPlayDate.date)
+					const differenceInDays = goalPlayDate.date
+						? lastMoment.diff(firstMoment, "days")
+						: 0
+					return firstPlayDate && goalPlayDate
+						? {
+								game: game.name,
+								plays: game.plays,
+								firstPlayDate,
+								goalPlayDate: goalPlayDate.date,
+								differenceInDays
+						  }
+						: null
+				})
 
-		ctx.body = gamesPlays
+			gamesPlays.sort((a, b) => a.goalPlayDate - b.goalPlayDate)
+
+			redisClient
+				.set(key, JSON.stringify(gamesPlays))
+				.catch(error => console.log("redis error", error))
+
+			ctx.body = gamesPlays
+		}
 	})
 
 	gamesRouter.get("/name/:name", async (ctx, next) => {
@@ -200,6 +262,8 @@ module.exports = ({ gamesRouter }) => {
 			newGame.save()
 		}
 
+		redisClient.flushall().catch(error => console.log("redis error", error))
+
 		ctx.status = 201
 		ctx.body = savedGame
 	})
@@ -222,11 +286,17 @@ module.exports = ({ gamesRouter }) => {
 		const updatedGame = await Game.findByIdAndUpdate(ctx.params.id, game, {
 			new: true
 		})
+
+		redisClient.flushall().catch(error => console.log("redis error", error))
+
 		ctx.body = updatedGame.toJSON()
 	})
 
 	gamesRouter.delete("/:id", jwt, async (ctx, next) => {
 		await Game.findOneAndDelete({ _id: ctx.params.id })
+
+		redisClient.flushall().catch(error => console.log("redis error", error))
+
 		ctx.status = 204
 	})
 }

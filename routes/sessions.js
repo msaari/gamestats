@@ -3,6 +3,10 @@ const Game = require("../models/Game")
 const jwt = require("../middlewares/jwt")
 const dates = require("../utils/dates")
 
+const redis = require("async-redis")
+const redisClient = redis.createClient(process.env.REDIS_URL)
+const md5 = require("md5")
+
 module.exports = ({ sessionsRouter }) => {
 	sessionsRouter.get("/", async (ctx, next) => {
 		let order = "asc"
@@ -71,6 +75,8 @@ module.exports = ({ sessionsRouter }) => {
 			newGame.save()
 		}
 
+		redisClient.flushall().catch(error => console.log("redis error", error))
+
 		ctx.status = 201
 		ctx.body = savedSession
 	})
@@ -92,11 +98,17 @@ module.exports = ({ sessionsRouter }) => {
 			session,
 			{ new: true }
 		)
+
+		redisClient.flushall().catch(error => console.log("redis error", error))
+
 		ctx.body = updatedSession.toJSON()
 	})
 
 	sessionsRouter.delete("/:id", jwt, async (ctx, next) => {
 		await Session.findOneAndDelete({ _id: ctx.params.id })
+
+		redisClient.flushall().catch(error => console.log("redis error", error))
+
 		ctx.status = 204
 	})
 }
