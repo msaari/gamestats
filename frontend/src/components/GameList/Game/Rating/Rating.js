@@ -49,7 +49,7 @@ const style1 = {
 
 const Rating = ({ value }) => {
 	let spanStyle = {}
-	switch (value) {
+	switch (Math.round(value)) {
 		case 10:
 			spanStyle = Object.assign({}, boxStyle, style10)
 			break

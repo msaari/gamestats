@@ -11,7 +11,8 @@
     "start": "NODE_ENV=production node app.js",
     "test": "NODE_ENV=test jest --watchAll --env node --runInBand",
     "watch": "NODE_ENV=development nodemon app.js",
-    "heroku-postbuild": "cd frontend && npm install && npm run build"
+    "heroku-postbuild": "cd frontend && npm install && npm run build",
+    "redis": "redis-server"
   },
   "repository": {
     "type": "git",
@@ -38,7 +39,6 @@
     "md5": "^2.2.1",
     "moment": "^2.24.0",
     "mongoose": "^5.7.5",
-    "redis": "^2.8.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.4"
   },

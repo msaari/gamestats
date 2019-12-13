@@ -19,6 +19,34 @@ const dateParamString = dateParams => {
 	return paramArray.join("&")
 }
 
+const sumTotalSessions = sessions => {
+	const totals = {
+		plays: 0,
+		wins: 0,
+		players: 0
+	}
+
+	sessions.forEach(session => {
+		totals.plays += parseInt(session.plays)
+		totals.wins += parseInt(session.wins)
+		totals.players += parseInt(session.players) * parseInt(session.plays)
+	})
+	totals.average = totals.plays
+		? Math.round((totals.players / totals.plays) * 10) / 10
+		: 0
+
+	return (
+		<tr>
+			<td>&nbsp;</td>
+			<td>Total</td>
+			<td>{totals.plays}</td>
+			<td>{totals.wins}</td>
+			<td>{totals.average}</td>
+			<td>&nbsp;</td>
+		</tr>
+	)
+}
+
 const SessionList = () => {
 	const { state, actions } = useOvermind()
 
@@ -51,6 +79,8 @@ const SessionList = () => {
 		return <Session key={entry.id} session={entry} isAuth={isAuth} />
 	})
 
+	const totals = sumTotalSessions(state.sessionList)
+
 	return (
 		<>
 			<DateRange paramSetter={setDateParams} />
@@ -66,7 +96,10 @@ const SessionList = () => {
 						{isAuth && <th>Tools</th>}
 					</tr>
 				</thead>
-				<tbody>{sessionsToShow}</tbody>
+				<tbody>
+					{sessionsToShow}
+					{totals}
+				</tbody>
 			</Table>
 		</>
 	)

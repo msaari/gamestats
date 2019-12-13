@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import Game from "./Game/Game"
 import GameFilter from "./GameFilter/GameFilter"
+import Rating from "./Game/Rating/Rating"
 import DateRange from "../DateRange"
 import ExportList from "../ExportList"
 import Table from "react-bootstrap/Table"
@@ -20,6 +21,38 @@ const dateParamString = dateParams => {
 	return paramArray.join("&")
 }
 
+const sumTotalGames = games => {
+	const totals = {
+		plays: 0,
+		wins: 0,
+		rating: 0
+	}
+
+	games.forEach(game => {
+		if (game.parent) return
+		totals.plays += parseInt(game.plays)
+		totals.wins += parseInt(game.wins)
+		totals.rating += parseInt(game.rating)
+	})
+	totals.averageRating =
+		games.length > 0 ? Math.round((totals.rating / games.length) * 10) / 10 : 0
+
+	return (
+		<tr>
+			<td>&nbsp;</td>
+			<td>Total</td>
+			<td>{totals.plays}</td>
+			<td>{totals.wins}</td>
+			<td>
+				<Rating value={totals.averageRating} />
+			</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+	)
+}
 const GameList = ({ path }) => {
 	const { state, actions } = useOvermind()
 
@@ -113,6 +146,8 @@ const GameList = ({ path }) => {
 		setSorting(sort)
 	}
 
+	const totals = sumTotalGames(filteredGameList)
+
 	return (
 		<>
 			<GameFilter
@@ -146,7 +181,10 @@ const GameList = ({ path }) => {
 							<th onClick={() => sortBy("hotness")}>Hotness</th>
 						</tr>
 					</thead>
-					<tbody>{gamesToShow}</tbody>
+					<tbody>
+						{gamesToShow}
+						{totals}
+					</tbody>
 				</Table>
 			)}
 			{!state.isFetchingGames && gamesToShow.length < 1 && (
