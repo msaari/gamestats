@@ -9,6 +9,15 @@ const redis = require("async-redis")
 const redisClient = redis.createClient(process.env.REDIS_URL)
 const md5 = require("md5")
 
+var redisAvailable = false
+
+redisClient.on("ready", function(err) {
+	redisAvailable = true
+})
+redisClient.on("error", function(err) {
+	redisAvailable = false
+})
+
 function escapeRegExp(text) {
 	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
 }
@@ -60,7 +69,7 @@ module.exports = ({ gamesRouter }) => {
 				JSON.stringify(ctx.request.query.output)
 		)
 
-		const redisGames = await redisClient.get(key)
+		const redisGames = redisAvailable ? await redisClient.get(key) : null
 		const games = redisGames
 			? JSON.parse(redisGames)
 			: sortGames(
@@ -73,29 +82,34 @@ module.exports = ({ gamesRouter }) => {
 
 		switch (ctx.request.query.output) {
 			case "bbcode":
-				redisClient
-					.set(key, JSON.stringify(games))
-					.catch(error => console.log("redis error", error))
+				if (redisAvailable)
+					redisClient
+						.set(key, JSON.stringify(games))
+						.catch(error => console.log("redis error", error))
 				ctx.body = JSON.stringify(bbCodify(games))
 				break
 			default:
-				redisClient
-					.set(key, JSON.stringify(games))
-					.catch(error => console.log("redis error", error))
+				if (redisAvailable)
+					redisClient
+						.set(key, JSON.stringify(games))
+						.catch(error => console.log("redis error", error))
 				ctx.body = games
 		}
 	})
 
 	gamesRouter.get("/gamenames", async (ctx, next) => {
-		const redisGames = await redisClient.get("gamenames")
+		const redisGames = redisAvailable
+			? await redisClient.get("gamenames")
+			: null
 		if (redisGames) {
 			ctx.body = JSON.parse(redisGames)
 		} else {
 			const games = await Game.find({})
 			const gameNames = games.map(game => game.name)
-			redisClient
-				.set("gamenames", JSON.stringify(gameNames))
-				.catch(error => console.log("redis error", error))
+			if (redisAvailable)
+				redisClient
+					.set("gamenames", JSON.stringify(gameNames))
+					.catch(error => console.log("redis error", error))
 			ctx.body = gameNames
 		}
 	})
@@ -113,7 +127,7 @@ module.exports = ({ gamesRouter }) => {
 				JSON.stringify(ctx.request.query.output)
 		)
 
-		const redisPlays = await redisClient.get(key)
+		const redisPlays = redisAvailable ? await redisClient.get(key) : null
 		if (redisPlays) {
 			ctx.body = JSON.parse(redisPlays)
 		} else {
@@ -132,9 +146,10 @@ module.exports = ({ gamesRouter }) => {
 
 			gamesPlays.sort((a, b) => a.date - b.date)
 
-			redisClient
-				.set(key, JSON.stringify(gamesPlays))
-				.catch(error => console.log("redis error", error))
+			if (redisAvailable)
+				redisClient
+					.set(key, JSON.stringify(gamesPlays))
+					.catch(error => console.log("redis error", error))
 
 			ctx.body = gamesPlays
 		}
@@ -158,7 +173,7 @@ module.exports = ({ gamesRouter }) => {
 				JSON.stringify(goal)
 		)
 
-		const redisPlays = await redisClient.get(key)
+		const redisPlays = redisAvailable ? await redisClient.get(key) : null
 		if (redisPlays) {
 			ctx.body = JSON.parse(redisPlays)
 		} else {
@@ -204,9 +219,10 @@ module.exports = ({ gamesRouter }) => {
 
 			gamesPlays.sort((a, b) => a.goalPlayDate - b.goalPlayDate)
 
-			redisClient
-				.set(key, JSON.stringify(gamesPlays))
-				.catch(error => console.log("redis error", error))
+			if (redisAvailable)
+				redisClient
+					.set(key, JSON.stringify(gamesPlays))
+					.catch(error => console.log("redis error", error))
 
 			ctx.body = gamesPlays
 		}
@@ -262,7 +278,8 @@ module.exports = ({ gamesRouter }) => {
 			newGame.save()
 		}
 
-		redisClient.flushall().catch(error => console.log("redis error", error))
+		if (redisAvailable)
+			redisClient.flushall().catch(error => console.log("redis error", error))
 
 		ctx.status = 201
 		ctx.body = savedGame
@@ -287,7 +304,8 @@ module.exports = ({ gamesRouter }) => {
 			new: true
 		})
 
-		redisClient.flushall().catch(error => console.log("redis error", error))
+		if (redisAvailable)
+			redisClient.flushall().catch(error => console.log("redis error", error))
 
 		ctx.body = updatedGame.toJSON()
 	})
@@ -295,7 +313,8 @@ module.exports = ({ gamesRouter }) => {
 	gamesRouter.delete("/:id", jwt, async (ctx, next) => {
 		await Game.findOneAndDelete({ _id: ctx.params.id })
 
-		redisClient.flushall().catch(error => console.log("redis error", error))
+		if (redisAvailable)
+			redisClient.flushall().catch(error => console.log("redis error", error))
 
 		ctx.status = 204
 	})

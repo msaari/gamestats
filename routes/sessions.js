@@ -7,6 +7,15 @@ const redis = require("async-redis")
 const redisClient = redis.createClient(process.env.REDIS_URL)
 const md5 = require("md5")
 
+var redisAvailable = false
+
+redisClient.on("ready", function(err) {
+	redisAvailable = true
+})
+redisClient.on("error", function(err) {
+	redisAvailable = false
+})
+
 module.exports = ({ sessionsRouter }) => {
 	sessionsRouter.get("/", async (ctx, next) => {
 		let order = "asc"
@@ -75,7 +84,8 @@ module.exports = ({ sessionsRouter }) => {
 			newGame.save()
 		}
 
-		redisClient.flushall().catch(error => console.log("redis error", error))
+		if (redisAvailable)
+			redisClient.flushall().catch(error => console.log("redis error", error))
 
 		ctx.status = 201
 		ctx.body = savedSession
@@ -99,7 +109,8 @@ module.exports = ({ sessionsRouter }) => {
 			{ new: true }
 		)
 
-		redisClient.flushall().catch(error => console.log("redis error", error))
+		if (redisAvailable)
+			redisClient.flushall().catch(error => console.log("redis error", error))
 
 		ctx.body = updatedSession.toJSON()
 	})
@@ -107,7 +118,8 @@ module.exports = ({ sessionsRouter }) => {
 	sessionsRouter.delete("/:id", jwt, async (ctx, next) => {
 		await Session.findOneAndDelete({ _id: ctx.params.id })
 
-		redisClient.flushall().catch(error => console.log("redis error", error))
+		if (redisAvailable)
+			redisClient.flushall().catch(error => console.log("redis error", error))
 
 		ctx.status = 204
 	})
