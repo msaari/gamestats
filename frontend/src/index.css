@@ -28,3 +28,10 @@ code {
   color: #999;
   font-size: 90%;
 }
+
+span.expansion {
+  font-size: small;
+  font-variant-caps: all-small-caps;
+  color: darkgreen;
+  margin-right: 0.2rem;
+}

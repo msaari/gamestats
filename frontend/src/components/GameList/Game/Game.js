@@ -24,10 +24,13 @@ const Game = ({ game, counter }) => {
 	const years = thisYear - game.firstYear + 1
 	const yearMetricAsterisk = game.lastYear !== thisYear ? "*" : ""
 
+	const expansion = game.parent ? <span className="expansion">[Exp]</span> : ""
+
 	return (
 		<tr>
 			<td className="counter">{counter}</td>
 			<td>
+				{expansion}
 				<span onClick={openModal}>{game.name}</span>
 				{isAuth && (
 					<FormModal
