@@ -25,22 +25,25 @@ const sumTotalGames = games => {
 	const totals = {
 		plays: 0,
 		wins: 0,
-		rating: 0
+		rating: 0,
+		playTime: 0
 	}
 
 	games.forEach(game => {
 		if (game.parent) return
 		totals.plays += parseInt(game.plays)
 		totals.wins += parseInt(game.wins)
-		totals.rating += parseInt(game.rating)
+		totals.rating += parseInt(game.rating) * parseInt(game.plays)
+		totals.playTime += parseInt(game.plays) * parseInt(game.gameLength)
 	})
 	totals.averageRating =
-		games.length > 0 ? Math.round((totals.rating / games.length) * 10) / 10 : 0
+		games.length > 0 ? Math.round((totals.rating / totals.plays) * 10) / 10 : 0
+	totals.playTime = Math.round(totals.playTime / 60)
 
 	return (
 		<tr>
 			<td>&nbsp;</td>
-			<td>Total</td>
+			<td>Total playtime {totals.playTime} hours</td>
 			<td>{totals.plays}</td>
 			<td>{totals.wins}</td>
 			<td>
