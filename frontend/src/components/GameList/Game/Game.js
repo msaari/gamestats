@@ -20,7 +20,10 @@ const Game = ({ game, counter }) => {
 		setEditForm(true)
 	}
 
-	const thisYear = new Date().getFullYear()
+	const thisMonth = new Date().getMonth()
+	const thisYear =
+		thisMonth < 1 ? new Date().getFullYear() - 1 : new Date().getFullYear()
+
 	const years = thisYear - game.firstYear + 1
 	const yearMetricAsterisk = game.lastYear !== thisYear ? "*" : ""
 
