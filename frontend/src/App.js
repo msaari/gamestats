@@ -8,6 +8,7 @@ import Games from "./views/Games"
 import NewSession from "./views/NewSession"
 import Sessions from "./views/Sessions"
 import Sync from "./views/Sync"
+import SyncTotals from "./views/SyncTotals"
 import BBCodes from "./views/BBCodes"
 import FirstPlays from "./views/FirstPlays"
 import FiftyPlays from "./views/FiftyPlays"
@@ -57,6 +58,11 @@ const App = () => {
 				path="/sync"
 				exact
 				render={routeProps => <Sync {...routeProps} />}
+			/>
+			<Route
+				path="/sync/totalplays"
+				exact
+				render={routeProps => <SyncTotals {...routeProps} />}
 			/>
 		</Router>
 	)

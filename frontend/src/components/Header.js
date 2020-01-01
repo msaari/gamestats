@@ -43,6 +43,9 @@ const Header = () => {
 						<LinkContainer to="/sync">
 							<NavDropdown.Item>Sync BGG ratings</NavDropdown.Item>
 						</LinkContainer>
+						<LinkContainer to="/sync/totalplays">
+							<NavDropdown.Item>Sync total plays</NavDropdown.Item>
+						</LinkContainer>
 					</NavDropdown>
 				</Nav>
 				{!state.user && <LoginForm />}

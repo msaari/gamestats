@@ -134,6 +134,15 @@ export const getSyncResults = async ({ effects, state }) => {
 	}
 }
 
+export const getSyncTotalsResults = async ({ effects, state }) => {
+	if (!state.isSyncing) {
+		state.isSyncing = true
+		const syncResults = await effects.sync.getWithToken("totalplays")
+		state.syncResults = syncResults
+		state.isSyncing = false
+	}
+}
+
 export const syncTotalPlays = ({ effects }) => {
 	effects.sync.getWithToken("totalplays")
 }

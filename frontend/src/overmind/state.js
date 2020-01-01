@@ -11,6 +11,7 @@ export default {
 	bbCode: "",
 	isFetchingBBCode: false,
 	syncResults: "",
+	syncTotalsResults: "",
 	isSyncing: false,
 	firstPlays: [],
 	isFetchingFirstPlays: false,

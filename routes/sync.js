@@ -140,6 +140,7 @@ module.exports = ({ syncRouter }) => {
 		})
 		const changes = (await Promise.all(changePromises)).filter(c => c)
 		if (changes.length === 0) changes.push("No changes!")
-		ctx.body = changes
+		const result = JSON.stringify(changes.join("\n"))
+		ctx.body = result
 	})
 }
