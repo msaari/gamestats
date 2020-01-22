@@ -68,6 +68,7 @@ const Game = ({ game, counter }) => {
 			</td>
 			<td>{game.happiness}</td>
 			<td>{game.hotness}</td>
+			<td>{game.year}</td>
 		</tr>
 	)
 }

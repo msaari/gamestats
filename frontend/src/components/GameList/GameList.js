@@ -100,30 +100,47 @@ const GameList = ({ path }) => {
 		)
 	}
 
-	if (sorting === "plays") filteredGameList.sort((a, b) => b.plays - a.plays)
-	if (sorting === "wins") filteredGameList.sort((a, b) => b.wins - a.wins)
-	if (sorting === "rating") filteredGameList.sort((a, b) => b.rating - a.rating)
-	if (sorting === "happiness")
-		filteredGameList.sort((a, b) => b.happiness - a.happiness)
-	if (sorting === "hotness")
-		filteredGameList.sort((a, b) => b.hotness - a.hotness)
-	if (sorting === "monthmetric")
-		filteredGameList.sort((a, b) => b.monthMetric - a.monthMetric)
-	if (sorting === "yearmetric")
-		filteredGameList.sort((a, b) => {
-			const aYears = new Date().getFullYear() - a.firstYear + 1
-			const bYears = new Date().getFullYear() - b.firstYear + 1
+	switch (sorting) {
+		case "year":
+			filteredGameList.sort((a, b) => b.year - a.year)
+			break
+		case "plays":
+			filteredGameList.sort((a, b) => b.plays - a.plays)
+			break
+		case "wins":
+			filteredGameList.sort((a, b) => b.wins - a.wins)
+			break
+		case "rating":
+			filteredGameList.sort((a, b) => b.rating - a.rating)
+			break
+		case "happiness":
+			filteredGameList.sort((a, b) => b.happiness - a.happiness)
+			break
+		case "hotness":
+			filteredGameList.sort((a, b) => b.hotness - a.hotness)
+			break
+		case "monthmetric":
+			filteredGameList.sort((a, b) => b.monthMetric - a.monthMetric)
+			break
+		case "yearmetric":
+			filteredGameList.sort((a, b) => {
+				const aYears = new Date().getFullYear() - a.firstYear + 1
+				const bYears = new Date().getFullYear() - b.firstYear + 1
 
-			const aScore = a.yearMetric * 2 - aYears + a.yearMetric
-			const bScore = b.yearMetric * 2 - bYears + b.yearMetric
+				const aScore = a.yearMetric * 2 - aYears + a.yearMetric
+				const bScore = b.yearMetric * 2 - bYears + b.yearMetric
 
-			return bScore - aScore
-		})
-	if (sorting === "names")
-		filteredGameList.sort((a, b) => {
-			if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
-			return 1
-		})
+				return bScore - aScore
+			})
+			break
+		case "names":
+			filteredGameList.sort((a, b) => {
+				if (a.name.toLowerCase() < b.name.toLowerCase()) return -1
+				return 1
+			})
+			break
+		default:
+	}
 
 	let counter = 0
 	const gamesToShow = filteredGameList.map(game => {
@@ -182,6 +199,7 @@ const GameList = ({ path }) => {
 								<abbr title="Huber Happiness Metric">HHM</abbr>
 							</th>
 							<th onClick={() => sortBy("hotness")}>Hotness</th>
+							<th onClick={() => sortBy("year")}>Year</th>
 						</tr>
 					</thead>
 					<tbody>
