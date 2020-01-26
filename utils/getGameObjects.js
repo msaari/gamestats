@@ -38,6 +38,7 @@ module.exports = async (
 		}
 	}
 
+	console.log(targetYear)
 	gameObjects.forEach(game => game.updateStayingPower(2001, targetYear))
 
 	return gameObjects

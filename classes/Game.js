@@ -95,17 +95,21 @@ class Game {
 			sumOfWeights += yearWeight
 		}
 
-		const currentYear = new Date().getFullYear()
 		const rawStayingPower = Object.entries(this.playsPerYear).reduce(
 			(sp, [year, plays]) => {
-				const yearWeight = Math.pow(5 / 6, currentYear - year)
-				sp.sumOfValues += Math.sqrt(plays * (this.gameLength / 60)) * yearWeight
+				const yearWeight = Math.pow(5 / 6, to - year)
+				sp.sumOfValues += Math.sqrt(plays) * yearWeight
+				if (this.name == "Love Letter") {
+					console.log(plays, Math.sqrt(plays), yearWeight)
+					console.log(sp.sumOfValues, sumOfWeights)
+				}
 				sp.weightedAverage = Math.pow(sp.sumOfValues / sumOfWeights, 2)
 				return sp
 			},
 			{ sumOfWeights: 0, sumOfValues: 0, weightedAverage: 0 }
 		)
-		const lengthStayingPower = rawStayingPower.weightedAverage
+		const lengthStayingPower =
+			rawStayingPower.weightedAverage * (this.gameLength / 60)
 		this.stayingPower = Number.parseFloat(lengthStayingPower).toPrecision(3)
 	}
 }
