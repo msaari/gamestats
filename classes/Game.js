@@ -99,17 +99,14 @@ class Game {
 		const rawStayingPower = Object.entries(this.playsPerYear).reduce(
 			(sp, [year, plays]) => {
 				const yearWeight = Math.pow(5 / 6, currentYear - year)
-				sp.sumOfValues += plays * yearWeight
+				sp.sumOfValues += Math.sqrt(plays * (this.gameLength / 60)) * yearWeight
 				sp.weightedAverage = Math.pow(sp.sumOfValues / sumOfWeights, 2)
 				return sp
 			},
 			{ sumOfWeights: 0, sumOfValues: 0, weightedAverage: 0 }
 		)
-		const lengthStayingPower =
-			rawStayingPower.weightedAverage * (this.gameLength / 60)
-		this.stayingPower = Number.parseFloat(
-			Math.sqrt(lengthStayingPower)
-		).toPrecision(3)
+		const lengthStayingPower = rawStayingPower.weightedAverage
+		this.stayingPower = Number.parseFloat(lengthStayingPower).toPrecision(3)
 	}
 }
 

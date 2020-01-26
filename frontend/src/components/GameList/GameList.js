@@ -53,6 +53,8 @@ const sumTotalGames = games => {
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
 			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
 		</tr>
 	)
 }
@@ -196,13 +198,19 @@ const GameList = ({ path }) => {
 							<th onClick={() => sortBy("plays")}>Plays</th>
 							<th onClick={() => sortBy("wins")}>Wins</th>
 							<th onClick={() => sortBy("rating")}>Rating</th>
-							<th onClick={() => sortBy("monthmetric")}>MM</th>
-							<th onClick={() => sortBy("yearmetric")}>YM</th>
+							<th onClick={() => sortBy("monthmetric")}>
+								<abbr title="Month Metric">MM</abbr>
+							</th>
+							<th onClick={() => sortBy("yearmetric")}>
+								<abbr title="Year Metric">YM</abbr>
+							</th>
 							<th onClick={() => sortBy("happiness")}>
 								<abbr title="Huber Happiness Metric">HHM</abbr>
 							</th>
 							<th onClick={() => sortBy("hotness")}>Hotness</th>
-							<th onClick={() => sortBy("stayingpower")}>SP</th>
+							<th onClick={() => sortBy("stayingpower")}>
+								<abbr title="Eric Brosius Staying Power">SP</abbr>
+							</th>
 							<th onClick={() => sortBy("year")}>Year</th>
 						</tr>
 					</thead>
