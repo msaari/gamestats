@@ -53,8 +53,8 @@ const generateWeekDateParam = ({ week, month, year }) => {
 }
 
 const generateRangeDateParam = ({ from, to }) => {
-	const now = moment()
 	if (!to) {
+		const now = moment()
 		to = now.format("YYYY-MM-DD")
 	}
 

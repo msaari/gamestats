@@ -5,7 +5,8 @@ const GameObject = require("../classes/Game")
 module.exports = async (
 	sessionParams,
 	includeSessions,
-	countForParents = true
+	countForParents = true,
+	targetYear = new Date().getFullYear()
 ) => {
 	const games = await Game.find({})
 	const sessions = await Session.find(sessionParams)
@@ -36,6 +37,8 @@ module.exports = async (
 			}
 		}
 	}
+
+	gameObjects.forEach(game => game.updateStayingPower(2001, targetYear))
 
 	return gameObjects
 }

@@ -15,18 +15,26 @@ const handleDateChange = event => {
 		: now.year()
 	const fromMonth = event.target.fromMonth.value
 		? parseInt(event.target.fromMonth.value)
+				.toString()
+				.padStart(2, "0")
 		: null
 	const fromDay = event.target.fromDay.value
 		? parseInt(event.target.fromDay.value)
+				.toString()
+				.padStart(2, "0")
 		: null
 	const toYear = event.target.toYear.value
 		? parseInt(event.target.toYear.value)
 		: now.year()
 	const toMonth = event.target.toMonth.value
 		? parseInt(event.target.toMonth.value)
+				.toString()
+				.padStart(2, "0")
 		: null
 	const toDay = event.target.toDay.value
 		? parseInt(event.target.toDay.value)
+				.toString()
+				.padStart(2, "0")
 		: null
 	setDateParams({ fromDay, fromMonth, fromYear, toDay, toMonth, toYear })
 }

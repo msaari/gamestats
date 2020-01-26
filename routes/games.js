@@ -60,6 +60,10 @@ module.exports = ({ gamesRouter }) => {
 		let dateParam = dates.readDateParam(ctx.request.query)
 		if (dateParam) sessionParams = dateParam
 
+		const targetYear = ctx.request.query.to
+			? ctx.request.query.to.substring(0, ctx.request.query.to.indexOf("-"))
+			: new Date().getFullYear()
+
 		const countForParents = ctx.request.query.parents === "0" ? false : true
 
 		const key = md5(
@@ -74,7 +78,12 @@ module.exports = ({ gamesRouter }) => {
 			? JSON.parse(redisGames)
 			: sortGames(
 					queryFiltering(
-						await getGameObjects(sessionParams, false, countForParents),
+						await getGameObjects(
+							sessionParams,
+							false,
+							countForParents,
+							targetYear
+						),
 						ctx.request.query
 					),
 					ctx.request.query

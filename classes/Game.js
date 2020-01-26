@@ -3,6 +3,7 @@ class Game {
 		this.id = id
 		this.name = name
 		this.plays = 0
+		this.playsPerYear = {}
 		this.wins = 0
 		this.designers = data.designers
 		this.publisher = data["publisher"]
@@ -22,10 +23,11 @@ class Game {
 		this.years = new Set()
 		this.firstYear = null
 		this.lastYear = null
+		this.stayingPower = 0
 	}
 
 	addSession(session, includeSessions) {
-		this.addPlays(session.plays)
+		this.addPlays(session.plays, session.date)
 		this.addWins(session.wins)
 		this.manageDateData(session.date)
 		if (includeSessions) {
@@ -38,9 +40,16 @@ class Game {
 		}
 	}
 
-	addPlays(plays) {
+	addPlays(plays, date) {
 		this.plays += parseInt(plays)
 		this.updateHappiness()
+
+		const year = date.getFullYear()
+		let playsPerYear = this.playsPerYear[year]
+		!playsPerYear
+			? (playsPerYear = parseInt(plays))
+			: (playsPerYear += parseInt(plays))
+		this.playsPerYear[year] = playsPerYear
 	}
 
 	addWins(wins) {
@@ -77,6 +86,30 @@ class Game {
 		this.hotness = Number.parseFloat(Math.log10(this.hotness)).toPrecision(3)
 		if (isNaN(this.happiness)) this.happiness = 0
 		if (isNaN(this.hotness)) this.hotness = 0
+	}
+
+	updateStayingPower(from, to) {
+		let sumOfWeights = 0
+		for (let year = from; year <= to; year++) {
+			const yearWeight = Math.pow(5 / 6, to - year)
+			sumOfWeights += yearWeight
+		}
+
+		const currentYear = new Date().getFullYear()
+		const rawStayingPower = Object.entries(this.playsPerYear).reduce(
+			(sp, [year, plays]) => {
+				const yearWeight = Math.pow(5 / 6, currentYear - year)
+				sp.sumOfValues += plays * yearWeight
+				sp.weightedAverage = Math.pow(sp.sumOfValues / sumOfWeights, 2)
+				return sp
+			},
+			{ sumOfWeights: 0, sumOfValues: 0, weightedAverage: 0 }
+		)
+		const lengthStayingPower =
+			rawStayingPower.weightedAverage * (this.gameLength / 60)
+		this.stayingPower = Number.parseFloat(
+			Math.sqrt(lengthStayingPower)
+		).toPrecision(3)
 	}
 }
 

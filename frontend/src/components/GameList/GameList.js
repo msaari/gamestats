@@ -119,6 +119,9 @@ const GameList = ({ path }) => {
 		case "hotness":
 			filteredGameList.sort((a, b) => b.hotness - a.hotness)
 			break
+		case "stayingpower":
+			filteredGameList.sort((a, b) => b.stayingPower - a.stayingPower)
+			break
 		case "monthmetric":
 			filteredGameList.sort((a, b) => b.monthMetric - a.monthMetric)
 			break
@@ -199,6 +202,7 @@ const GameList = ({ path }) => {
 								<abbr title="Huber Happiness Metric">HHM</abbr>
 							</th>
 							<th onClick={() => sortBy("hotness")}>Hotness</th>
+							<th onClick={() => sortBy("stayingpower")}>SP</th>
 							<th onClick={() => sortBy("year")}>Year</th>
 						</tr>
 					</thead>
