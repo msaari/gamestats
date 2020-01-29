@@ -42,7 +42,6 @@ class Game {
 
 	addPlays(plays, date) {
 		this.plays += parseInt(plays)
-		this.updateHappiness()
 
 		const year = date.getFullYear()
 		let playsPerYear = this.playsPerYear[year]

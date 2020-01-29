@@ -38,7 +38,10 @@ module.exports = async (
 		}
 	}
 
-	gameObjects.forEach(game => game.updateStayingPower(2001, targetYear))
+	gameObjects.forEach(game => {
+		game.updateStayingPower(2001, targetYear)
+		game.updateHappiness()
+	})
 
 	return gameObjects
 }
