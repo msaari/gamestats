@@ -99,10 +99,6 @@ class Game {
 			(sp, [year, plays]) => {
 				const yearWeight = Math.pow(5 / 6, to - year)
 				sp.sumOfValues += Math.sqrt(plays) * yearWeight
-				if (this.name == "Love Letter") {
-					console.log(plays, Math.sqrt(plays), yearWeight)
-					console.log(sp.sumOfValues, sumOfWeights)
-				}
 				sp.weightedAverage = Math.pow(sp.sumOfValues / sumOfWeights, 2)
 				return sp
 			},

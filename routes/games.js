@@ -63,7 +63,6 @@ module.exports = ({ gamesRouter }) => {
 		const targetYear = ctx.request.query.to
 			? ctx.request.query.to.substring(0, ctx.request.query.to.indexOf("-"))
 			: new Date().getFullYear()
-		console.log(ctx.request.query.to, targetYear)
 
 		const countForParents = ctx.request.query.parents === "0" ? false : true
 

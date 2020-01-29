@@ -61,7 +61,6 @@ const generateRangeDateParam = ({ from, to }) => {
 	const toNextDay = moment(to)
 		.add(1, "days")
 		.format("YYYY-MM-DD")
-	console.log(toNextDay)
 
 	let dateParam = {
 		date: {
@@ -69,7 +68,7 @@ const generateRangeDateParam = ({ from, to }) => {
 			$lt: `${toNextDay}`
 		}
 	}
-	console.log(dateParam)
+
 	return dateParam
 }
 
