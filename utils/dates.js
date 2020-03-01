@@ -27,7 +27,7 @@ const generateWeekDateParam = ({ week, month, year }) => {
 		dateParam = {
 			date: {
 				$gte: `${theMonth.startOf("month").format("YYYY-MM-DD")}`,
-				$lte: `${theMonth.endOf("month").format("YYYY-MM-DD")}`
+				$lte: `${theMonth.endOf("month").format("YYYY-MM-DD")} 23:59:59`
 			}
 		}
 	} else if (year && week) {
@@ -35,7 +35,7 @@ const generateWeekDateParam = ({ week, month, year }) => {
 		dateParam = {
 			date: {
 				$gte: `${theWeek.startOf("isoWeek").format("YYYY-MM-DD")}`,
-				$lte: `${theWeek.endOf("isoWeek").format("YYYY-MM-DD")}`
+				$lte: `${theWeek.endOf("isoWeek").format("YYYY-MM-DD")} 23:59:59`
 			}
 		}
 	} else if (year) {
@@ -44,7 +44,7 @@ const generateWeekDateParam = ({ week, month, year }) => {
 		dateParam = {
 			date: {
 				$gte: `${theYear.startOf("year").format("YYYY-MM-DD")}`,
-				$lte: `${theYear.endOf("year").format("YYYY-MM-DD")}`
+				$lte: `${theYear.endOf("year").format("YYYY-MM-DD")} 23:59:59`
 			}
 		}
 	}
@@ -58,14 +58,10 @@ const generateRangeDateParam = ({ from, to }) => {
 		to = now.format("YYYY-MM-DD")
 	}
 
-	const toNextDay = moment(to)
-		.add(1, "days")
-		.format("YYYY-MM-DD")
-
 	let dateParam = {
 		date: {
 			$gte: `${from}`,
-			$lt: `${toNextDay}`
+			$lte: `${to} 23:59:59`
 		}
 	}
 
