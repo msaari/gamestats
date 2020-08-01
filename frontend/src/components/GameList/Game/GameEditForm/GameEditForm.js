@@ -5,7 +5,7 @@ import { useOvermind } from "../../../../overmind"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
-import LinkExternal from "@primer/octicons-react"
+import { LinkExternalIcon } from "@primer/octicons-react"
 
 let closeModal = null
 let action = null
@@ -106,7 +106,7 @@ const GameEditForm = ({ game, modalCloser }) => {
 						tabIndex="-1"
 						href={"https://www.boardgamegeek.com/boardgame/" + game.bgg + "/"}
 					>
-						<LinkExternal />
+						<LinkExternalIcon />
 					</a>
 				</Form.Label>
 				<Col sm={10}>

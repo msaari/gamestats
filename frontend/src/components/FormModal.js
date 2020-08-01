@@ -1,7 +1,7 @@
 import React from "react"
 import Button from "react-bootstrap/Button"
 import Modal from "react-bootstrap/Modal"
-import X from "@primer/octicons-react"
+import { XIcon } from "@primer/octicons-react"
 
 const FormModal = ({ show, closeModal, heading, children }) => {
 	return (
@@ -13,7 +13,7 @@ const FormModal = ({ show, closeModal, heading, children }) => {
 					variant="outline-dark"
 					className="float-right"
 				>
-					<X />
+					<XIcon />
 				</Button>
 			</Modal.Header>
 			<Modal.Body>{children}</Modal.Body>
