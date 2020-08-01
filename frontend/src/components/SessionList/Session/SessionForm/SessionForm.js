@@ -1,12 +1,12 @@
 import React, { useEffect } from "react"
-import CreatableSelect from "react-select/lib/Creatable"
+import CreatableSelect from "react-select/Creatable"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 import SessionDate from "./SessionDate/SessionDate"
 import { useOvermind } from "../../../../overmind"
 
-const SessionForm = props => {
+const SessionForm = (props) => {
 	const { state, actions } = useOvermind()
 
 	useEffect(() => {
