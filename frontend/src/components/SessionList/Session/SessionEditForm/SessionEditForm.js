@@ -10,7 +10,7 @@ const SessionEditForm = ({ session, modalCloser }) => {
 		return (Array(length + 1).join("0") + input).slice(-length)
 	}
 
-	const formHandler = async event => {
+	const formHandler = async (event) => {
 		event.persist()
 		event.preventDefault()
 		try {
@@ -26,7 +26,7 @@ const SessionEditForm = ({ session, modalCloser }) => {
 				game: event.target.game.value,
 				plays: event.target.plays.value,
 				wins: event.target.wins.value,
-				players: event.target.players.value
+				players: event.target.players.value,
 			}
 			actions.updateSession({ id: session.id, object: newSession })
 			const notifier = new AWN()
