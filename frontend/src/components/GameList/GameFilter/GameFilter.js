@@ -1,7 +1,7 @@
 import React from "react"
 import Form from "react-bootstrap/Form"
 import InputGroup from "react-bootstrap/InputGroup"
-import Octicon, { Search } from "@primer/octicons-react"
+import Search from "@primer/octicons-react"
 
 const GameFilter = ({
 	filterText,
@@ -9,7 +9,7 @@ const GameFilter = ({
 	incompleteFilter,
 	incompleteChangeEvent,
 	expansionsFilter,
-	expansionsChangeEvent
+	expansionsChangeEvent,
 }) => {
 	return (
 		<Form>
@@ -17,7 +17,7 @@ const GameFilter = ({
 				<InputGroup>
 					<InputGroup.Prepend>
 						<InputGroup.Text id="basic-addon1">
-							<Octicon icon={Search} />
+							<Search />
 						</InputGroup.Text>
 					</InputGroup.Prepend>
 					<Form.Control

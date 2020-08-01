@@ -5,28 +5,28 @@ import { useOvermind } from "../../../../overmind"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
-import Octicon, { LinkExternal } from "@primer/octicons-react"
+import LinkExternal from "@primer/octicons-react"
 
 let closeModal = null
 let action = null
 
-const handleFormChange = async event => {
+const handleFormChange = async (event) => {
 	event.persist()
 	event.preventDefault()
 	try {
 		const newGame = {
 			designers: event.target.designers.value
 				.split(",")
-				.map(item => item.trim()),
+				.map((item) => item.trim()),
 			publisher: event.target.publisher.value
 				.split(",")
-				.map(item => item.trim()),
+				.map((item) => item.trim()),
 			year: event.target.year.value,
 			name: event.target.name.value,
 			bgg: event.target.bgg.value,
 			rating: event.target.rating.value,
 			gameLength: event.target.gameLength.value,
-			parent: event.target.parent.value
+			parent: event.target.parent.value,
 		}
 
 		action.updateGame({ id: event.target.id.value, object: newGame })
@@ -39,7 +39,7 @@ const handleFormChange = async event => {
 	}
 }
 
-const deleteGame = async id => {
+const deleteGame = async (id) => {
 	const notifier = new AWN()
 	const onOk = () => {
 		action.deleteGame(id)
@@ -106,7 +106,7 @@ const GameEditForm = ({ game, modalCloser }) => {
 						tabIndex="-1"
 						href={"https://www.boardgamegeek.com/boardgame/" + game.bgg + "/"}
 					>
-						<Octicon icon={LinkExternal} />
+						<LinkExternal />
 					</a>
 				</Form.Label>
 				<Col sm={10}>
