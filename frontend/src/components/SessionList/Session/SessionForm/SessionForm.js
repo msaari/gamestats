@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import CreatableSelect from "react-select/Creatable"
+import CreatableSelect from "react-select/creatable"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
