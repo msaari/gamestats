@@ -48,6 +48,7 @@ module.exports = ({ timePeriodsRouter }) => {
 
 		for (const session of sessions) {
 			const sessionDate = moment(session.date)
+			if (sessionDate.format("YYYY-MM-DD") === "2001-01-01") continue
 			let month = months.find((m) => m.name == sessionDate.format("YYYY-MM"))
 			if (!month) {
 				month = {}
@@ -74,5 +75,60 @@ module.exports = ({ timePeriodsRouter }) => {
 		})
 
 		ctx.body = months
+	})
+
+	timePeriodsRouter.get("/years", async (ctx, next) => {
+		let key = md5("getallgameobjects")
+
+		const redisGames = redisAvailable ? await redisClient.get(key) : null
+		const games = redisGames ? JSON.parse(redisGames) : await Game.find({})
+
+		if (redisAvailable)
+			redisClient
+				.set(key, JSON.stringify(games))
+				.catch((error) => console.log("redis error", error))
+		key = md5("getallsessions")
+
+		const redisSessions = redisAvailable ? await redisClient.get(key) : null
+		const sessions = redisSessions
+			? JSON.parse(redisSessions)
+			: await Session.find({})
+
+		if (redisAvailable)
+			redisClient
+				.set(key, JSON.stringify(sessions))
+				.catch((error) => console.log("redis error", error))
+
+		let years = []
+
+		for (const session of sessions) {
+			const sessionDate = moment(session.date)
+			if (sessionDate.format("YYYY-MM-DD") === "2001-01-01") continue
+			let year = years.find((m) => m.name == sessionDate.format("YYYY"))
+			if (!year) {
+				year = {}
+				year.name = sessionDate.format("YYYY")
+				year.plays = 0
+				year.totalPlayers = 0
+				year.totalLength = 0
+				years.push(year)
+			}
+			const game = games.find((g) => g.name == session.game)
+			year.plays = year.plays + session.plays
+			year.totalPlayers = year.totalPlayers + session.plays * session.players
+			year.totalLength = year.totalLength + session.plays * game["length"]
+			years = years.map((m) => {
+				if (m.name === year.name) {
+					m = year
+				}
+				return m
+			})
+		}
+		years = years.map((m) => {
+			m.avgPlayers = m.totalPlayers / m.plays
+			return m
+		})
+
+		ctx.body = years
 	})
 }
