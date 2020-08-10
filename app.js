@@ -35,23 +35,27 @@ app.on("error", (err, ctx) => {
 })
 
 const router = new Router({
-	prefix: "/api"
+	prefix: "/api",
 })
 
 const gamesRouter = new Router({
-	prefix: "/api/games"
+	prefix: "/api/games",
 })
 
 const sessionsRouter = new Router({
-	prefix: "/api/sessions"
+	prefix: "/api/sessions",
+})
+
+const timePeriodsRouter = new Router({
+	prefix: "/api/timeperiods",
 })
 
 const loginRouter = new Router({
-	prefix: "/api/login"
+	prefix: "/api/login",
 })
 
 const syncRouter = new Router({
-	prefix: "/api/sync"
+	prefix: "/api/sync",
 })
 
 require("./routes/basic")({ router })
@@ -59,6 +63,7 @@ require("./routes/games")({ gamesRouter })
 require("./routes/sessions")({ sessionsRouter })
 require("./routes/login")({ loginRouter })
 require("./routes/sync")({ syncRouter })
+require("./routes/timeperiods")({ timePeriodsRouter })
 
 app.use(router.routes())
 app.use(router.allowedMethods())
@@ -68,6 +73,9 @@ app.use(gamesRouter.allowedMethods())
 
 app.use(sessionsRouter.routes())
 app.use(sessionsRouter.allowedMethods())
+
+app.use(timePeriodsRouter.routes())
+app.use(timePeriodsRouter.allowedMethods())
 
 app.use(loginRouter.routes())
 app.use(loginRouter.allowedMethods())
