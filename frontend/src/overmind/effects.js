@@ -15,7 +15,7 @@ export class Api {
 		}
 	}
 
-	setToken = newToken => {
+	setToken = (newToken) => {
 		this.token = `Bearer ${newToken}`
 	}
 
@@ -24,9 +24,9 @@ export class Api {
 		return response.data
 	}
 
-	getSome = async limit => {
+	getSome = async (limit) => {
 		const response = await axios.get(this.baseUrl, {
-			params: { limit, order: "desc" }
+			params: { limit, order: "desc" },
 		})
 		return response.data
 	}
@@ -39,7 +39,7 @@ export class Api {
 
 	getWithToken = async (path, params = null) => {
 		const config = {
-			headers: { Authorization: this.token }
+			headers: { Authorization: this.token },
 		}
 		params = params ? "?" + params : ""
 
@@ -47,9 +47,9 @@ export class Api {
 		return response.data
 	}
 
-	create = async newObject => {
+	create = async (newObject) => {
 		const config = {
-			headers: { Authorization: this.token }
+			headers: { Authorization: this.token },
 		}
 
 		let response = null
@@ -59,16 +59,16 @@ export class Api {
 
 	update = async (id, newObject) => {
 		const config = {
-			headers: { Authorization: this.token }
+			headers: { Authorization: this.token },
 		}
 
 		const response = await axios.put(`${this.baseUrl}/${id}`, newObject, config)
 		return response.data
 	}
 
-	deleteItem = async id => {
+	deleteItem = async (id) => {
 		const config = {
-			headers: { Authorization: this.token }
+			headers: { Authorization: this.token },
 		}
 
 		const response = await axios.delete(`${this.baseUrl}/${id}`, config)
@@ -77,7 +77,7 @@ export class Api {
 }
 
 class LoginApi extends Api {
-	login = async credentials => {
+	login = async (credentials) => {
 		const response = await axios.post(this.baseUrl, credentials)
 		return response.data
 	}
@@ -85,5 +85,6 @@ class LoginApi extends Api {
 
 export const sessions = new Api("/api/sessions", axios)
 export const games = new Api("/api/games", axios)
+export const timeperiods = new Api("/api/timeperiods", axios)
 export const sync = new Api("/api/sync", axios)
 export const login = new LoginApi("/api/login", axios)

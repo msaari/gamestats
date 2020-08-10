@@ -16,5 +16,9 @@ export default {
 	firstPlays: [],
 	isFetchingFirstPlays: false,
 	fiftyPlays: [],
-	isFetchingFiftyPlays: false
+	isFetchingFiftyPlays: false,
+	monthList: [],
+	isFetchingMonths: false,
+	yearList: [],
+	isFetchingYears: false,
 }

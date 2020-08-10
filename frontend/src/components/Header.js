@@ -36,6 +36,14 @@ const Header = () => {
 							<NavDropdown.Item>Fifty plays</NavDropdown.Item>
 						</LinkContainer>
 					</NavDropdown>
+					<NavDropdown className="mr-4" title="Periods" id="periods-dropdown">
+						<LinkContainer exact to="/months">
+							<NavDropdown.Item>Months</NavDropdown.Item>
+						</LinkContainer>
+						<LinkContainer exact to="/years">
+							<NavDropdown.Item>Years</NavDropdown.Item>
+						</LinkContainer>
+					</NavDropdown>
 					<NavDropdown title="Misc" id="misc-elements">
 						<LinkContainer to="/sessions/bbcode">
 							<NavDropdown.Item>BBCode sessions</NavDropdown.Item>

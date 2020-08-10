@@ -7,6 +7,8 @@ import Home from "./views/Home"
 import Games from "./views/Games"
 import NewSession from "./views/NewSession"
 import Sessions from "./views/Sessions"
+import Months from "./views/Months"
+import Years from "./views/Years"
 import Sync from "./views/Sync"
 import SyncTotals from "./views/SyncTotals"
 import BBCodes from "./views/BBCodes"
@@ -32,37 +34,47 @@ const App = () => {
 			<Route path="/sessions" exact render={() => <Sessions />} />
 			<Route
 				path="/sessions/bbcode"
-				render={routeProps => <BBCodes {...routeProps} />}
+				render={(routeProps) => <BBCodes {...routeProps} />}
 			/>
 			<Route
 				path="/games"
 				exact
-				render={routeProps => <Games {...routeProps} />}
+				render={(routeProps) => <Games {...routeProps} />}
 			/>
 			<Route
 				path="/games/top100"
 				exact
-				render={routeProps => <Games {...routeProps} />}
+				render={(routeProps) => <Games {...routeProps} />}
 			/>
 			<Route
 				path="/games/firstplays"
 				exact
-				render={routeProps => <FirstPlays {...routeProps} />}
+				render={(routeProps) => <FirstPlays {...routeProps} />}
 			/>
 			<Route
 				path="/games/fiftyplays"
 				exact
-				render={routeProps => <FiftyPlays {...routeProps} />}
+				render={(routeProps) => <FiftyPlays {...routeProps} />}
+			/>
+			<Route
+				path="/months"
+				exact
+				render={(routeProps) => <Months {...routeProps} />}
+			/>
+			<Route
+				path="/years"
+				exact
+				render={(routeProps) => <Years {...routeProps} />}
 			/>
 			<Route
 				path="/sync"
 				exact
-				render={routeProps => <Sync {...routeProps} />}
+				render={(routeProps) => <Sync {...routeProps} />}
 			/>
 			<Route
 				path="/sync/totalplays"
 				exact
-				render={routeProps => <SyncTotals {...routeProps} />}
+				render={(routeProps) => <SyncTotals {...routeProps} />}
 			/>
 		</Router>
 	)

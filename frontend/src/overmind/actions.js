@@ -20,7 +20,9 @@ export const setSessionList = ({ state }, sessionList) => {
 
 export const deleteSession = ({ effects, state }, id) => {
 	effects.sessions.deleteItem(id)
-	const newSessionList = state.sessionList.filter(session => session.id !== id)
+	const newSessionList = state.sessionList.filter(
+		(session) => session.id !== id
+	)
 	state.sessionList = newSessionList
 }
 
@@ -33,7 +35,7 @@ export const createSession = async ({ effects, state }, session) => {
 export const updateGame = async ({ effects, state }, data) => {
 	await effects.games.update(data.id, data.object)
 	const updatedGame = await effects.games.getPath(`/id/${data.id}`)
-	const newGameList = state.gameList.map(game =>
+	const newGameList = state.gameList.map((game) =>
 		game.id === data.id ? updatedGame : game
 	)
 	state.gameList = newGameList
@@ -41,7 +43,7 @@ export const updateGame = async ({ effects, state }, data) => {
 
 export const updateSession = async ({ effects, state }, data) => {
 	const updatedSession = await effects.sessions.update(data.id, data.object)
-	const newSessionList = state.sessionList.map(session =>
+	const newSessionList = state.sessionList.map((session) =>
 		session.id === data.id ? updatedSession : session
 	)
 	state.sessionList = newSessionList
@@ -49,7 +51,7 @@ export const updateSession = async ({ effects, state }, data) => {
 
 export const deleteGame = ({ effects, state }, id) => {
 	effects.games.deleteItem(id)
-	const newGameList = state.gameList.filter(game => game.id !== id)
+	const newGameList = state.gameList.filter((game) => game.id !== id)
 	state.gameList = newGameList
 }
 
@@ -73,10 +75,10 @@ export const getGameNames = async ({ effects, state }) => {
 	if (!state.isFetchingNames) {
 		state.isFetchingNames = true
 		const games = await effects.games.getPath("gamenames")
-		state.gameNames = games.map(game => {
+		state.gameNames = games.map((game) => {
 			return {
 				label: game,
-				value: game
+				value: game,
 			}
 		})
 		state.gameNames.sort((a, b) => {
@@ -122,6 +124,22 @@ export const getFiftyPlays = async ({ effects, state }) => {
 		const fiftyPlays = await effects.games.getPath("playgoal", "goal=50")
 		state.fiftyPlays = fiftyPlays
 		state.isFetchingFiftyPlays = false
+	}
+}
+
+export const getMonthList = async ({ effects, state }) => {
+	if (!state.isFetchingMonths) {
+		state.isFetchingMonths = true
+		state.monthList = await effects.timeperiods.getPath("months")
+		state.isFetchingMonths = false
+	}
+}
+
+export const getYearList = async ({ effects, state }) => {
+	if (!state.isFetchingYears) {
+		state.isFetchingYears = true
+		state.yearList = await effects.timeperiods.getPath("years")
+		state.isFetchingYears = false
 	}
 }
 
