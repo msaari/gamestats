@@ -28,7 +28,7 @@
     "axios": "^0.19.2",
     "bcrypt": "^5.0.0",
     "dotenv": "^8.2.0",
-    "fast-xml-parser": "^3.17.4",
+    "fast-xml-parser": "^3.17.5",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.0",
     "koa-bodyparser": "^4.3.0",
@@ -37,15 +37,15 @@
     "koa-router": "^9.1.0",
     "koa-static": "^5.0.0",
     "md5": "^2.2.1",
-    "moment": "^2.27.0",
-    "mongoose": "^5.9.27",
+    "moment": "^2.29.1",
+    "mongoose": "^5.11.4",
     "request": "^2.88.2",
     "request-promise": "^4.2.6"
   },
   "devDependencies": {
-    "jest": "^26.2.2",
-    "json-server": "^0.16.1",
-    "nodemon": "^2.0.4",
+    "jest": "^26.6.3",
+    "json-server": "^0.16.3",
+    "nodemon": "^2.0.6",
     "supertest": "^4.0.2"
   }
 }
