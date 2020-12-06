@@ -5,7 +5,6 @@ const dates = require("../utils/dates")
 
 const redis = require("async-redis")
 const redisClient = redis.createClient(process.env.REDIS_URL)
-const md5 = require("md5")
 
 var redisAvailable = false
 
@@ -27,12 +26,19 @@ module.exports = ({ sessionsRouter }) => {
 		if (dateParam) params = dateParam
 
 		if (ctx.request.query.game) {
+			const childGames = await Game.find({ parent: ctx.request.query.game })
+			const childGameNames = childGames.map(g => g.name)
+			const grandChildGames = await Game.find({ parent: { "$in" : childGameNames } } )
+			const grandChildGameNames = grandChildGames.map(g => g.name)
+			const gameParam = [ ctx.request.query.game, ...childGameNames, ...grandChildGameNames ]
+
 			params = {
 				...params,
-				game: ctx.request.query.game
+				game: { "$in": gameParam }
 			}
 		}
 
+		console.log(params)
 		let limit = 0
 		if (Number.isInteger(parseInt(ctx.request.query.limit)))
 			limit = parseInt(ctx.request.query.limit)
