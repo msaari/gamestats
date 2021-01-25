@@ -2,7 +2,7 @@ const Session = require("../models/Session")
 const Game = require("../models/Game")
 const jwt = require("../middlewares/jwt")
 const dates = require("../utils/dates")
-const moment = require("moment")
+const dayjs = require("dayjs")
 
 const redis = require("async-redis")
 const redisClient = redis.createClient(process.env.REDIS_URL)
@@ -47,7 +47,7 @@ module.exports = ({ timePeriodsRouter }) => {
 		let months = []
 
 		for (const session of sessions) {
-			const sessionDate = moment(session.date)
+			const sessionDate = dayjs(session.date)
 			if (sessionDate.format("YYYY-MM-DD") === "2001-01-01") continue
 			let month = months.find((m) => m.name == sessionDate.format("YYYY-MM"))
 			if (!month) {
@@ -102,7 +102,7 @@ module.exports = ({ timePeriodsRouter }) => {
 		let years = []
 
 		for (const session of sessions) {
-			const sessionDate = moment(session.date)
+			const sessionDate = dayjs(session.date)
 			if (sessionDate.format("YYYY-MM-DD") === "2001-01-01") continue
 			let year = years.find((m) => m.name == sessionDate.format("YYYY"))
 			if (!year) {

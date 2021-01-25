@@ -1,4 +1,4 @@
-const moment = require("moment")
+const dayjs = require("dayjs")
 
 const readDateParam = query => {
 	let dateParam = null
@@ -21,17 +21,23 @@ const generateWeekDateParam = ({ week, month, year }) => {
 
 	let dateParam = {}
 
-	if (year && month) {
-		const theMonth = moment(year + " " + month, "YYYY MM")
+	var customParseFormat = require('dayjs/plugin/customParseFormat')
+	dayjs.extend(customParseFormat)
 
+	if (year && month) {
+		const theMonth = dayjs(year + " " + month, "YYYY MM")
 		dateParam = {
 			date: {
 				$gte: `${theMonth.startOf("month").format("YYYY-MM-DD")}`,
 				$lte: `${theMonth.endOf("month").format("YYYY-MM-DD")} 23:59:59`
 			}
 		}
+		console.log(dateParam)
 	} else if (year && week) {
-		const theWeek = moment(year + "W" + week)
+		var isoWeek = require('dayjs/plugin/isoWeek')
+		dayjs.extend(isoWeek)
+
+		const theWeek = dayjs(year + "W" + week)
 		dateParam = {
 			date: {
 				$gte: `${theWeek.startOf("isoWeek").format("YYYY-MM-DD")}`,
@@ -39,12 +45,12 @@ const generateWeekDateParam = ({ week, month, year }) => {
 			}
 		}
 	} else if (year) {
-		const theYear = moment(year, "YYYY")
+		const theYear = dayjs(year, "YYYY")
 
 		dateParam = {
 			date: {
 				$gte: `${theYear.startOf("year").format("YYYY-MM-DD")}`,
-				$lte: `${theYear.endOf("year").format("YYYY-MM-DD")} 23:59:59`
+				$lte: `${theYear.endOf("year").format("YYYY-MM-DD")}`
 			}
 		}
 	}
@@ -54,14 +60,14 @@ const generateWeekDateParam = ({ week, month, year }) => {
 
 const generateRangeDateParam = ({ from, to }) => {
 	if (!to) {
-		const now = moment()
+		const now = dayjs()
 		to = now.format("YYYY-MM-DD")
 	}
 
 	let dateParam = {
 		date: {
 			$gte: `${from}`,
-			$lte: `${to} 23:59:59`
+			$lte: `${to}`
 		}
 	}
 

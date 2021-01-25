@@ -38,7 +38,6 @@ module.exports = ({ sessionsRouter }) => {
 			}
 		}
 
-		console.log(params)
 		let limit = 0
 		if (Number.isInteger(parseInt(ctx.request.query.limit)))
 			limit = parseInt(ctx.request.query.limit)

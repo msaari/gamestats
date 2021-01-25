@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import moment from "moment"
+import dayjs from "dayjs"
 import Session from "./Session/Session"
 import DateRange from "../DateRange"
 import GameSelector from "./GameSelector/GameSelector"
@@ -8,7 +8,7 @@ import { useOvermind } from "../../overmind"
 
 const dateParamString = dateParams => {
 	let paramArray = []
-	const to = moment(
+	const to = dayjs(
 		`${dateParams.toYear}-${dateParams.toMonth}-${dateParams.toDay}`,
 		"YYYY-MM-DD"
 	).add(1, "days")
@@ -50,7 +50,7 @@ const sumTotalSessions = sessions => {
 const SessionList = () => {
 	const { state, actions } = useOvermind()
 
-	const now = moment()
+	const now = dayjs()
 
 	const [dateParams, setDateParams] = useState({
 		fromDay: now.startOf("month").format("D"),

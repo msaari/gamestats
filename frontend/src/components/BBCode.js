@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import DisplayText from "./DisplayText"
 import { useOvermind } from "../overmind"
-import moment from "moment"
+import dayjs from "dayjs"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
@@ -17,33 +17,26 @@ const dateParamString = dateParams => {
 
 const dateParamHeading = dateParams => {
 	let headingString = ""
+	var customParseFormat = require('dayjs/plugin/customParseFormat')
+	dayjs.extend(customParseFormat)
+
 	if (dateParams["month"]) {
-		const time = moment(
+		const time = dayjs(
 			`${dateParams["month"]} ${dateParams["year"]}`,
-			"MM YYYY"
+			["M YYYY", "MM YYYY"]
 		)
 		headingString +=
 			time.startOf("month").format("D.M.YYYY") +
 			" – " +
 			time.endOf("month").format("D.M.YYYY")
-	} else if (dateParams["week"]) {
-		const time = moment(
-			`${dateParams["week"]} ${dateParams["year"]}`,
-			"WW GGGG"
-		)
-		headingString +=
-			time.startOf("week").format("D.M.YYYY") +
-			" – " +
-			time.endOf("week").format("D.M.YYYY")
 	}
 	return headingString
 }
 
 const BBCode = () => {
 	const { actions, state } = useOvermind()
-	const now = moment()
+	const now = dayjs()
 	const [dateParams, setDateParams] = useState({
-		week: null,
 		month: now.month() + 1,
 		year: now.year()
 	})
@@ -64,30 +57,22 @@ const BBCode = () => {
 		const month = event.target.month.value
 			? parseInt(event.target.month.value)
 			: null
-		let week = event.target.week.value
-			? parseInt(event.target.week.value)
-			: null
-		if (week && month) week = null
-		setDateParams({ week, month, year })
+		setDateParams({ month, year })
 	}
 
 	return (
 		<>
 			<Form onSubmit={formHandler}>
 				<Form.Row>
-					<Form.Group as={Col} md="3" controlId="week">
-						<Form.Label>Week</Form.Label>
-						<Form.Control type="number" placeholder="Week" />
-					</Form.Group>
-					<Form.Group as={Col} md="3" controlId="month">
+					<Form.Group as={Col} md="4" controlId="month">
 						<Form.Label>Month</Form.Label>
 						<Form.Control type="number" defaultValue={now.month() + 1} />
 					</Form.Group>
-					<Form.Group as={Col} md="3" controlId="year">
+					<Form.Group as={Col} md="4" controlId="year">
 						<Form.Label>Year</Form.Label>
 						<Form.Control type="number" defaultValue={now.year()} />
 					</Form.Group>
-					<Form.Group as={Col} md="3">
+					<Form.Group as={Col} md="4">
 						<Form.Label>&nbsp;</Form.Label>
 						<Button type="submit" variant="primary" block>
 							Update

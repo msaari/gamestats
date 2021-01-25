@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react"
+//import moment from "moment"
+import dayjs from "dayjs"
 import Game from "./Game/Game"
 import GameFilter from "./GameFilter/GameFilter"
 import Rating from "./Game/Rating/Rating"
@@ -65,7 +67,17 @@ const GameList = ({ path }) => {
 	const [incompleteFilter, setIncompleteFilter] = useState(false)
 	const [expansionFilter, setExpansionFilter] = useState(false)
 	const [sorting, setSorting] = useState("names")
-	const [dateParams, setDateParams] = useState({})
+
+	const now = dayjs()
+
+	const [dateParams, setDateParams] = useState({
+		fromDay: '01',
+		fromMonth: '01',
+		fromYear: now.year(),
+		toDay: now.date(),
+		toMonth: now.format('MM'),
+		toYear: now.year()
+	})
 
 	let paramString = ""
 	if (path === "top100") {

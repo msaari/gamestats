@@ -3,7 +3,7 @@ const jwt = require("../middlewares/jwt")
 const dates = require("../utils/dates")
 const bbCodify = require("../utils/bbcodify")
 const getGameObjects = require("../utils/getGameObjects")
-const moment = require("moment")
+const dayjs = require("dayjs")
 
 const redis = require("async-redis")
 const redisClient = redis.createClient(process.env.REDIS_URL)
@@ -210,8 +210,8 @@ module.exports = ({ gamesRouter }) => {
 						},
 						{ date: 0, plays: 0, reachedGoal: false }
 					)
-					const firstMoment = moment(firstPlayDate)
-					const lastMoment = moment(goalPlayDate.date)
+					const firstMoment = dayjs(firstPlayDate)
+					const lastMoment = dayjs(goalPlayDate.date)
 					const differenceInDays = goalPlayDate.date
 						? lastMoment.diff(firstMoment, "days")
 						: 0

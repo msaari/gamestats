@@ -2,7 +2,7 @@ import React, { useEffect } from "react"
 import Table from "react-bootstrap/Table"
 import Spinner from "react-bootstrap/Spinner"
 import { useOvermind } from "../../overmind"
-import moment from "moment"
+import dayjs from "dayjs"
 
 const FirstPlayList = () => {
 	const { state, actions } = useOvermind()
@@ -14,7 +14,7 @@ const FirstPlayList = () => {
 	let counter = 0
 	const fiftyList = state.fiftyPlays.filter(row => row.goalPlayDate)
 	const gameList = fiftyList.map(row => {
-		const date = moment(row.goalPlayDate)
+		const date = dayjs(row.goalPlayDate)
 		let time = row.differenceInDays
 		let unit = "days"
 		if (time > 360 && time < 365 * 2) {

@@ -2,12 +2,12 @@ import React, { useState } from "react"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
-import moment from "moment"
+import dayjs from "dayjs"
 
 let setDateParams = null
 
 const handleDateChange = event => {
-	const now = moment()
+	const now = dayjs()
 
 	event.preventDefault()
 	const fromYear = event.target.fromYear.value
@@ -40,7 +40,7 @@ const handleDateChange = event => {
 }
 
 const DateRange = ({ paramSetter }) => {
-	const to = moment()
+	const to = dayjs()
 
 	const [defaultValues, setDefaultValues] = useState({
 		fromDay: 1,
@@ -64,7 +64,7 @@ const DateRange = ({ paramSetter }) => {
 	}
 
 	const setDate = mode => {
-		const today = moment()
+		const today = dayjs()
 		switch (mode) {
 			case "alltime":
 				setDefaultValues({
@@ -77,7 +77,7 @@ const DateRange = ({ paramSetter }) => {
 				})
 				break
 			case "12months": {
-				const yearAgo = moment().subtract(1, "years")
+				const yearAgo = dayjs().subtract(1, "years")
 
 				setDefaultValues({
 					fromDay: yearAgo.date(),
@@ -90,7 +90,7 @@ const DateRange = ({ paramSetter }) => {
 				break
 			}
 			case "thisyear": {
-				const thisYear = moment().startOf("year")
+				const thisYear = dayjs().startOf("year")
 
 				setDefaultValues({
 					fromDay: thisYear.date(),
@@ -103,10 +103,10 @@ const DateRange = ({ paramSetter }) => {
 				break
 			}
 			case "lastyear": {
-				const lastYear = moment()
+				const lastYear = dayjs()
 					.subtract(1, "years")
 					.startOf("year")
-				const endOfLastYear = moment()
+				const endOfLastYear = dayjs()
 					.subtract(1, "years")
 					.endOf("year")
 
@@ -121,7 +121,9 @@ const DateRange = ({ paramSetter }) => {
 				break
 			}
 			case "thisquarter": {
-				const thisQuarter = moment().startOf("quarter")
+				var quarterOfYear = require('dayjs/plugin/quarterOfYear')
+				dayjs.extend(quarterOfYear)
+				const thisQuarter = dayjs().startOf("quarter")
 
 				setDefaultValues({
 					fromDay: thisQuarter.date(),

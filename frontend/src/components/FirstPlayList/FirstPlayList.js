@@ -4,7 +4,7 @@ import Spinner from "react-bootstrap/Spinner"
 import Accordion from "react-bootstrap/Accordion"
 import Card from "react-bootstrap/Card"
 import { useOvermind } from "../../overmind"
-import moment from "moment"
+import dayjs from "dayjs"
 
 const FirstPlayList = () => {
 	const { state, actions } = useOvermind()
@@ -42,7 +42,7 @@ const FirstPlayList = () => {
 	const accordionCards = []
 	let yearSessions = []
 	state.firstPlays.forEach(row => {
-		const date = moment(row.date)
+		const date = dayjs(row.date)
 		if (date.year() !== currentYear) {
 			if (currentYear) {
 				accordionCards[currentYear] = createYearAccordion(
