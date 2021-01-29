@@ -25,7 +25,8 @@ const generateWeekDateParam = ({ week, month, year }) => {
 	dayjs.extend(customParseFormat)
 
 	if (year && month) {
-		const theMonth = dayjs(year + " " + month, "YYYY MM")
+		const theMonth = dayjs(year + " " + month.toString().padStart(2,'0'), "YYYY MM")
+
 		dateParam = {
 			date: {
 				$gte: `${theMonth.startOf("month").format("YYYY-MM-DD")}`,
