@@ -6,17 +6,17 @@
     "@primer/octicons-react": "^10.1.0",
     "awesome-notifications": "^3.1.1",
     "axios": "^0.21.1",
-    "bootstrap": "^4.5.3",
-    "dayjs": "^1.10.4",
+    "bootstrap": "^4.6.0",
+    "dayjs": "^1.10.6",
     "overmind": "^24.1.1",
     "overmind-react": "^25.1.1",
     "react": "^16.14.0",
-    "react-bootstrap": "^1.4.0",
+    "react-bootstrap": "^1.6.1",
     "react-dom": "^16.14.0",
     "react-router-bootstrap": "^0.25.0",
-    "react-router-dom": "^5.2.0",
-    "react-scripts": "^3.4.4",
-    "react-select": "^3.1.1"
+    "react-router-dom": "^5.3.0",
+    "react-scripts": "^4",
+    "react-select": "^3.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
