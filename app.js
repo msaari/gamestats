@@ -7,8 +7,6 @@ const mongoose = require("mongoose")
 const config = require("./utils/config")
 
 const mongoUrl = config.mongoUrl
-mongoose.set("useFindAndModify", false)
-mongoose.set("useUnifiedTopology", true)
 mongoose.connect(mongoUrl, { useNewUrlParser: true })
 
 const app = new Koa()

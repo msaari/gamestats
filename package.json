@@ -24,9 +24,9 @@
   "author": "Mikko Saari",
   "license": "MIT",
   "dependencies": {
-    "async-redis": "^1.1.7",
+    "async-redis": "^2",
     "axios": "^0.21.1",
-    "bcrypt": "^5.0.0",
+    "bcrypt": "^5.0.1",
     "dayjs": "^1.10.4",
     "dotenv": "^8.2.0",
     "fast-xml-parser": "^3.17.5",
@@ -38,7 +38,7 @@
     "koa-router": "^9.1.0",
     "koa-static": "^5.0.0",
     "md5": "^2.2.1",
-    "mongoose": "^5.11.4",
+    "mongoose": "^6",
     "request": "^2.88.2",
     "request-promise": "^4.2.6"
   },
