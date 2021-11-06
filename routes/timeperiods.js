@@ -49,15 +49,13 @@ async function createTimePeriodsData(type) {
 	for (const session of sessions) {
 		const sessionDate = dayjs(session.date)
 		if (sessionDate.format("YYYY-MM-DD") === "2001-01-01") continue
-		let period = null;
-		if ( type == 'month' ) {
-			period = data.find((m) => m.name == sessionDate.format("YYYY-MM"))
-		} else if ( type == 'year' ) {
-			period = data.find((y) => y.name == sessionDate.format("YYYY"))
-		}
+
+		const format = type == 'month' ? "YYYY-MM" : "YYYY"
+		let period = null
+		period = data.find((p) => p.name == sessionDate.format(format))
 		if (!period) {
 			period = {}
-			period.name = sessionDate.format("YYYY-MM")
+			period.name = sessionDate.format(format)
 			period.plays = 0
 			period.totalPlayers = 0
 			period.totalLength = 0
@@ -82,6 +80,8 @@ async function createTimePeriodsData(type) {
 		p.games = null
 		return p
 	})
+
+	return data
 }
 
 module.exports = ({ timePeriodsRouter }) => {
