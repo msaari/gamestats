@@ -21,114 +21,75 @@ function escapeRegExp(text) {
 	return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&")
 }
 
+// Creates the data for the timeperiods page
+async function createTimePeriodsData(type) {
+	let key = md5("getallgameobjects")
+
+	const redisGames = redisAvailable ? await redisClient.get(key) : null
+	const games = redisGames ? JSON.parse(redisGames) : await Game.find({})
+
+	if (redisAvailable)
+		redisClient
+			.set(key, JSON.stringify(games))
+			.catch((error) => console.log("redis error", error))
+	key = md5("getallsessions")
+
+	const redisSessions = redisAvailable ? await redisClient.get(key) : null
+	const sessions = redisSessions
+		? JSON.parse(redisSessions)
+		: await Session.find({})
+
+	if (redisAvailable)
+		redisClient
+			.set(key, JSON.stringify(sessions))
+			.catch((error) => console.log("redis error", error))
+
+	let data = []
+
+	for (const session of sessions) {
+		const sessionDate = dayjs(session.date)
+		if (sessionDate.format("YYYY-MM-DD") === "2001-01-01") continue
+		let period = null;
+		if ( type == 'month' ) {
+			period = data.find((m) => m.name == sessionDate.format("YYYY-MM"))
+		} else if ( type == 'year' ) {
+			period = data.find((y) => y.name == sessionDate.format("YYYY"))
+		}
+		if (!period) {
+			period = {}
+			period.name = sessionDate.format("YYYY-MM")
+			period.plays = 0
+			period.totalPlayers = 0
+			period.totalLength = 0
+			period.games = new Set()
+			data.push(period)
+		}
+		const game = games.find((g) => g.name == session.game)
+		period.plays = period.plays + session.plays
+		period.totalPlayers = period.totalPlayers + session.plays * session.players
+		period.totalLength = period.totalLength + session.plays * game["length"]
+		period.games.add(game["name"])
+		data = data.map((p) => {
+			if (p.name === period.name) {
+				p = period
+			}
+			return p
+		})
+	}
+	data = data.map((p) => {
+		p.avgPlayers = p.totalPlayers / p.plays
+		p.totalGames = p.games.size
+		p.games = null
+		return p
+	})
+}
+
 module.exports = ({ timePeriodsRouter }) => {
 	timePeriodsRouter.get("/months", async (ctx, next) => {
-		let key = md5("getallgameobjects")
-
-		const redisGames = redisAvailable ? await redisClient.get(key) : null
-		const games = redisGames ? JSON.parse(redisGames) : await Game.find({})
-
-		if (redisAvailable)
-			redisClient
-				.set(key, JSON.stringify(games))
-				.catch((error) => console.log("redis error", error))
-		key = md5("getallsessions")
-
-		const redisSessions = redisAvailable ? await redisClient.get(key) : null
-		const sessions = redisSessions
-			? JSON.parse(redisSessions)
-			: await Session.find({})
-
-		if (redisAvailable)
-			redisClient
-				.set(key, JSON.stringify(sessions))
-				.catch((error) => console.log("redis error", error))
-
-		let months = []
-
-		for (const session of sessions) {
-			const sessionDate = dayjs(session.date)
-			if (sessionDate.format("YYYY-MM-DD") === "2001-01-01") continue
-			let month = months.find((m) => m.name == sessionDate.format("YYYY-MM"))
-			if (!month) {
-				month = {}
-				month.name = sessionDate.format("YYYY-MM")
-				month.plays = 0
-				month.totalPlayers = 0
-				month.totalLength = 0
-				months.push(month)
-			}
-			const game = games.find((g) => g.name == session.game)
-			month.plays = month.plays + session.plays
-			month.totalPlayers = month.totalPlayers + session.plays * session.players
-			month.totalLength = month.totalLength + session.plays * game["length"]
-			months = months.map((m) => {
-				if (m.name === month.name) {
-					m = month
-				}
-				return m
-			})
-		}
-		months = months.map((m) => {
-			m.avgPlayers = m.totalPlayers / m.plays
-			return m
-		})
-
-		ctx.body = months
+		ctx.body = await createTimePeriodsData("month")
 	})
 
 	timePeriodsRouter.get("/years", async (ctx, next) => {
-		let key = md5("getallgameobjects")
-
-		const redisGames = redisAvailable ? await redisClient.get(key) : null
-		const games = redisGames ? JSON.parse(redisGames) : await Game.find({})
-
-		if (redisAvailable)
-			redisClient
-				.set(key, JSON.stringify(games))
-				.catch((error) => console.log("redis error", error))
-		key = md5("getallsessions")
-
-		const redisSessions = redisAvailable ? await redisClient.get(key) : null
-		const sessions = redisSessions
-			? JSON.parse(redisSessions)
-			: await Session.find({})
-
-		if (redisAvailable)
-			redisClient
-				.set(key, JSON.stringify(sessions))
-				.catch((error) => console.log("redis error", error))
-
-		let years = []
-
-		for (const session of sessions) {
-			const sessionDate = dayjs(session.date)
-			if (sessionDate.format("YYYY-MM-DD") === "2001-01-01") continue
-			let year = years.find((m) => m.name == sessionDate.format("YYYY"))
-			if (!year) {
-				year = {}
-				year.name = sessionDate.format("YYYY")
-				year.plays = 0
-				year.totalPlayers = 0
-				year.totalLength = 0
-				years.push(year)
-			}
-			const game = games.find((g) => g.name == session.game)
-			year.plays = year.plays + session.plays
-			year.totalPlayers = year.totalPlayers + session.plays * session.players
-			year.totalLength = year.totalLength + session.plays * game["length"]
-			years = years.map((m) => {
-				if (m.name === year.name) {
-					m = year
-				}
-				return m
-			})
-		}
-		years = years.map((m) => {
-			m.avgPlayers = m.totalPlayers / m.plays
-			return m
-		})
-
-		ctx.body = years
+		ctx.body = await createTimePeriodsData("year")
 	})
 }
