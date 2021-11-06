@@ -36,6 +36,9 @@ const PeriodList = ({ name }) => {
 		case "plays":
 			periodList.sort((a, b) => b.plays - a.plays)
 			break
+		case "games":
+			periodList.sort((a, b) => b.totalGames - a.totalGames)
+			break
 		case "avgplayers":
 			periodList.sort((a, b) => b.avgPlayers - a.avgPlayers)
 			break
@@ -71,6 +74,7 @@ const PeriodList = ({ name }) => {
 			<tr key={counter}>
 				<td>{row.name}</td>
 				<td>{row.plays}</td>
+				<td>{row.totalGames}</td>
 				<td>{avgPlayers}</td>
 				<td>{hours}</td>
 				<td>{avgLength}</td>
@@ -85,6 +89,7 @@ const PeriodList = ({ name }) => {
 					<tr>
 						<th onClick={() => sortBy("name")}>{name}</th>
 						<th onClick={() => sortBy("plays")}>Plays</th>
+						<th onClick={() => sortBy("games")}>Games</th>
 						<th onClick={() => sortBy("avgplayers")}>Avg. Players</th>
 						<th onClick={() => sortBy("hours")}>Total hours</th>
 						<th onClick={() => sortBy("length")}>Avg. length</th>
