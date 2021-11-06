@@ -5,7 +5,7 @@
   "dependencies": {
     "@primer/octicons-react": "^10.1.0",
     "awesome-notifications": "^3.1.1",
-    "axios": "^0.21.1",
+    "axios": "^0.21.4",
     "bootstrap": "^4.6.0",
     "dayjs": "^1.10.6",
     "overmind": "^24.1.1",
