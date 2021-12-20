@@ -50,7 +50,7 @@ async function createTimePeriodsData(type) {
 		const sessionDate = dayjs(session.date)
 		if (sessionDate.format("YYYY-MM-DD") === "2001-01-01") continue
 
-		const format = type == 'month' ? "YYYY-MM" : "YYYY"
+		const format = type == "month" ? "YYYY-MM" : "YYYY"
 		let period = null
 		period = data.find((p) => p.name == sessionDate.format(format))
 		if (!period) {

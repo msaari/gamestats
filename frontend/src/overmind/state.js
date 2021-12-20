@@ -1,4 +1,4 @@
-export default {
+const values = {
 	user: null,
 	sessionList: [],
 	isFetchingSessions: false,
@@ -22,3 +22,5 @@ export default {
 	yearList: [],
 	isFetchingYears: false,
 }
+
+export default values
