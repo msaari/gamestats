@@ -3,10 +3,11 @@ import dayjs from "dayjs"
 import Session from "./Session/Session"
 import DateRange from "../DateRange"
 import GameSelector from "./GameSelector/GameSelector"
+import SessionChart from "./SessionChart/SessionChart"
 import Table from "react-bootstrap/Table"
 import { useOvermind } from "../../overmind"
 
-const dateParamString = dateParams => {
+const dateParamString = (dateParams) => {
 	let paramArray = []
 	const to = dayjs(
 		`${dateParams.toYear}-${dateParams.toMonth}-${dateParams.toDay}`,
@@ -19,14 +20,14 @@ const dateParamString = dateParams => {
 	return paramArray.join("&")
 }
 
-const sumTotalSessions = sessions => {
+const sumTotalSessions = (sessions) => {
 	const totals = {
 		plays: 0,
 		wins: 0,
-		players: 0
+		players: 0,
 	}
 
-	sessions.forEach(session => {
+	sessions.forEach((session) => {
 		totals.plays += parseInt(session.plays)
 		totals.wins += parseInt(session.wins)
 		totals.players += parseInt(session.players) * parseInt(session.plays)
@@ -58,7 +59,7 @@ const SessionList = () => {
 		fromYear: now.year(),
 		toDay: now.endOf("month").format("D"),
 		toMonth: now.month() + 1,
-		toYear: now.year()
+		toYear: now.year(),
 	})
 	const [gameParam, setGameParam] = useState("")
 	const isAuth = state.user ? true : false
@@ -71,11 +72,11 @@ const SessionList = () => {
 		actions.setupSessionList(paramString)
 	}, [paramString, actions])
 
-	const handleGameChange = event => {
+	const handleGameChange = (event) => {
 		setGameParam(event.value)
 	}
 
-	const sessionsToShow = state.sessionList.map(entry => {
+	const sessionsToShow = state.sessionList.map((entry) => {
 		return <Session key={entry.id} session={entry} isAuth={isAuth} />
 	})
 
@@ -101,6 +102,7 @@ const SessionList = () => {
 					{totals}
 				</tbody>
 			</Table>
+			{gameParam && <SessionChart />}
 		</>
 	)
 }
