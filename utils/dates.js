@@ -68,8 +68,8 @@ const generateRangeDateParam = ({ from, to }) => {
 	let dateParam = {
 		date: {
 			$gte: `${from}`,
-			$lte: `${to}`
-		}
+			$lte: `${to} 23:59:59`,
+		},
 	}
 
 	return dateParam
