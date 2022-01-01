@@ -64,8 +64,12 @@ const SessionChart = () => {
 		const oldestYear = parseInt(oldestYearMonth.split("-")[0])
 		const oldestMonth = parseInt(oldestYearMonth.split("-")[1])
 		for (let i = oldestYear; i <= currentYear; i++) {
-			for (let j = 1; j <= currentMonth; j++) {
-				if ((i === oldestYear && j > oldestMonth) || i > oldestYear) {
+			for (let j = 1; j <= 12; j++) {
+				if (
+					(i === oldestYear && j > oldestMonth) ||
+					(i > oldestYear && i < currentYear) ||
+					(i === currentYear && j <= currentMonth)
+				) {
 					j < 10 ? monthLabels.add(`${i}-0${j}`) : monthLabels.add(`${i}-${j}`)
 				}
 			}
