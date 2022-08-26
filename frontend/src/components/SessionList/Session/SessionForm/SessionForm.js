@@ -4,10 +4,11 @@ import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
 import Button from "react-bootstrap/Button"
 import SessionDate from "./SessionDate/SessionDate"
-import { useOvermind } from "../../../../overmind"
+import { useActions, useAppState } from "../../../../overmind"
 
 const SessionForm = (props) => {
-	const { state, actions } = useOvermind()
+	const actions = useActions()
+	const state = useAppState()
 
 	useEffect(() => {
 		if (state.gameNames.length === 0) {

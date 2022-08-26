@@ -1,9 +1,10 @@
 import React, { useEffect } from "react"
 import AWN from "awesome-notifications"
-import { useOvermind } from "../../../../overmind"
+import { useActions, useAppState } from "../../../../overmind"
 
 const SessionGeekLink = ({ session }) => {
-	const { state, actions } = useOvermind()
+	const actions = useActions()
+	const state = useAppState()
 
 	const markSessionGeeked = async session => {
 		const updatedSession = { ...session, ungeeked: false }

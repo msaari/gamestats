@@ -3,10 +3,11 @@ import Select from "react-select"
 import Button from "react-bootstrap/Button"
 import Row from "react-bootstrap/Row"
 import Col from "react-bootstrap/Col"
-import { useOvermind } from "../../../overmind"
+import { useActions, useAppState } from "../../../overmind"
 
 const GameSelector = ({ changeHandler }) => {
-	const { state, actions } = useOvermind()
+	const actions = useActions()
+	const state = useAppState()
 
 	const [showSelect, setShowSelect] = useState(false)
 

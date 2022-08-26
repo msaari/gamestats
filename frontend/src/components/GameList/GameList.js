@@ -8,7 +8,7 @@ import DateRange from "../DateRange"
 import ExportList from "../ExportList"
 import Table from "react-bootstrap/Table"
 import Spinner from "react-bootstrap/Spinner"
-import { useOvermind } from "../../overmind"
+import { useActions, useAppState } from "../../overmind"
 
 const dateParamString = dateParams => {
 	let paramArray = []
@@ -61,7 +61,8 @@ const sumTotalGames = games => {
 	)
 }
 const GameList = ({ path }) => {
-	const { state, actions } = useOvermind()
+	const actions = useActions()
+	const state = useAppState()
 
 	const [gameFilter, setGameFilter] = useState("")
 	const [incompleteFilter, setIncompleteFilter] = useState(false)

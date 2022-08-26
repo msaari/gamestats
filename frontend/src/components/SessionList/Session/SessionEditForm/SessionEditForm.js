@@ -1,10 +1,10 @@
 import React from "react"
 import AWN from "awesome-notifications"
 import SessionForm from "../SessionForm/SessionForm"
-import { useOvermind } from "../../../../overmind"
+import { useActions } from "../../../../overmind"
 
 const SessionEditForm = ({ session, modalCloser }) => {
-	const { actions } = useOvermind()
+	const { actions } = useActions()
 
 	const zeroPad = (input, length) => {
 		return (Array(length + 1).join("0") + input).slice(-length)

@@ -17,10 +17,10 @@ import FiftyPlays from "./views/FiftyPlays"
 
 import Header from "./components/Header"
 
-import { useOvermind } from "./overmind"
+import { useActions } from "./overmind"
 
 const App = () => {
-	const { actions } = useOvermind()
+	const actions = useActions()
 
 	useEffect(() => {
 		actions.setupUser()

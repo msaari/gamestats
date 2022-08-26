@@ -2,10 +2,10 @@ import React, { useState } from "react"
 import AWN from "awesome-notifications"
 import Form from "react-bootstrap/Form"
 import Button from "react-bootstrap/Button"
-import { useOvermind } from "../overmind"
+import { useActions } from "../overmind"
 
 const LoginForm = () => {
-	const { actions } = useOvermind()
+	const { actions } = useActions()
 
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")

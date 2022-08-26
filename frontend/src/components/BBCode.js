@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
 import DisplayText from "./DisplayText"
-import { useOvermind } from "../overmind"
+import { useAppState, useActions } from "../overmind"
 import dayjs from "dayjs"
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
@@ -34,7 +34,8 @@ const dateParamHeading = dateParams => {
 }
 
 const BBCode = () => {
-	const { actions, state } = useOvermind()
+	const actions = useActions()
+	const state = useAppState()
 	const now = dayjs()
 	const [dateParams, setDateParams] = useState({
 		month: now.month() + 1,

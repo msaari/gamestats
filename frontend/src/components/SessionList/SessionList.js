@@ -5,7 +5,7 @@ import DateRange from "../DateRange"
 import GameSelector from "./GameSelector/GameSelector"
 import SessionChart from "./SessionChart/SessionChart"
 import Table from "react-bootstrap/Table"
-import { useOvermind } from "../../overmind"
+import { useActions, useAppState } from "../../overmind"
 
 const dateParamString = (dateParams) => {
 	let paramArray = []
@@ -49,7 +49,8 @@ const sumTotalSessions = (sessions) => {
 }
 
 const SessionList = () => {
-	const { state, actions } = useOvermind()
+	const actions = useActions()
+	const state = useAppState()
 
 	const now = dayjs()
 

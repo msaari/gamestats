@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react"
 import Table from "react-bootstrap/Table"
-import { useOvermind } from "../../overmind"
+import { useActions, useAppState } from "../../overmind"
 
 const PeriodList = ({ name }) => {
-	const { state, actions } = useOvermind()
+	const actions = useActions()
+	const state = useAppState()
 
 	const [sorting, setSorting] = useState("name")
 

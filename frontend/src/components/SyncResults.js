@@ -1,10 +1,11 @@
 import React, { useEffect } from "react"
 import Container from "react-bootstrap/Container"
 import DisplayText from "./DisplayText"
-import { useOvermind } from "../overmind"
+import { useAppState, useActions } from "../overmind"
 
 const SyncResults = () => {
-	const { actions, state } = useOvermind()
+	const actions = useActions()
+	const state = useAppState()
 	useEffect(() => {
 		actions.getSyncResults()
 	}, [actions])

@@ -3,11 +3,10 @@ import { Link } from "react-router-dom"
 import { Nav, Navbar, NavDropdown } from "react-bootstrap"
 import { LinkContainer } from "react-router-bootstrap"
 import LoginForm from "./LoginForm"
-import { useOvermind } from "../overmind"
+import { useAppState } from "../overmind"
 
 const Header = () => {
-	const { state } = useOvermind()
-
+	const state = useAppState()
 	return (
 		<Navbar bg="light" expand="lg" className="mb-3">
 			<Navbar.Brand>

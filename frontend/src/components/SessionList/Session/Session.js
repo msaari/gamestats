@@ -4,10 +4,11 @@ import SessionEditForm from "./SessionEditForm/SessionEditForm"
 import SessionGeekLink from "./SessionGeekLink/SessionGeekLink"
 import Button from "react-bootstrap/Button"
 import FormModal from "../../FormModal"
-import { useOvermind } from "../../../overmind"
+import { useActions, useAppState } from "../../../overmind"
 
 const Session = ({ session }) => {
-	const { state, actions } = useOvermind()
+	const state = useAppState()
+	const actions = useActions()
 	const isAuth = state.user ? true : false
 
 	const [editForm, setEditForm] = useState(false)

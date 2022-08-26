@@ -4,10 +4,10 @@ import Plays from "./Plays/Plays"
 import GameEditForm from "./GameEditForm/GameEditForm"
 import GameDetails from "./GameDetails/GameDetails"
 import FormModal from "../../FormModal"
-import { useOvermind } from "../../../overmind"
+import { useAppState } from "../../../overmind"
 
 const Game = ({ game, counter }) => {
-	const { state } = useOvermind()
+	const { state } = useAppState()
 	const isAuth = state.user ? true : false
 
 	const [editForm, setEditForm] = useState(false)

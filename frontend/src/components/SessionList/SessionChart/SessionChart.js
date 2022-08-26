@@ -1,6 +1,6 @@
 import React from "react"
 import { Line } from "react-chartjs-2"
-import { useOvermind } from "../../../overmind"
+import { useAppState } from "../../../overmind"
 import {
 	Chart as ChartJS,
 	CategoryScale,
@@ -11,7 +11,7 @@ import {
 } from "chart.js"
 
 const SessionChart = () => {
-	const { state } = useOvermind()
+	const { state } = useAppState()
 
 	ChartJS.register(
 		CategoryScale,

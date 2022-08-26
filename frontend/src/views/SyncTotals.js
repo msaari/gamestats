@@ -1,10 +1,10 @@
 import React from "react"
 import SyncTotalsResults from "../components/SyncTotalsResults"
 import Container from "react-bootstrap/Container"
-import { useOvermind } from "../overmind"
+import { useAppState } from "../overmind"
 
 const SyncTotals = () => {
-	const { state } = useOvermind()
+	const { state } = useAppState()
 
 	return (
 		<Container>

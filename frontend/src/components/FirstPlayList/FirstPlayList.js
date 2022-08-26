@@ -3,11 +3,12 @@ import Table from "react-bootstrap/Table"
 import Spinner from "react-bootstrap/Spinner"
 import Accordion from "react-bootstrap/Accordion"
 import Card from "react-bootstrap/Card"
-import { useOvermind } from "../../overmind"
+import { useActions, useAppState } from "../../overmind"
 import dayjs from "dayjs"
 
 const FirstPlayList = () => {
-	const { state, actions } = useOvermind()
+	const actions = useActions()
+	const state = useAppState()
 
 	useEffect(() => {
 		actions.getFirstPlays()

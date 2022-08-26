@@ -1,6 +1,6 @@
 import React from "react"
 import AWN from "awesome-notifications"
-import { useOvermind } from "../../../../overmind"
+import { useActions } from "../../../../overmind"
 
 import Form from "react-bootstrap/Form"
 import Col from "react-bootstrap/Col"
@@ -52,7 +52,7 @@ const deleteGame = async (id) => {
 }
 
 const GameEditForm = ({ game, modalCloser }) => {
-	const { actions } = useOvermind()
+	const { actions } = useActions()
 	action = actions
 	closeModal = modalCloser
 

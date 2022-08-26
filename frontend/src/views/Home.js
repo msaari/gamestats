@@ -1,10 +1,10 @@
 import React from "react"
 import NewSessionForm from "../components/SessionList/Session/NewSessionForm/NewSessionForm"
 import Container from "react-bootstrap/Container"
-import { useOvermind } from "../overmind"
+import { useAppState } from "../overmind"
 
 const Home = () => {
-	const { state } = useOvermind()
+	const state = useAppState()
 
 	return (
 		<Container>
