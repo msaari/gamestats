@@ -11,7 +11,7 @@ import {
 } from "chart.js"
 
 const SessionChart = () => {
-	const { state } = useAppState()
+	const state = useAppState()
 
 	ChartJS.register(
 		CategoryScale,

@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container"
 import { useAppState } from "../overmind"
 
 const Sync = () => {
-	const { state } = useAppState()
+	const state = useAppState()
 
 	return (
 		<Container>

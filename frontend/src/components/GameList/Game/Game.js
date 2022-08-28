@@ -7,7 +7,7 @@ import FormModal from "../../FormModal"
 import { useAppState } from "../../../overmind"
 
 const Game = ({ game, counter }) => {
-	const { state } = useAppState()
+	const state = useAppState()
 	const isAuth = state.user ? true : false
 
 	const [editForm, setEditForm] = useState(false)

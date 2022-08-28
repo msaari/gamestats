@@ -4,7 +4,7 @@ import SessionForm from "../SessionForm/SessionForm"
 import { useActions } from "../../../../overmind"
 
 const SessionEditForm = ({ session, modalCloser }) => {
-	const { actions } = useActions()
+	const actions = useActions()
 
 	const zeroPad = (input, length) => {
 		return (Array(length + 1).join("0") + input).slice(-length)

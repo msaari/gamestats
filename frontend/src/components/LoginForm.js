@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button"
 import { useActions } from "../overmind"
 
 const LoginForm = () => {
-	const { actions } = useActions()
+	const actions = useActions()
 
 	const [username, setUsername] = useState("")
 	const [password, setPassword] = useState("")

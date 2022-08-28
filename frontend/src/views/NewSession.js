@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container"
 import { useAppState } from "../overmind"
 
 const NewSession = () => {
-	const { state } = useAppState()
+	const state = useAppState()
 
 	return (
 		<Container>

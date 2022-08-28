@@ -52,7 +52,7 @@ const deleteGame = async (id) => {
 }
 
 const GameEditForm = ({ game, modalCloser }) => {
-	const { actions } = useActions()
+	const actions = useActions()
 	action = actions
 	closeModal = modalCloser
 
